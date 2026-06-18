@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import TypewriterEffect from "@/components/TypewriterEffect";
+import TypewriterEffect from "@/components/effects/TypewriterEffect";
 
 const BootSplash = () => {
     const [visibleLines, setVisibleLines] = useState<number>(0);

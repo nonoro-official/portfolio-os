@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import TypewriterEffect from '@/components/TypewriterEffect'
+import TypewriterEffect from '@/components/effects/TypewriterEffect'
 import { ArrowRightCircle } from 'lucide-react'
 import { useRouter } from "next/navigation";
 
