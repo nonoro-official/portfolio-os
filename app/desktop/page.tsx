@@ -1,11 +1,8 @@
+import DesktopWrapper from '@/components/desktop/DesktopWrapper'
 import React from 'react'
 
 const Desktop = () => {
-  return (
-    <div>
-      <h1>Desktop</h1>
-    </div>
-  )
+  return <DesktopWrapper/>
 }
 
 export default Desktop

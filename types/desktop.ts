@@ -1,0 +1,28 @@
+export interface Item {
+    id: string;
+    name: string;
+    type: "file" | "folder" | "app";
+    parentId: string | null;
+    content?: Item[];
+    icon?: string;
+    link?: string;
+    path: string;
+    position?: Position;
+}
+
+export interface Window {
+    id: string;
+    itemId: string;
+    position: Position;
+    size: {width: number, height: number};
+    zIndex: number;
+    state: "normal" | "minimized" | "maximized";
+}
+
+export interface Position {
+    x: number;
+    y: number;
+}
+
+// Browser
+// Gallery
