@@ -50,13 +50,41 @@ export const useDesktop = () => {
 
       // Otherwise, create a new window
       const nextZIndex = getNextZIndex(prev);
+      const windowWidth = 900;
+      const windowHeight = 800;
+
+      if (typeof window === "undefined") {
+        // If window is not defined (e.g., during SSR), return a default position
+        return [
+          ...prev,
+          {
+            id: Date.now().toString(),
+            itemId: item.id,
+            position: { x: 50 + prev.length * 20, y: 50 + prev.length * 20 },
+            size: { width: windowWidth, height: windowHeight },
+            zIndex: nextZIndex,
+            state: "normal",
+          },
+        ];
+      }
+
+      // Calculate initial position (centered, but offset for each new window)
+      const desktopWidth = window.innerWidth;
+      const desktopHeight = window.innerHeight;
+      let initialX = (desktopWidth - windowWidth) / 2 + prev.length * 20;
+      let initialY = (desktopHeight - windowHeight) / 2 + prev.length * 20;
+      
+      // Constrain within viewport
+      initialX = Math.max(0, Math.min(initialX, desktopWidth - windowWidth));
+      initialY = Math.max(0, Math.min(initialY, desktopHeight - windowHeight));
+
       return [
         ...prev,
         {
           id: Date.now().toString(),
           itemId: item.id,
-          position: { x: 50 + prev.length * 20, y: 50 + prev.length * 20 },
-          size: { width: 400, height: 300 },
+          position: { x: initialX, y: initialY },
+          size: { width: windowWidth, height: windowHeight },
           zIndex: nextZIndex,
           state: "normal",
         },
