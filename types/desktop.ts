@@ -8,6 +8,7 @@ export interface Item {
     link?: string;
     path: string;
     position?: Position;
+    gridCellId?: string;
 }
 
 export interface Window {

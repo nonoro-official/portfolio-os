@@ -11,10 +11,19 @@ export interface DesktopContextValue {
   toggleMaximizeWindow: (windowId: string) => void;
   focusWindow: (windowId: string) => void;
   moveWindow: (windowId: string, position: { x: number; y: number }) => void;
+  moveItem: (itemId: string, gridCell: { id: string }) => void;
 }
 
 export const useDesktop = () => {
-  const [items] = useState<Item[]>(initialItems);
+  // Assign grid cells to items that don't have one
+  const initializeItems = (items: Item[]) => {
+    return items.map((item, index) => ({
+      ...item,
+      gridCellId: item.gridCellId || `${Math.floor(index / 10)}-${index % 10}`,
+    }));
+  };
+
+  const [items, setItems] = useState<Item[]>(() => initializeItems(initialItems));
   const [windows, setWindows] = useState<Window[]>([]);
   const desktopRef = useRef<HTMLDivElement>(null);
 
@@ -112,6 +121,17 @@ export const useDesktop = () => {
     []
   );
 
+  const moveItem = useCallback(
+    (itemId: string, gridCell: { id: string }) => {
+      // This function would update the position of the desktop item in the grid
+      setItems((prev) =>
+        prev.map((item) => 
+          (item.id === itemId ? { ...item, gridCellId: gridCell.id } : item))
+      );
+    },
+    []
+  );
+
   const contextValue: DesktopContextValue = {
     items,
     windows,
@@ -121,6 +141,7 @@ export const useDesktop = () => {
     toggleMaximizeWindow,
     focusWindow,
     moveWindow,
+    moveItem,
   };
 
   return {
