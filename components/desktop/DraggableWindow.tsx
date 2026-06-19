@@ -42,13 +42,24 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       if (isDragging && !isMaximized) {
+        let nextX = e.clientX - dragStart.x;
+        let nextY = e.clientY - dragStart.y;
+        
+        // Constrain within viewport
+        const desktopWidth = window.innerWidth;
+        const desktopHeight = window.innerHeight;
+        const { width, height } = windowItem.size;
+
+        nextX = Math.max(0, Math.min(nextX, desktopWidth - width));
+        nextY = Math.max(0, Math.min(nextY, desktopHeight - height));
+
         moveWindow(windowItem.id, {
-          x: e.clientX - dragStart.x,
-          y: e.clientY - dragStart.y,
+          x: nextX,
+          y: nextY,
         });
       }
     },
-    [isDragging, isMaximized, dragStart, moveWindow, windowItem.id]
+    [isDragging, isMaximized, dragStart, moveWindow, windowItem.id, windowItem.size]
   );
 
   const handleMouseUp = useCallback(() => {
