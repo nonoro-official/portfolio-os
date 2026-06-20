@@ -1,16 +1,24 @@
 import React from 'react'
-import { DragDropProvider, type DragEndEvent } from '@dnd-kit/react'
+import { DragDropProvider, type DragEndEvent, type DragStartEvent } from '@dnd-kit/react'
 import { useDesktopContext } from '@/context/DesktopContext';
 import {DraggableDesktopItem} from '@/components/desktop/DraggableDesktopItem';
-import { GridCell } from '@/components/desktop/GridCell';
+import { DesktopGridCell } from '@/components/desktop/DesktopGridCell';
 
-const GRID_ROWS = 6;
-const GRID_COLS = 10;
+const GRID_ROWS = 8;
+const GRID_COLS = 18;
 
 const DesktopGrid = () => {
   const { items, moveItem } = useDesktopContext();
 
+  const [activeId, setActiveId] = React.useState<string | null>(null);
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(String(event.operation.source?.id));
+  }
+
   const handleDragEnd = (event: DragEndEvent) => {
+    setActiveId(null);
+
     if (event.canceled) return;
 
     const { operation } = event;
@@ -25,9 +33,10 @@ const DesktopGrid = () => {
   }
 
   return (
-    <DragDropProvider onDragEnd={handleDragEnd}>
+    <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div
         style={{
+          marginTop: "40px",
           display: "grid",
           gridTemplateRows: `repeat(${GRID_ROWS}, 90px)`,
           gridTemplateColumns: `repeat(${GRID_COLS}, 90px)`,
@@ -50,9 +59,9 @@ const DesktopGrid = () => {
             );
 
             return (
-              <GridCell key={cellId} id={cellId}>
+              <DesktopGridCell key={cellId} id={cellId} isDraggingItem={!!activeId}>
                 {allocatedItem && <DraggableDesktopItem item={allocatedItem} />}
-              </GridCell>
+              </DesktopGridCell>
             );
           })
         )}
