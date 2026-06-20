@@ -43,7 +43,7 @@ const BootSplash = () => {
                 <br />
                 {visibleLines >= 2 && <p>NP BIOS Rev1.0</p>}
                 <br />
-                {visibleLines >= 3 && <p>Main Processor : custom_silicon</p>}
+                {visibleLines >= 3 && <p>Main Processor : citrus</p>}
                 {visibleLines >= 4 && <p>Memory Testing : OK</p>}
             </div>
 

@@ -1,137 +1,36 @@
-import { useState, useCallback, useEffect } from "react";
-import { Minimize, Maximize2, Square, X } from "lucide-react";
-import type { Window } from "@/types/desktop";
-import { useDesktopContext } from "@/context/DesktopContext";
+import React from "react";
 
-interface DraggableWindowProps {
-  windowItem: Window;
+interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: "default" | "destructive" | "ghost";
+  size?: "sm" | "md" | "lg";
   children: React.ReactNode;
 }
 
-export const DraggableWindow: React.FC<DraggableWindowProps> = ({
-  windowItem,
-  children,
+export const Button: React.FC<ButtonProps> = ({
+  variant = "default",
+  size = "md",
+  className = "",
+  ...props
 }) => {
-  const { 
-    closeWindow, 
-    toggleMinimizeWindow, 
-    toggleMaximizeWindow, 
-    focusWindow, 
-    moveWindow 
-  } = useDesktopContext();
-  
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const baseStyles =
+    "focus:outline-none rounded transition-colors font-medium";
 
-  const isMaximized = windowItem.state === "maximized";
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    // Bring window to front on click
-    focusWindow(windowItem.id);
-
-    // Don't allow dragging if the window is maximized
-    if (isMaximized) return;
-
-    setIsDragging(true);
-    setDragStart({
-      x: e.clientX - windowItem.position.x,
-      y: e.clientY - windowItem.position.y,
-    });
+  const variantStyles = {
+    default: "hover:bg-neutral-700/30",
+    destructive: "hover:bg-red-500/80",
+    ghost: "hover:bg-neutral-600/30",
   };
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (isDragging && !isMaximized) {
-        moveWindow(windowItem.id, {
-          x: e.clientX - dragStart.x,
-          y: e.clientY - dragStart.y,
-        });
-      }
-    },
-    [isDragging, isMaximized, dragStart, moveWindow, windowItem.id]
-  );
+  const sizeStyles = {
+    sm: "px-2 py-1 text-xs",
+    md: "px-3 py-2 text-sm",
+    lg: "px-4 py-3 text-base",
+  };
 
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-  }, []);
-
-  useEffect(() => {
-    if (isDragging) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
-    }
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging, handleMouseMove, handleMouseUp]);
-
-  // Completely hide window if minimized
-  if (windowItem.state === "minimized") return null;
+  const combinedClassName = `${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`;
 
   return (
-    <div
-      onClick={() => focusWindow(windowItem.id)} // Focus if clicking anywhere on the window body
-      className={`absolute backdrop-blur-xl bg-neutral-800/10 shadow-lg overflow-hidden transition-all duration-150 ${
-        isMaximized 
-          ? "top-0 left-0 w-full h-full rounded-none" 
-          : "rounded-lg"
-      }`}
-      style={
-        isMaximized
-          ? { zIndex: windowItem.zIndex }
-          : {
-              left: windowItem.position.x,
-              top: windowItem.position.y,
-              width: windowItem.size.width,
-              height: windowItem.size.height,
-              zIndex: windowItem.zIndex, // Uses the managed zIndex instead of 1000
-            }
-      }
-    >
-      {/* Header Bar */}
-      <div
-        className={`p-2 px-4 flex bg-neutral-700/10 justify-between items-center ${
-          isMaximized ? "cursor-default" : "cursor-move"
-        }`}
-        onMouseDown={handleMouseDown}
-        onDoubleClick={() => toggleMaximizeWindow(windowItem.id)} // Double-click to Maximize/Restore
-      >
-        <h3 className="text-sm select-none">{windowItem.itemId}</h3>
-        <div className="flex space-x-2">
-          {/* Minimize Button */}
-          <button
-            onClick={() => toggleMinimizeWindow(windowItem.id)}
-            className="focus:outline-none hover:bg-neutral-700/30 p-1 rounded"
-          >
-            <Minimize className="size-4" />
-          </button>
-          
-          {/* Maximize / Restore Button */}
-          <button
-            onClick={() => toggleMaximizeWindow(windowItem.id)}
-            className="focus:outline-none hover:bg-neutral-700/30 p-1 rounded"
-          >
-            {isMaximized ? <Square className="size-4" /> : <Maximize2 className="size-4" />}
-          </button>
-
-          {/* Close Button */}
-          <button
-            onClick={() => closeWindow(windowItem.id)}
-            className="focus:outline-none hover:bg-red-500/80 p-1 rounded transition-colors"
-          >
-            <X className="size-4" />
-          </button>
-        </div>
-      </div>
-
-      {/* Window Body */}
-      <div
-        className="p-4 px-8 overflow-auto"
-        style={{ height: "calc(100% - 40px)" }}
-      >
-        {children}
-      </div>
-    </div>
+    <button className={combinedClassName} {...props} />
   );
 };

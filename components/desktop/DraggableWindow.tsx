@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Minimize, Maximize2, Square, X } from "lucide-react";
 import type { Window } from "@/types/desktop";
 import { useDesktopContext } from "@/context/DesktopContext";
+import { Button } from "@/components/ui/Button";
 
 interface DraggableWindowProps {
   windowItem: Window;
@@ -114,28 +115,34 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
         <h3 className="text-sm select-none">{windowItem.itemId}</h3>
         <div className="flex space-x-2">
           {/* Minimize Button */}
-          <button
+          <Button
             onClick={() => toggleMinimizeWindow(windowItem.id)}
-            className="focus:outline-none hover:bg-neutral-700/30 p-1 rounded"
+            variant="default"
+            size="sm"
+            className="p-1"
           >
             <Minimize className="size-4" />
-          </button>
+          </Button>
           
           {/* Maximize / Restore Button */}
-          <button
+          <Button
             onClick={() => toggleMaximizeWindow(windowItem.id)}
-            className="focus:outline-none hover:bg-neutral-700/30 p-1 rounded"
+            variant="default"
+            size="sm"
+            className="p-1"
           >
             {isMaximized ? <Square className="size-4" /> : <Maximize2 className="size-4" />}
-          </button>
+          </Button>
 
           {/* Close Button */}
-          <button
+          <Button
             onClick={() => closeWindow(windowItem.id)}
-            className="focus:outline-none hover:bg-red-500/80 p-1 rounded transition-colors"
+            variant="destructive"
+            size="sm"
+            className="p-1"
           >
             <X className="size-4" />
-          </button>
+          </Button>
         </div>
       </div>
 
