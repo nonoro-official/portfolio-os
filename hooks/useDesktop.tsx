@@ -9,9 +9,11 @@ export interface DesktopContextValue {
   closeWindow: (windowId: string) => void;
   toggleMinimizeWindow: (windowId: string) => void;
   toggleMaximizeWindow: (windowId: string) => void;
-  focusWindow: (windowId: string) => void;
+  focusWindow: (windowId: string, title: string) => void;
   moveWindow: (windowId: string, position: { x: number; y: number }) => void;
   moveItem: (itemId: string, gridCell: { id: string }) => void;
+  getAllWindows: () => Window[];
+  getFocusedWindow: () => Window | null;
 }
 
 export const useDesktop = () => {
@@ -60,6 +62,7 @@ export const useDesktop = () => {
           {
             id: Date.now().toString(),
             itemId: item.id,
+            title: item.name,
             position: { x: 50 + prev.length * 20, y: 50 + prev.length * 20 },
             size: { width: windowWidth, height: windowHeight },
             zIndex: nextZIndex,
@@ -83,6 +86,7 @@ export const useDesktop = () => {
         {
           id: Date.now().toString(),
           itemId: item.id,
+          title: item.name,
           position: { x: initialX, y: initialY },
           size: { width: windowWidth, height: windowHeight },
           zIndex: nextZIndex,
@@ -131,11 +135,11 @@ export const useDesktop = () => {
   });
 }, [getNextZIndex]);
 
-  const focusWindow = useCallback((windowId: string) => {
+  const focusWindow = useCallback((windowId: string, title: string) => {
     setWindows((prev) => {
       const nextZIndex = getNextZIndex(prev);
       return prev.map((w) =>
-        w.id === windowId ? { ...w, zIndex: nextZIndex } : w
+        w.id === windowId ? { ...w, zIndex: nextZIndex, title } : w
       );
     });
   }, [getNextZIndex]);
@@ -160,6 +164,17 @@ export const useDesktop = () => {
     []
   );
 
+  const getAllWindows = useCallback(() => windows, [windows]);
+
+  const getFocusedWindow = useCallback(() => {
+    if (windows.length === 0) return null;
+    return windows.reduce((highest, current) => {
+      if (current.state === "minimized") return highest; // Skip minimized windows
+      if (!highest) return current;
+      return (current.zIndex ?? 0) > (highest.zIndex ?? 0) ? current : highest;
+    }, null as Window | null);
+  }, [windows]);
+
   const contextValue: DesktopContextValue = {
     items,
     windows,
@@ -170,6 +185,8 @@ export const useDesktop = () => {
     focusWindow,
     moveWindow,
     moveItem,
+    getAllWindows,
+    getFocusedWindow,
   };
 
   return {

@@ -14,6 +14,7 @@ export interface Item {
 export interface Window {
     id: string;
     itemId: string;
+    title: string;
     position: Position;
     size: {width: number, height: number};
     zIndex: number;

@@ -4,6 +4,7 @@ import { DesktopContext } from "@/context/DesktopContext";
 import { DraggableWindow } from "@/components/desktop/DraggableWindow";
 import { useDesktop } from "@/hooks/useDesktop";
 import DesktopGrid from "@/components/desktop/DesktopGrid";
+import StatusBar from "@/components/statusbar/StatusBar";
 
 const DesktopWrapper: React.FC = () => {
   const { contextValue, desktopRef } = useDesktop();
@@ -11,7 +12,8 @@ const DesktopWrapper: React.FC = () => {
   return (
     <DesktopContext.Provider value={contextValue}>
       <div ref={desktopRef} className="flex h-screen w-screen overflow-hidden select-none">
-        <div className="relative w-full h-full bg-background md:shadow-xl">
+        <div className="flex-col relative w-full h-full bg-background md:shadow-xl">
+          <StatusBar />
           {/* Desktop Items Grid with Drag Support */}
           <DesktopGrid />
 

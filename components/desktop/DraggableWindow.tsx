@@ -28,7 +28,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
 
   const handleMouseDown = (e: React.MouseEvent) => {
     // Bring window to front on click
-    focusWindow(windowItem.id);
+    focusWindow(windowItem.id, windowItem.title);
 
     // Don't allow dragging if the window is maximized
     if (isMaximized) return;
@@ -83,7 +83,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
 
   return (
     <div
-      onClick={() => focusWindow(windowItem.id)} // Focus if clicking anywhere on the window body
+      onClick={() => focusWindow(windowItem.id, windowItem.title)} // Focus if clicking anywhere on the window body
       className={`absolute backdrop-blur-xl bg-neutral-800/10 shadow-lg overflow-hidden ${
         isDragging ? "" : "transition-all duration-150"
       } ${
@@ -112,7 +112,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
         onMouseDown={handleMouseDown}
         onDoubleClick={() => toggleMaximizeWindow(windowItem.id)} // Double-click to Maximize/Restore
       >
-        <h3 className="text-sm select-none">{windowItem.itemId}</h3>
+        <h3 className="text-sm select-none">{windowItem.title}</h3>
         <div className="flex space-x-2">
           {/* Minimize Button */}
           <Button
