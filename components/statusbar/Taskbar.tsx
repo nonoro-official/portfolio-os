@@ -11,8 +11,8 @@ const Taskbar = () => {
         {getAllWindows().map((window) => (
           <div
             key={window.id}
-            className={`h-8 px-3 rounded-md flex items-center justify-center shrink-0 text-sm text-white ${
-              focusedWindow?.id === window.id ? 'bg-blue-500' : 'bg-gray-700'
+            className={`h-8 px-3 rounded-md flex items-center justify-center shrink-0 text-sm text-foreground ${
+              focusedWindow?.id === window.id ? 'bg-primary' : 'bg-secondary'
             }`}
           >
             {window.title}

@@ -122,7 +122,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
             onClick={() => toggleMinimizeWindow(windowItem.id)}
             variant="ghost"
             size="sm"
-            className="p-1"
+            className="p-2"
           >
             <Minimize className="size-4" />
           </Button>
@@ -132,7 +132,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
             onClick={() => toggleMaximizeWindow(windowItem.id)}
             variant="ghost"
             size="sm"
-            className="p-1"
+            className="p-2"
           >
             {isMaximized ? <Square className="size-4" /> : <Maximize2 className="size-4" />}
           </Button>
@@ -142,7 +142,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
             onClick={() => closeWindow(windowItem.id)}
             variant="destructive"
             size="sm"
-            className="p-1"
+            className="p-2"
           >
             <X className="size-4" />
           </Button>
