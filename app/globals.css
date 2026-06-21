@@ -5,14 +5,13 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Yellow Theme - Light Mode */
-  --background: oklch(0.95 0.05 95);          /* Bright soft yellow background */
-  --foreground: oklch(0.25 0.05 95);          /* Deep dark amber/brown text for readability */
-  --card: oklch(0.98 0.1 95);                 /* Slightly lighter yellow card */
+  --background: oklch(0.95 0.05 95);          
+  --foreground: oklch(0.25 0.05 95);          
+  --card: oklch(0.98 0.1 95);                
   --card-foreground: oklch(0.25 0.05 95);
   --popover: oklch(0.98 0.1 95);
   --popover-foreground: oklch(0.25 0.05 95);
-  --primary: oklch(0.75 0.18 85);             /* Rich gold/yellow primary tone */
+  --primary: oklch(0.75 0.18 85);             
   --primary-foreground: oklch(0.2 0.05 85);
   --secondary: oklch(0.9 0.12 95);
   --secondary-foreground: oklch(0.25 0.05 95);
@@ -41,14 +40,13 @@
 }
 
 .dark {
-  /* Dark Mode - Dark Amber / Charcoal Theme */
-  --background: oklch(0.18 0.02 90);          /* Very dark, warm charcoal */
-  --foreground: oklch(0.92 0.04 95);          /* Crisp, soft warm off-white */
+  --background: oklch(0.18 0.02 90);          
+  --foreground: oklch(0.92 0.04 95);          
   --card: oklch(0.22 0.02 90);
   --card-foreground: oklch(0.92 0.04 95);
   --popover: oklch(0.22 0.02 90);
   --popover-foreground: oklch(0.92 0.04 95);
-  --primary: oklch(0.82 0.16 90);             /* Vibrant yellow highlights for dark mode */
+  --primary: oklch(0.82 0.16 90);            
   --primary-foreground: oklch(0.2 0.05 90);
   --secondary: oklch(0.26 0.02 90);
   --secondary-foreground: oklch(0.92 0.04 95);

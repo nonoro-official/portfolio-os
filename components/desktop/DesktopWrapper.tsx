@@ -5,6 +5,7 @@ import { DraggableWindow } from "@/components/desktop/draggables/DraggableWindow
 import { useDesktop } from "@/hooks/useDesktop";
 import DesktopGrid from "@/components/desktop/grid/DesktopGrid";
 import StatusBar from "@/components/statusbar/StatusBar";
+import Dock from "@/components/dock/Dock";
 
 const DesktopWrapper: React.FC = () => {
   const { contextValue, desktopRef } = useDesktop();
@@ -25,6 +26,8 @@ const DesktopWrapper: React.FC = () => {
               </div>
             </DraggableWindow>
           ))}
+
+          <Dock />
         </div>
       </div>
     </DesktopContext.Provider>
