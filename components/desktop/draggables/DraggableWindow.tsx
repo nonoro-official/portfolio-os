@@ -104,7 +104,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
     >
       {/* Header Bar */}
       <div
-        className={`p-2 px-4 flex bg-neutral-700/10 justify-between items-center ${
+        className={`p-2 px-4 flex bg-secondary border-b border-sidebar-border justify-between items-center ${
           isMaximized ? "cursor-default" : "cursor-move"
         }`}
         onMouseDown={handleMouseDown}
@@ -146,7 +146,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
 
       {/* Window Body */}
       <div
-        className="p-4 px-8 overflow-auto"
+        className="p-4 px-8 bg-sidebar-primary-foreground dark:bg-card overflow-auto"
         style={{ height: "calc(100% - 40px)" }}
       >
         {children}

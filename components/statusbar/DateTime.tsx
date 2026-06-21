@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useEffect, useRef } from "react"
 import { Calendar } from "../ui/calendar"
+import { Button } from "../ui/button"
 
 export function DateTime() {
   const [time, setTime] = useState("")
@@ -40,34 +41,34 @@ export function DateTime() {
   }, [isCalendarOpen])
 
   return (
-  <div className="relative inline-block text-sm tracking-wider tabular-nums" ref={containerRef}>
-    <button 
-      onClick={() => setIsCalendarOpen((prev) => !prev)}
-      className="flex items-center gap-1.5 hover:bg-neutral-700/20 px-3 py-1 rounded transition-colors"
-    >
-  <span>
-    {date ? (
-      `${date.toLocaleDateString('en-US', { month: 'short' })} ${date.getDate()} ${date.toLocaleDateString('en-US', { weekday: 'short' })}`
-    ) : (
-      "--- -- ---"
-    )}
-  </span>
-  <span>
-    {time || "--:--"}
-  </span>
-</button>
-
-    {isCalendarOpen && (
-      <div className="absolute top-full left-1/2 mt-2 -translate-x-1/2 bg-background shadow-xl rounded-lg z-50">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="rounded-lg border"
-          captionLayout="dropdown"
-        />
-      </div>
-    )}
-  </div>
-)
+    <div className="relative inline-block text-sm tracking-wider tabular-nums" ref={containerRef}>
+      <Button
+        variant="ghost-bar"
+        size="default"
+        onClick={() => setIsCalendarOpen((prev) => !prev)}
+      >
+        <span>
+          {date ? (
+            `${date.toLocaleDateString('en-US', { month: 'short' })} ${date.getDate()} ${date.toLocaleDateString('en-US', { weekday: 'short' })}`
+          ) : (
+            "--- -- ---"
+          )}
+        </span>
+        <span>
+          {time || "--:--"}
+        </span>
+      </Button>
+      {isCalendarOpen && (
+        <div className="absolute top-full left-1/2 mt-2 -translate-x-1/2 bg-background shadow-xl rounded-lg z-50">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="rounded-lg border bg-card"
+            captionLayout="dropdown"
+          />
+        </div>
+      )}
+    </div>
+  )
 }

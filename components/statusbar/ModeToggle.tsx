@@ -14,7 +14,7 @@ export function ModeToggle() {
 
   return (
     <Button 
-      variant="ghost" 
+      variant="ghost-bar" 
       size="icon" 
       onClick={toggleTheme}
       aria-label="Toggle theme"
