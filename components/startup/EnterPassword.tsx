@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import TypewriterEffect from '@/components/effects/TypewriterEffect'
 import { ArrowRightCircle } from 'lucide-react'
 import { useRouter } from "next/navigation";
@@ -9,12 +9,28 @@ const EnterPassword = () => {
   const passwordText = "Hello! Welcome to my portfolio!"
   const router = useRouter();
   
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     router.push('/desktop')
-  }
+  }, [router]);
+
+  useEffect(() => {
+    if (!isFinished) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        handleLogin();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isFinished, handleLogin,]);
 
   return (
-    <div className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm text-gray-700 flex items-center justify-between font-sans">
+    <div className="w-full px-4 py-3 bg-card border border-border rounded text-foreground flex items-center justify-between font-sans">
       <span className="flex-1">
         <TypewriterEffect text={passwordText} delay={70} onComplete={() => setIsFinished(true)}/>
       </span>
@@ -28,7 +44,7 @@ const EnterPassword = () => {
         >
           <ArrowRightCircle 
             size={20} 
-            className="text-gray-400 hover:text-indigo-600 ml-2" 
+            className="text-muted-foreground hover:text-primary ml-2" 
           />
         </button>
       )}
