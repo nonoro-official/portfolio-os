@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect } from "react";
-import { Minimize, Maximize2, Square, X } from "lucide-react";
+import { Minus, Maximize, Square, X } from "lucide-react";
 import type { Window } from "@/types/desktop";
 import { useDesktopContext } from "@/context/DesktopContext";
 import { Button } from "@/components/ui/button";
+import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/types/desktop";
 
 interface DraggableWindowProps {
   windowItem: Window;
@@ -27,9 +28,6 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
   const isMaximized = windowItem.state === "maximized";
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Bring window to front on click
-    focusWindow(windowItem.id, windowItem.title);
-
     // Don't allow dragging if the window is maximized
     if (isMaximized) return;
 
@@ -46,16 +44,13 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
         let nextX = e.clientX - dragStart.x;
         let nextY = e.clientY - dragStart.y;
 
-        const STATUSBAR_HEIGHT = 48; // Adjust if you have a status bar at the bottom
-
-        
         // Constrain within viewport
         const desktopWidth = window.innerWidth;
         const desktopHeight = window.innerHeight;
         const { width, height } = windowItem.size;
 
         nextX = Math.max(0, Math.min(nextX, desktopWidth - width));
-        nextY = Math.max(STATUSBAR_HEIGHT, Math.min(nextY, desktopHeight - height));
+        nextY = Math.max(STATUS_BAR_HEIGHT, Math.min(nextY, desktopHeight - height - DOCK_HEIGHT));
 
         moveWindow(windowItem.id, {
           x: nextX,
@@ -124,7 +119,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
             size="sm"
             className="p-2"
           >
-            <Minimize className="size-4" />
+            <Minus className="size-4" />
           </Button>
           
           {/* Maximize / Restore Button */}
@@ -134,7 +129,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
             size="sm"
             className="p-2"
           >
-            {isMaximized ? <Square className="size-4" /> : <Maximize2 className="size-4" />}
+            {isMaximized ? <Square className="size-4" /> : <Maximize className="size-4" />}
           </Button>
 
           {/* Close Button */}

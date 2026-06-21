@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from "react";
 import type { Item, Window } from "@/types/desktop";
 import { initialItems } from "@/config/desktop";
+import { WINDOW_WIDTH, WINDOW_HEIGHT } from '@/types/desktop';
 
 export interface DesktopContextValue {
   items: Item[];
@@ -52,8 +53,6 @@ export const useDesktop = () => {
 
       // Otherwise, create a new window
       const nextZIndex = getNextZIndex(prev);
-      const windowWidth = 900;
-      const windowHeight = 800;
 
       if (typeof window === "undefined") {
         // If window is not defined (e.g., during SSR), return a default position
@@ -64,7 +63,7 @@ export const useDesktop = () => {
             itemId: item.id,
             title: item.name,
             position: { x: 50 + prev.length * 20, y: 50 + prev.length * 20 },
-            size: { width: windowWidth, height: windowHeight },
+            size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
             zIndex: nextZIndex,
             state: "normal",
           },
@@ -74,12 +73,12 @@ export const useDesktop = () => {
       // Calculate initial position (centered, but offset for each new window)
       const desktopWidth = window.innerWidth;
       const desktopHeight = window.innerHeight;
-      let initialX = (desktopWidth - windowWidth) / 2 + prev.length * 20;
-      let initialY = (desktopHeight - windowHeight) / 2 + prev.length * 20;
+      let initialX = (desktopWidth - WINDOW_WIDTH) / 2 + prev.length * 20;
+      let initialY = (desktopHeight - WINDOW_HEIGHT) / 2 + prev.length * 20;
       
       // Constrain within viewport
-      initialX = Math.max(0, Math.min(initialX, desktopWidth - windowWidth));
-      initialY = Math.max(0, Math.min(initialY, desktopHeight - windowHeight));
+      initialX = Math.max(0, Math.min(initialX, desktopWidth - WINDOW_WIDTH));
+      initialY = Math.max(0, Math.min(initialY, desktopHeight - WINDOW_HEIGHT));
 
       return [
         ...prev,
@@ -88,7 +87,7 @@ export const useDesktop = () => {
           itemId: item.id,
           title: item.name,
           position: { x: initialX, y: initialY },
-          size: { width: windowWidth, height: windowHeight },
+          size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
           zIndex: nextZIndex,
           state: "normal",
         },
