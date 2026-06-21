@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { DesktopContext } from "@/context/DesktopContext";
-import { DraggableWindow } from "@/components/desktop/DraggableWindow";
+import { DraggableWindow } from "@/components/desktop/draggables/DraggableWindow";
 import { useDesktop } from "@/hooks/useDesktop";
-import DesktopGrid from "@/components/desktop/DesktopGrid";
+import DesktopGrid from "@/components/desktop/grid/DesktopGrid";
 import StatusBar from "@/components/statusbar/StatusBar";
 
 const DesktopWrapper: React.FC = () => {

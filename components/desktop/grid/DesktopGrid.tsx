@@ -1,8 +1,8 @@
 import React from 'react'
 import { DragDropProvider, type DragEndEvent, type DragStartEvent } from '@dnd-kit/react'
 import { useDesktopContext } from '@/context/DesktopContext';
-import {DraggableDesktopItem} from '@/components/desktop/DraggableDesktopItem';
-import { DesktopGridCell } from '@/components/desktop/DesktopGridCell';
+import {DraggableDesktopItem} from '@/components/desktop/draggables/DraggableDesktopItem';
+import { DesktopGridCell } from '@/components/desktop/grid/DesktopGridCell';
 
 const GRID_ROWS = 8;
 const GRID_COLS = 18;
