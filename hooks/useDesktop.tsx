@@ -111,7 +111,7 @@ export const useDesktop = () => {
           ...w,
           state: isCurrentlyMinimized ? "normal" : "minimized",
           // Focus the window when restoring it
-          zIndex: isCurrentlyMinimized ? nextZIndex : w.zIndex,
+          zIndex: isCurrentlyMinimized ? nextZIndex : 0,
         };
       });
     });
@@ -128,7 +128,7 @@ export const useDesktop = () => {
       return {
         ...w,
         state: isCurrentlyMaximized ? "normal" : "maximized",
-        zIndex: isCurrentlyMaximized ? nextZIndex : w.zIndex,
+        zIndex: isCurrentlyMaximized ? 0 : nextZIndex,
       };
     });
   });

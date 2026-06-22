@@ -6,7 +6,7 @@ import { Button } from "../ui/button"
 export function DateTime() {
   const [time, setTime] = useState("")
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
-    const [date, setDate] = useState<Date | undefined>(new Date())
+  const [date, setDate] = useState<Date | undefined>(new Date())
 
   const containerRef = useRef<HTMLDivElement>(null)
 
