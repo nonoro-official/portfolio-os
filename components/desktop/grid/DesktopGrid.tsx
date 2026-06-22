@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { DragDropProvider, type DragEndEvent, type DragStartEvent } from '@dnd-kit/react'
 import { useDesktopContext } from '@/context/DesktopContext';
-import {DraggableDesktopItem} from '@/components/desktop/draggables/DraggableDesktopItem';
+import { DraggableDesktopItem } from '@/components/desktop/draggables/DraggableDesktopItem';
 import { DesktopGridCell } from '@/components/desktop/grid/DesktopGridCell';
 import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from '@/types/desktop';
 

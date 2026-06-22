@@ -13,15 +13,23 @@ export const DraggableDesktopItem: React.FC<DraggableDesktopItemProps> = ({ item
     id: item.id,
   });
 
+  const handleOpenItem = () => {
+      if (item.type === "file" && item.link) {
+        window.open(item.link, "_blank");
+      } else if (item.type === "folder") {
+        openWindow(item);
+      }
+    };
+
   return (
     <div
       ref={ref}
-      onDoubleClick={() => openWindow(item)}
+      onDoubleClick={handleOpenItem}
       className="flex flex-col items-center justify-center w-20 text-center cursor-grab select-none active:cursor-grabbing"
     >
       {/* Icon Display */}
       <div className="text-[36px] mb-1 drop-shadow-md">
-        {item.icon || (item.type === "folder" ? "📁" : "📄")}
+        {item.type === "folder" ? ("📁"): ("📄")}
       </div>
 
       {/* Label Text */}
