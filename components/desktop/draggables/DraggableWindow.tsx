@@ -146,7 +146,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
 
       {/* Window Body */}
       <div
-        className="p-4 px-8 bg-sidebar-primary-foreground dark:bg-card overflow-auto"
+        className="w-full bg-sidebar-primary-foreground dark:bg-card overflow-hidden"
         style={{ height: "calc(100% - 40px)" }}
       >
         {children}

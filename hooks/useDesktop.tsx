@@ -66,6 +66,7 @@ export const useDesktop = () => {
             size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
             zIndex: nextZIndex,
             state: "normal",
+            url: item.link,
           },
         ];
       }
@@ -90,6 +91,7 @@ export const useDesktop = () => {
           size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
           zIndex: nextZIndex,
           state: "normal",
+          url: item.link,
         },
       ];
     });

@@ -19,6 +19,8 @@ export interface Window {
     size: {width: number, height: number};
     zIndex: number;
     state: "normal" | "minimized" | "maximized";
+    url?: string;
+    content?: string;
 }
 
 export interface Position {
