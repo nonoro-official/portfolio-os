@@ -8,6 +8,7 @@ export const initialItems: Item[] = [
     parentId: null,
     path: "/desktop/Games",
     link: "",
+    gridCellId: "0-0"
   },
   {
     id: "browser",
@@ -16,6 +17,7 @@ export const initialItems: Item[] = [
     parentId: null,
     path: "/desktop/Browser",
     link: "",
+    gridCellId: "1-0"
   },
   {
     id: "tools",
@@ -24,6 +26,7 @@ export const initialItems: Item[] = [
     parentId: null,
     path: "/desktop/CLI_Tools.sh",
     link: "",
+    gridCellId: "2-0"
   },
   {
     id: "mobile",
@@ -32,6 +35,16 @@ export const initialItems: Item[] = [
     parentId: null,
     path: "/desktop/Mobile_Apps",
     link: "",
+    gridCellId: "3-0"
+  },
+  {
+    id: "systems",
+    name: "Systems",
+    type: "folder",
+    parentId: null,
+    path: "/desktop/Systems",
+    link: "",
+    gridCellId: "4-0"
   },
   {
     id: "work-experience",
@@ -39,6 +52,7 @@ export const initialItems: Item[] = [
     type: "file",
     parentId: null,
     path: "/desktop/Work.md",
+    gridCellId: "0-1"
   },
   {
     id: "resume-download",
@@ -47,6 +61,7 @@ export const initialItems: Item[] = [
     parentId: null,
     path: "/desktop/Download_Resume.pdf",
     link: "/resume.pdf", // Triggers your local public asset resume download
+    gridCellId: "1-1"
   },
   {
     id: "gallery",
@@ -54,6 +69,7 @@ export const initialItems: Item[] = [
     type: "folder",
     parentId: null,
     path: "/desktop/Gallery",
+    gridCellId: "2-1"
   },
   {
     id: "skills",
@@ -61,6 +77,7 @@ export const initialItems: Item[] = [
     type: "app",
     parentId: null,
     path: "/desktop/Settings",
+    gridCellId: "0-2"
   },
   {
     id: "readme",
@@ -68,5 +85,6 @@ export const initialItems: Item[] = [
     type: "file",
     parentId: null,
     path: "/desktop/README.md",
+    gridCellId: "1-2"
   },
 ];

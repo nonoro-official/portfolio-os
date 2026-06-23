@@ -17,14 +17,25 @@ export interface DesktopContextValue {
   getFocusedWindow: () => Window | null;
 }
 
+const MAX_ROWS_PER_COLUMN = 8;
+
 export const useDesktop = () => {
   // Assign grid cells to items that don't have one
   const initializeItems = (items: Item[]) => {
-    return items.map((item, index) => ({
+  return items.map((item, index) => {
+    // Keep row-col assignment if gridCellId already exists
+    if (item.gridCellId) return item;
+
+    // Standard column-major fallback layout calculation:
+    const rowIndex = index % MAX_ROWS_PER_COLUMN;
+    const colIndex = Math.floor(index / MAX_ROWS_PER_COLUMN);
+
+    return {
       ...item,
-      gridCellId: item.gridCellId || `${Math.floor(index / 10)}-${index % 10}`,
-    }));
-  };
+      gridCellId: `${rowIndex}-${colIndex}`,
+    };
+  });
+};
 
   const [items, setItems] = useState<Item[]>(() => initializeItems(initialItems));
   const [windows, setWindows] = useState<Window[]>([]);
