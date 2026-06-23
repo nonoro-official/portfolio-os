@@ -7,7 +7,7 @@ export const initialItems: Item[] = [
     type: "app",
     parentId: null,
     path: "/desktop/Games",
-    link: "", 
+    link: "",
   },
   {
     id: "browser",
@@ -68,5 +68,5 @@ export const initialItems: Item[] = [
     type: "file",
     parentId: null,
     path: "/desktop/README.md",
-  }
+  },
 ];
