@@ -1,31 +1,62 @@
 "use client";
 import React, { useState } from "react";
-import { ArrowLeft, Home, RotateCw, Search } from "lucide-react";
+import { ArrowLeft, Home, RotateCw, Search, X, Disc3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const SEARCH_RESULTS = [
   {
+    icon: <Disc3 />,
+    name: "Green Light Records",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    stack: "MongoDB - Express - React - Node.js",
+    desc: "Green Light Records is a records shop.",
+    hasReadMore: false,
+    preview: "💬",
+  },
+  {
+    icon: "💬",
     name: "Roll Your Reps",
     url: "https://roll-your-reps.vercel.app",
+    stack: "React - Typescript - Node.js",
     desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
-    icon: "🛍️",
+    hasReadMore: false,
+    preview: "🛍️",
   },
   {
-    name: "VND",
-    url: "https://nonoro-official.github.io/vnd.github.io/",
-    desc: "Visual Novel Development Club Website. This is a website about a video game that was developed in a school club I joined in 11th grade! The website was made for an assignment in my web design and scripting class. The video game is a visual novel dating simulator about supernatural characters in a magic school.",
     icon: "💬",
+    name: "Company Website Mega Menu",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    stack: "WordPress",
+    desc: "A mega menu me and my partner made for our internship using WordPress.",
+    hasReadMore: false,
+    preview: "💬",
   },
   {
+    icon: "💬",
+    name: "VND School Dating Sim",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    stack: "HTML - CSS",
+    desc: "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school.",
+    hasReadMore: true,
+    preview: "💬",
+  },
+  {
+    icon: "🍋",
     name: "Personal Website",
     url: "https://nonoro-official.github.io/noahpenaranda-personalwebsite.github.io/",
+    stack: "HTML - CSS",
     desc: "Personal website made for college.",
-    icon: "📊",
+    hasReadMore: false,
+    preview: "📊",
   },
   {
+    icon: "🍋",
     name: "Portfolio",
     url: "https://nonoro-official.github.io/portfolio/",
+    stack: "HTML - CSS",
     desc: "Original portfolio website. Based from the personal website.",
-    icon: "🌐",
+    hasReadMore: false,
+    preview: "🌐",
   },
 ];
 
@@ -33,7 +64,6 @@ const Browser = () => {
   const [currentUrl, setCurrentUrl] = useState<string>("");
   const [inputUrl, setInputUrl] = useState<string>("");
   const [viewMode, setViewMode] = useState<"homepage" | "iframe">("homepage");
-
   const [refreshKey, setRefreshKey] = useState<number>(0);
 
   const navigateTo = (url: string) => {
@@ -57,27 +87,30 @@ const Browser = () => {
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
       {/* Top Browser Control Bar */}
-      <div className="flex items-center gap-3 px-4 py-2 bg-[#EADBB6]/40 border-b border-zinc-200/50 shrink-0">
+      <div className="flex items-center gap-3 px-4 py-2 bg-[#FDFBF7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
         <div className="flex items-center gap-1.5 text-zinc-600">
-          <button
+          <Button
+            variant="window"
             onClick={goHome}
             disabled={viewMode === "homepage"}
             className="p-1 hover:bg-zinc-200/50 rounded disabled:opacity-30 transition"
           >
             <ArrowLeft className="size-4" />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="window"
             onClick={goHome}
             className="p-1 hover:bg-zinc-200/50 rounded transition"
           >
             <Home className="size-4" />
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="window"
             onClick={refreshPage}
             className="p-1 hover:bg-zinc-200/50 rounded transition"
           >
             <RotateCw className="size-4" />
-          </button>
+          </Button>
         </div>
 
         {/* Address Bar */}
@@ -96,22 +129,22 @@ const Browser = () => {
             value={inputUrl}
             onChange={(e) => setInputUrl(e.target.value)}
             placeholder="Search Googly or type a URL..."
-            className="w-full bg-white border border-zinc-200 text-zinc-700 rounded pl-8 pr-3 py-1 text-xs outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400/20 transition"
+            className="w-full bg-white dark:bg-background border border-zinc-200 text-zinc-700 dark:text-foreground rounded pl-8 pr-3 py-1 text-xs outline-none focus:border-zinc-400 dark:border-border focus:ring-1 focus:ring-zinc-400/20 transition"
           />
           <Search className="size-3.5 text-zinc-400 absolute left-2.5 pointer-events-none" />
         </form>
       </div>
 
       {/* Main Window Canvas Viewport */}
-      <div className="flex-1 w-full bg-white overflow-y-auto">
+      <div className="flex-1 w-full bg-white dark:bg-popover overflow-y-auto">
         {viewMode === "homepage" ? (
           /* ================= GOOGLE HOMEPAGE CUSTOM INDEX ================= */
           <div className="max-w-2xl mx-auto px-6 py-4 flex flex-col">
-            <div className="w-full flex items-center gap-4 mb-6 border-b border-zinc-200 pb-4">
-              <h1 className="text-4xl font-extrabold tracking-tight bg-linear-to-r from-amber-600 via-orange-500 to-yellow-600 bg-clip-text text-transparent select-none shrink-0 py-1">
+            <div className="w-full flex items-center gap-4 mb-6 border-b border-zinc-200 dark:border-border pb-4">
+              <h1 className="text-4xl font-extrabold bg-clip-text text-amber-600 select-none shrink-0 py-1">
                 Googly
               </h1>
-              <div className="flex-1 bg-zinc-50 border border-zinc-200 rounded-full flex items-center px-4 py-2.5 shadow-sm text-sm text-zinc-400 select-none">
+              <div className="flex-1 bg-zinc-50 dark:bg-background border border-zinc-200 dark:border-border rounded-full flex items-center px-4 py-2.5 shadow-sm text-sm text-zinc-400 select-none">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -128,34 +161,74 @@ const Browser = () => {
                   <input
                     type="text"
                     value={inputUrl}
-                    placeholder="View my websites..."
+                    placeholder="My Web Projects"
                     onChange={(e) => setInputUrl(e.target.value)}
                     className="w-full bg-transparent outline-none text-foreground"
                   />
+                  <X className="size-4 text-zinc-400 absolute right-2 cursor-pointer hover:text-zinc-600 transition" onClick={() => setInputUrl("")} />
                 </form>
               </div>
             </div>
 
-            <div className="w-full gap-4">
-              {SEARCH_RESULTS.map((site) => (
-                <button
-                  key={site.name}
-                  onClick={() => navigateTo(site.url)}
-                  className="group text-left p-4 flex items-start gap-3 w-full"
-                >
-                  <span className="text-2xl p-2 shadow-inner group-hover:scale-105">
-                    {site.icon}
-                  </span>
-                  <div className="truncate">
-                    <h3 className="font-semibold text-zinc-800 text-sm group-hover:text-amber-700 ">
-                      {site.name}
-                    </h3>
-                    <p className="text-xs text-zinc-400 truncate mt-1">
-                      {site.desc}
-                    </p>
+            <div className="flex flex-col gap-6 max-w-2xl">
+              {SEARCH_RESULTS.map((site) => {
+                const displayUrl = site.url
+                  .replace("https://", "")
+                  .replace("www.", "")
+                  .split("/")
+                  .filter(Boolean)
+                  .join(" › ");
+
+                return (
+                  <div key={site.name} className="flex items-start justify-between gap-4">
+                    {/* Left Side: Content */}
+                    <div className="flex-1 min-w-0 flex flex-col">
+                      {/* 1. Header: Icon & Breadcrumb */}
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm p-1 bg-zinc-100 rounded-full flex items-center justify-center size-6 select-none shrink-0">
+                          {site.icon}
+                        </span>
+                        <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
+                        <span className="text-xs font-normal text-foreground truncate">{site.stack}</span>
+                        <span className="text-[10px] text-zinc-500 break-all whitespace-normal">{displayUrl}</span>
+                      </div>
+                      </div>
+
+                      {/* 2. Title Link */}
+                      <Button
+                        variant="link"
+                        onClick={() => navigateTo(site.url)}
+                        // Added h-auto, p-0, text-xl, and critically: justify-start text-left
+                        className="h-auto p-0 text-xl text-foreground hover:text-primary hover:underline font-medium leading-tight mb-1 justify-start text-left whitespace-normal"
+                      >
+                        {site.name}
+                      </Button>
+
+                      {/* 3. Description Snippet with Inline Read More */}
+                      <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
+                        {site.desc}{" "}
+                        <a
+                          href={displayUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline inline-block whitespace-nowrap ml-1 cursor-pointer font-normal"
+                          onClick={(e) => e.stopPropagation()} // Keeps click from firing navigateTo
+                        >
+                          {site.hasReadMore ? "Read More" : ""}
+                        </a>
+                      </p>
+                    </div>
+
+                    {/* Right Side: Google-style square snippet thumbnail */}
+                    <button 
+                      onClick={() => navigateTo(site.url)}
+                      className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden"
+                    >
+                      {site.preview}
+                    </button>
                   </div>
-                </button>
-              ))}
+                );
+              })}
             </div>
           </div>
         ) : (
@@ -165,7 +238,7 @@ const Browser = () => {
             src={currentUrl}
             title="Live Website Runner"
             className="w-full h-full border-none bg-white"
-            sandbox="allow-scripts allow-same-origin allow-forms"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
             allow="autoplay; fullscreen"
           />
         )}
