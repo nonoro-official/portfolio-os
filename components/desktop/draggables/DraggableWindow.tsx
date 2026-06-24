@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Minus, Maximize, Square, X } from "lucide-react";
 import type { Window } from "@/types/desktop";
 import { useDesktopContext } from "@/context/DesktopContext";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/types/desktop";
 
 interface DraggableWindowProps {
@@ -14,14 +14,14 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
   windowItem,
   children,
 }) => {
-  const { 
-    closeWindow, 
-    toggleMinimizeWindow, 
-    toggleMaximizeWindow, 
-    focusWindow, 
-    moveWindow 
+  const {
+    closeWindow,
+    toggleMinimizeWindow,
+    toggleMaximizeWindow,
+    focusWindow,
+    moveWindow,
   } = useDesktopContext();
-  
+
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
@@ -50,7 +50,10 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
         const { width, height } = windowItem.size;
 
         nextX = Math.max(0, Math.min(nextX, desktopWidth - width));
-        nextY = Math.max(STATUS_BAR_HEIGHT, Math.min(nextY, desktopHeight - height - DOCK_HEIGHT));
+        nextY = Math.max(
+          STATUS_BAR_HEIGHT,
+          Math.min(nextY, desktopHeight - height - DOCK_HEIGHT),
+        );
 
         moveWindow(windowItem.id, {
           x: nextX,
@@ -58,7 +61,14 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
         });
       }
     },
-    [isDragging, isMaximized, dragStart, moveWindow, windowItem.id, windowItem.size]
+    [
+      isDragging,
+      isMaximized,
+      dragStart,
+      moveWindow,
+      windowItem.id,
+      windowItem.size,
+    ],
   );
 
   const handleMouseUp = useCallback(() => {
@@ -85,9 +95,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
       className={`absolute backdrop-blur-xl bg-neutral-800/10 shadow-lg overflow-hidden ${
         isDragging ? "" : "transition-all duration-150"
       } ${
-        isMaximized 
-          ? "top-0 left-0 w-full h-full rounded-none" 
-          : "rounded-lg"
+        isMaximized ? "top-0 left-0 w-full h-full rounded-none" : "rounded-lg"
       }`}
       style={
         isMaximized
@@ -121,7 +129,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
           >
             <Minus className="size-4" />
           </Button>
-          
+
           {/* Maximize / Restore Button */}
           <Button
             onClick={() => toggleMaximizeWindow(windowItem.id)}
@@ -129,7 +137,11 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
             size="sm"
             className="p-2"
           >
-            {isMaximized ? <Square className="size-4" /> : <Maximize className="size-4" />}
+            {isMaximized ? (
+              <Square className="size-4" />
+            ) : (
+              <Maximize className="size-4" />
+            )}
           </Button>
 
           {/* Close Button */}

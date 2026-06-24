@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import { DragDropProvider, type DragEndEvent, type DragStartEvent } from '@dnd-kit/react'
-import { useDesktopContext } from '@/context/DesktopContext';
-import { DraggableDesktopItem } from '@/components/desktop/draggables/DraggableDesktopItem';
-import { DesktopGridCell } from '@/components/desktop/grid/DesktopGridCell';
-import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from '@/types/desktop';
+import React, { useState, useEffect } from "react";
+import {
+  DragDropProvider,
+  type DragEndEvent,
+  type DragStartEvent,
+} from "@dnd-kit/react";
+import { useDesktopContext } from "@/context/DesktopContext";
+import { DraggableDesktopItem } from "@/components/desktop/draggables/DraggableDesktopItem";
+import { DesktopGridCell } from "@/components/desktop/grid/DesktopGridCell";
+import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/types/desktop";
 
 const CELL_SIZE = 90;
 const CELL_GAP = 15;
@@ -17,22 +21,27 @@ const DesktopGrid = () => {
   useEffect(() => {
     const calculateGrid = () => {
       const availableWidth = window.innerWidth - PADDING * 2;
-      const availableHeight = window.innerHeight - STATUS_BAR_HEIGHT - DOCK_HEIGHT - PADDING;
-      
-      const cols = Math.floor((availableWidth + CELL_GAP) / (CELL_SIZE + CELL_GAP));
-      const rows = Math.floor((availableHeight + CELL_GAP) / (CELL_SIZE + CELL_GAP));
-      
+      const availableHeight =
+        window.innerHeight - STATUS_BAR_HEIGHT - DOCK_HEIGHT - PADDING;
+
+      const cols = Math.floor(
+        (availableWidth + CELL_GAP) / (CELL_SIZE + CELL_GAP),
+      );
+      const rows = Math.floor(
+        (availableHeight + CELL_GAP) / (CELL_SIZE + CELL_GAP),
+      );
+
       setGridDimensions({ rows: Math.max(1, rows), cols: Math.max(1, cols) });
     };
 
     calculateGrid();
-    window.addEventListener('resize', calculateGrid);
-    return () => window.removeEventListener('resize', calculateGrid);
+    window.addEventListener("resize", calculateGrid);
+    return () => window.removeEventListener("resize", calculateGrid);
   }, []);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(String(event.operation.source?.id));
-  }
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     setActiveId(null);
@@ -45,10 +54,14 @@ const DesktopGrid = () => {
 
     if (!draggedItemId || !targetCellId) return;
 
-    if (draggedItemId && typeof targetCellId === "string" && targetCellId.includes("-")) {
+    if (
+      draggedItemId &&
+      typeof targetCellId === "string" &&
+      targetCellId.includes("-")
+    ) {
       moveItem(String(draggedItemId), { id: targetCellId });
     }
-  }
+  };
 
   return (
     <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -72,21 +85,25 @@ const DesktopGrid = () => {
         {Array.from({ length: gridDimensions.rows }).map((_, rowIndex) =>
           Array.from({ length: gridDimensions.cols }).map((_, colIndex) => {
             const cellId = `${rowIndex}-${colIndex}`;
-            
+
             const allocatedItem = items.find(
-              (item) => item.gridCellId === cellId
+              (item) => item.gridCellId === cellId,
             );
 
             return (
-              <DesktopGridCell key={cellId} id={cellId} isDraggingItem={!!activeId}>
+              <DesktopGridCell
+                key={cellId}
+                id={cellId}
+                isDraggingItem={!!activeId}
+              >
                 {allocatedItem && <DraggableDesktopItem item={allocatedItem} />}
               </DesktopGridCell>
             );
-          })
+          }),
         )}
       </div>
     </DragDropProvider>
-  )
-}
+  );
+};
 
-export default DesktopGrid
+export default DesktopGrid;

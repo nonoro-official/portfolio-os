@@ -1,8 +1,8 @@
-import DesktopWrapper from '@/components/desktop/DesktopWrapper'
-import React from 'react'
+import DesktopWrapper from "@/components/desktop/DesktopWrapper";
+import React from "react";
 
 const Desktop = () => {
-  return <DesktopWrapper/>
-}
+  return <DesktopWrapper />;
+};
 
-export default Desktop
+export default Desktop;

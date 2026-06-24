@@ -1,6 +1,6 @@
-'use client'
-import React from 'react'
-import Typewriter from 'typewriter-effect'
+"use client";
+import React from "react";
+import Typewriter from "typewriter-effect";
 
 interface TypewriterProps {
   text: string;
@@ -9,7 +9,12 @@ interface TypewriterProps {
   onComplete?: () => void;
 }
 
-const TypewriterEffect = ({ text, delay = 50, showCursor = true, onComplete}: TypewriterProps) => {
+const TypewriterEffect = ({
+  text,
+  delay = 50,
+  showCursor = true,
+  onComplete,
+}: TypewriterProps) => {
   return (
     <div>
       <Typewriter
@@ -22,13 +27,13 @@ const TypewriterEffect = ({ text, delay = 50, showCursor = true, onComplete}: Ty
             .start();
         }}
         options={{
-            delay,
-            loop: false,
-            cursor: showCursor ? "|" : "",
+          delay,
+          loop: false,
+          cursor: showCursor ? "|" : "",
         }}
       />
     </div>
-  )
-}
+  );
+};
 
-export default TypewriterEffect
+export default TypewriterEffect;
