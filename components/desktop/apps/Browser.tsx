@@ -1,7 +1,7 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
+import { useWindow } from "@/hooks/useWindow";
 import { ArrowLeft, Home, RotateCw, Search, X, Disc3 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 
 const SEARCH_RESULTS = [
   {
@@ -61,33 +61,21 @@ const SEARCH_RESULTS = [
 ];
 
 const Browser = () => {
-  const [currentUrl, setCurrentUrl] = useState<string>("");
-  const [inputUrl, setInputUrl] = useState<string>("");
-  const [viewMode, setViewMode] = useState<"homepage" | "iframe">("homepage");
-  const [refreshKey, setRefreshKey] = useState<number>(0);
-
-  const navigateTo = (url: string) => {
-    setCurrentUrl(url);
-    setInputUrl(url);
-    setViewMode("iframe");
-  };
-
-  const goHome = () => {
-    setViewMode("homepage");
-    setCurrentUrl("");
-    setInputUrl("");
-  };
-
-  const refreshPage = () => {
-    if (viewMode === "iframe") {
-      setRefreshKey((prev) => prev + 1);
-    }
-  };
+  const {
+    currentUrl,
+    inputUrl,
+    setInputUrl,
+    viewMode,
+    refreshKey,
+    navigateTo,
+    goHome,
+    refreshPage,
+  } = useWindow();
 
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
       {/* Top Browser Control Bar */}
-      <div className="flex items-center gap-3 px-4 py-2 bg-[#FDFBF7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
+      <div className="flex items-center gap-3 px-4 py-1 bg-[#FDFBF7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
         <div className="flex items-center gap-1.5 text-zinc-600">
           <Button
             variant="window"
@@ -117,10 +105,7 @@ const Browser = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (inputUrl.trim())
-              navigateTo(
-                inputUrl.startsWith("http") ? inputUrl : `https://${inputUrl}`,
-              );
+            if (inputUrl.trim()) navigateTo(inputUrl);
           }}
           className="flex-1 relative flex items-center"
         >
@@ -165,7 +150,10 @@ const Browser = () => {
                     onChange={(e) => setInputUrl(e.target.value)}
                     className="w-full bg-transparent outline-none text-foreground"
                   />
-                  <X className="size-4 text-zinc-400 absolute right-2 cursor-pointer hover:text-zinc-600 transition" onClick={() => setInputUrl("")} />
+                  <X
+                    className="size-4 text-zinc-400 absolute right-2 cursor-pointer hover:text-zinc-600 transition"
+                    onClick={() => setInputUrl("")}
+                  />
                 </form>
               </div>
             </div>
@@ -180,7 +168,10 @@ const Browser = () => {
                   .join(" › ");
 
                 return (
-                  <div key={site.name} className="flex items-start justify-between gap-4">
+                  <div
+                    key={site.name}
+                    className="flex items-start justify-between gap-4"
+                  >
                     {/* Left Side: Content */}
                     <div className="flex-1 min-w-0 flex flex-col">
                       {/* 1. Header: Icon & Breadcrumb */}
@@ -189,9 +180,13 @@ const Browser = () => {
                           {site.icon}
                         </span>
                         <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
-                        <span className="text-xs font-normal text-foreground truncate">{site.stack}</span>
-                        <span className="text-[10px] text-zinc-500 break-all whitespace-normal">{displayUrl}</span>
-                      </div>
+                          <span className="text-xs font-normal text-foreground truncate">
+                            {site.stack}
+                          </span>
+                          <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
+                            {displayUrl}
+                          </span>
+                        </div>
                       </div>
 
                       {/* 2. Title Link */}
@@ -205,7 +200,7 @@ const Browser = () => {
                       </Button>
 
                       {/* 3. Description Snippet with Inline Read More */}
-                      <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
                         {site.desc}{" "}
                         <a
                           href={displayUrl}
@@ -220,7 +215,7 @@ const Browser = () => {
                     </div>
 
                     {/* Right Side: Google-style square snippet thumbnail */}
-                    <button 
+                    <button
                       onClick={() => navigateTo(site.url)}
                       className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden"
                     >
