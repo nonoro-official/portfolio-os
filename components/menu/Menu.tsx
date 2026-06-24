@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
 const Menu = () => {
   return (
-    <div className="flex items-center justify-center h-full text-white text-sm cursor-pointer">
-      Menu
+    <div className="flex items-center justify-center text-2xl h-full cursor-pointer">
+      🍋
     </div>
-  )
-}
+  );
+};
 
-export default Menu
+export default Menu;
