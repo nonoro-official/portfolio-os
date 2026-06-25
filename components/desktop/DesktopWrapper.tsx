@@ -8,6 +8,7 @@ import DesktopGrid from "@/components/desktop/grid/DesktopGrid";
 import StatusBar from "@/components/statusbar/StatusBar";
 import Dock from "@/components/dock/Dock";
 import Browser from "@/components/desktop/apps/Browser";
+import GameLauncher from "@/components/desktop/apps/GameLauncher";
 
 const DesktopWrapper: React.FC = () => {
   const { contextValue, desktopRef } = useDesktop();
@@ -15,16 +16,24 @@ const DesktopWrapper: React.FC = () => {
   const renderItemContent = (windowItem: Window) => {
     switch (windowItem.itemId) {
       case "browser":
-        return <Browser item={windowItem.url || "https://localhost:3000"} />;
-      // Add more cases for other apps as needed
+        return <Browser />;
+      case "game-launcher":
+        return <GameLauncher />;
       default:
-        return <div className="p-4 font-mono text-xs text-zinc-500">{windowItem.itemId}</div>;
+        return (
+          <div className="p-4 font-mono text-xs text-zinc-500">
+            {windowItem.itemId}
+          </div>
+        );
     }
-  }
+  };
 
   return (
     <DesktopContext.Provider value={contextValue}>
-      <div ref={desktopRef} className="flex h-screen w-screen overflow-hidden select-none">
+      <div
+        ref={desktopRef}
+        className="flex h-screen w-screen overflow-hidden select-none"
+      >
         <div className="flex-col relative w-full h-full bg-background md:shadow-xl">
           <StatusBar />
           {/* Desktop Items Grid with Drag Support */}
@@ -38,6 +47,9 @@ const DesktopWrapper: React.FC = () => {
           ))}
 
           <Dock />
+          <p className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground text-center">
+            © 2026 Noah Peñaranda
+          </p>
         </div>
       </div>
     </DesktopContext.Provider>

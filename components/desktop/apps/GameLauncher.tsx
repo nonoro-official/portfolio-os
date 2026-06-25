@@ -1,0 +1,321 @@
+import { useState, useEffect } from "react";
+import { ArrowLeft, RotateCw, Search } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { useWindow } from "@/hooks/useWindow";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/Carousel";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/Input-Group";
+
+const GAMES = [
+  {
+    name: "Through Your Eyes",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    gameTags: {
+      stack: ["Ren'Py"],
+      genre: ["Visual Novel", "Narrative"],
+    },
+    desc: "Green Light Records is a records shop.",
+    isFeatured: true,
+    preview: "💬",
+    featuredImage: "",
+  },
+  {
+    name: "Talinghaga: Kuwento ng mga Kaluluwa",
+    url: "https://roll-your-reps.vercel.app",
+    gameTags: {
+      stack: ["Ren'Py"],
+      genre: ["Visual Novel", "Narrative"],
+    },
+    desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
+    isFeatured: true,
+    preview: "🛍️",
+    featuredImage: "",
+  },
+  {
+    name: "CoDecipher: Unmask the Code",
+    url: "https://github.com/Jerp010/CoDecipher",
+    gameTags: {
+      stack: ["Web"],
+      genre: ["Multiplayer", "Puzzle"],
+    },
+    desc: "CoDecipher is an interactive multiplayer coding game where players decipher masked code segments, fill in the blanks, and compete to master programming concepts. Built for the Hackathon Jam 2026 by Barney and Friends.",
+    isFeatured: true,
+    preview: "💬",
+    featuredImage: "",
+  },
+  {
+    name: "Rover I",
+    url: "https://sbsonk.itch.io/rover-i",
+    embedId: "3273222",
+    gameTags: {
+      stack: ["Web"],
+      genre: ["Adventure", "Puzzle"],
+    },
+    desc: "A mega menu me and my partner made for our internship using WordPress.",
+    isFeatured: true,
+    preview: "💬",
+    featuredImage: "",
+  },
+  {
+    name: "Day Trading Simulator",
+    url: "https://roll-your-reps.vercel.app",
+    gameTags: {
+      stack: ["Raylib"],
+      genre: ["Simulator"],
+    },
+    desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
+    isFeatured: true,
+    preview: "🛍️",
+    featuredImage: "",
+  },
+  {
+    name: "Rizz Riot: The Unwanted Magnet",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    gameTags: {
+      stack: ["Unity"],
+      genre: ["Visual Novel", "Narrative"],
+    },
+    desc: "Green Light Records is a records shop.",
+    isFeatured: false,
+    preview: "💬",
+  },
+  {
+    name: "Eden Academy",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    gameTags: {
+      stack: ["Ren'Py"],
+      genre: ["Visual Novel", "Narrative", "Simulation"],
+    },
+    desc: "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school.",
+    isFeatured: false,
+    preview: "💬",
+  },
+  {
+    name: "MIRO",
+    url: "https://nonoro-official.github.io/noahpenaranda-personalwebsite.github.io/",
+    gameTags: {
+      stack: ["Ren'Py"],
+      genre: ["Visual Novel", "Narrative", "Adventure"],
+    },
+    desc: "Personal website made for college.",
+    isFeatured: false,
+    preview: "📊",
+  },
+];
+
+const GameLauncher = () => {
+  const {
+    currentUrl,
+    inputUrl,
+    setInputUrl,
+    viewMode,
+    refreshKey,
+    navigateTo,
+    goHome,
+    refreshPage,
+  } = useWindow();
+
+  const featuredGames = GAMES.filter((game) => game.isFeatured == true);
+  const [activeItemIndex, setActiveItemIndex] = useState(0);
+  const [api, setApi] = useState<CarouselApi>();
+
+  useEffect(() => {
+    if (!api) return;
+
+    api.on("select", () => {
+      setActiveItemIndex(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  return (
+    <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
+      {/* Top Browser Control Bar */}
+      <div className="flex items-center gap-3 px-4 py-1 bg-[#FDFBF7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
+        <div className="flex items-center gap-1.5 text-zinc-300">
+          <Button
+            variant="window"
+            onClick={goHome}
+            disabled={viewMode === "homepage"}
+            className="p-1 hover:bg-zinc-200/50 rounded disabled:opacity-30 transition"
+          >
+            <ArrowLeft className="size-4" />
+          </Button>
+          <Button
+            variant="window"
+            onClick={refreshPage}
+            className="p-1 hover:bg-zinc-200/50 rounded transition"
+          >
+            <RotateCw className="size-4" />
+          </Button>
+          <p>|</p>
+        </div>
+        <p className="text-2xl font-bold bg-clip-text text-amber-600 select-none shrink-0 py-1">
+          Vapor
+        </p>
+      </div>
+      {/* Browse and Search Tab */}
+      <div className="flex items-center gap-3 px-4 py-2 bg-[#ecebe7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
+        <div className="flex items-center gap-1.5 text-zinc-300">
+          <Button
+            variant="link"
+            onClick={goHome}
+            className="p-1 hover:bg-zinc-200/50 rounded transition"
+          >
+            <p className="text-sm font-medium text-zinc-600 hover:text-zinc-800">
+              Browse
+            </p>
+          </Button>
+          <Button
+            variant="link"
+            onClick={goHome}
+            className="p-1 hover:bg-zinc-200/50 rounded transition"
+          >
+            <p className="text-sm font-medium text-zinc-600 hover:text-zinc-800">
+              Competitions
+            </p>
+          </Button>
+          <Button
+            variant="link"
+            onClick={goHome}
+            className="p-1 hover:bg-zinc-200/50 rounded transition"
+          >
+            <p className="text-sm font-medium text-zinc-600 hover:text-zinc-800">
+              Genre
+            </p>
+          </Button>
+          <Button
+            variant="link"
+            onClick={goHome}
+            className="p-1 hover:bg-zinc-200/50 rounded transition"
+          >
+            <p className="text-sm font-medium text-zinc-600 hover:text-zinc-800">
+              Stack
+            </p>
+          </Button>
+        </div>
+        {/* Search Bar */}
+        <InputGroup className="absolute right-3 w-2/5 bg-white dark:bg-background border border-zinc-200 text-zinc-700 dark:text-foreground rounded pl-2 py-1 text-xs outline-none transition dark:border-border has-[input:focus-visible]:!border-zinc-400 has-[input:focus-visible]:!ring-1 has-[input:focus-visible]:!ring-zinc-400/20">
+          <InputGroupInput placeholder="Search the store" />
+          <InputGroupAddon align="inline-end">
+            <InputGroupButton
+              variant="window"
+              className="hover:bg-zinc-200/50 dark:hover:bg-secondary rounded transition cursor-pointer"
+            >
+              <Search className="size-3.5 text-zinc-400" />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+
+      {/* Main Window Canvas Viewport */}
+      <div className="flex-1 w-full bg-white dark:bg-popover overflow-y-auto">
+        {viewMode === "homepage" ? (
+          /* ================= GOOGLE HOMEPAGE CUSTOM INDEX ================= */
+          <div className="max-w-2xl mx-auto items-center px-6 py-8 flex flex-col gap-8">
+            {/* Carousel */}
+            <Carousel setApi={setApi}>
+              <CarouselContent>
+                {Array.from({ length: featuredGames.length }, (_, index) => (
+                  <CarouselItem key={index}>
+                    <div className="flex justify-center items-center h-80 min-w-30 bg-zinc-500">
+                      {featuredGames[index].preview ||
+                        featuredGames[index].name}
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+            <div className="flex flex-col gap-6 max-w-2xl">
+              {GAMES.map((site) => {
+                const displayUrl = site.url
+                  .replace("https://", "")
+                  .replace("www.", "")
+                  .split("/")
+                  .filter(Boolean)
+                  .join(" › ");
+
+                return (
+                  <div
+                    key={site.name}
+                    className="flex items-start justify-between gap-4"
+                  >
+                    {/* Left Side: Preview */}
+                    <Button
+                      variant="window"
+                      onClick={() => navigateTo(site.url)}
+                      className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden"
+                    >
+                      {site.preview}
+                    </Button>
+                    <div className="flex-1 min-w-0 flex flex-col">
+                      {/* 1. Header: Breadcrumb */}
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
+                          <span className="text-xs font-normal text-foreground truncate">
+                            {site.gameTags.stack.join(" / ")} |{" "}
+                            {site.gameTags.genre.join(", ")}
+                          </span>
+                          <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
+                            {displayUrl}
+                          </span>
+                        </div>
+                      </div>
+                      {/* 2. Title Link */}
+                      <Button
+                        variant="link"
+                        onClick={() => navigateTo(site.url)}
+                        // Added h-auto, p-0, text-xl, and critically: justify-start text-left
+                        className="h-auto p-0 text-xl text-foreground hover:text-primary hover:underline font-medium leading-tight mb-1 justify-start text-left whitespace-normal"
+                      >
+                        {site.name}
+                      </Button>
+
+                      {/* 3. Description Snippet with Inline Read More */}
+                      <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
+                        {site.desc}{" "}
+                        <a
+                          href={displayUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline inline-block whitespace-nowrap ml-1 cursor-pointer font-normal"
+                          onClick={(e) => e.stopPropagation()} // Keeps click from firing navigateTo
+                        >
+                          {site.isFeatured ? "Read More" : ""}
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          /* ================= LIVE EMBEDDED IFRAME VIEW ================= */
+          <iframe
+            key={refreshKey}
+            src={currentUrl}
+            title="Live Website Runner"
+            className="w-full h-full border-none bg-white"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+            allow="autoplay; fullscreen"
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default GameLauncher;
