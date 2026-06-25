@@ -1,23 +1,11 @@
-import { useState, useEffect } from "react";
-import { ArrowLeft, RotateCw, Search } from "lucide-react";
+import React from "react";
+import { ArrowLeft, RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useWindow } from "@/hooks/useWindow";
 import { useSearch } from "@/hooks/useSearch";
 import { games } from "@/config/games";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from "@/components/ui/Carousel";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from "@/components/ui/Input-Group";
+import { SearchBar } from "@/components/ui/custom/SearchBar";
+import { FeaturedBanner } from "@/components/ui/custom/FeaturedBanner";
 
 const GameStore = () => {
   const { currentUrl, viewMode, refreshKey, navigateTo, goHome, refreshPage } =
@@ -25,16 +13,6 @@ const GameStore = () => {
 
   const search = useSearch(games);
   const featuredGames = games.filter((game) => game.isFeatured == true);
-  const [activeItemIndex, setActiveItemIndex] = useState(0);
-  const [api, setApi] = useState<CarouselApi>();
-
-  useEffect(() => {
-    if (!api) return;
-
-    api.on("select", () => {
-      setActiveItemIndex(api.selectedScrollSnap());
-    });
-  }, [api]);
 
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
@@ -103,22 +81,11 @@ const GameStore = () => {
           </Button>
         </div>
         {/* Search Bar */}
-        <InputGroup className="absolute right-3 w-2/5 bg-white dark:bg-background border border-zinc-200 text-zinc-700 dark:text-foreground rounded pl-2 py-1 text-xs outline-none transition dark:border-border has-[input:focus-visible]:!border-zinc-400 has-[input:focus-visible]:!ring-1 has-[input:focus-visible]:!ring-zinc-400/20">
-          <InputGroupInput
-            value={search.query}
-            onChange={(e) => search.setQuery(e.target.value)}
-            placeholder="Search the store"
-          />
-          <InputGroupAddon align="inline-end">
-            <InputGroupButton
-              variant="window"
-              className="hover:bg-zinc-200/50 dark:hover:bg-secondary rounded transition cursor-pointer"
-              disabled
-            >
-              <Search className="size-3.5 text-zinc-400" />
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
+        <SearchBar
+          value={search.query}
+          onChange={search.setQuery}
+          placeholder="Search the store"
+        />
       </div>
 
       {/* Main Window Canvas Viewport */}
@@ -127,20 +94,14 @@ const GameStore = () => {
           /* ================= GOOGLE HOMEPAGE CUSTOM INDEX ================= */
           <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col gap-8">
             {/* Carousel */}
-            <Carousel setApi={setApi}>
-              <CarouselContent>
-                {Array.from({ length: featuredGames.length }, (_, index) => (
-                  <CarouselItem key={index}>
-                    <div className="flex justify-center items-center h-80 min-w-30 bg-zinc-500">
-                      {featuredGames[index].preview ||
-                        featuredGames[index].name}
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
+            <FeaturedBanner
+              items={featuredGames}
+              renderItem={(game) => (
+                <div className="flex justify-center items-center h-80 min-w-30 bg-zinc-500 rounded-xl text-white font-semibold">
+                  {game.preview || game.name}
+                </div>
+              )}
+            />
             <div className="flex flex-col gap-6 max-w-2xl">
               {search.results.length === 0 && search.query.trim() && (
                 <p className="text-sm text-zinc-500 text-center">
