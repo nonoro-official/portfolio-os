@@ -8,7 +8,8 @@ import DesktopGrid from "@/components/desktop/grid/DesktopGrid";
 import StatusBar from "@/components/statusbar/StatusBar";
 import Dock from "@/components/dock/Dock";
 import Browser from "@/components/desktop/apps/Browser";
-import GameLauncher from "@/components/desktop/apps/GameLauncher";
+import GameStore from "@/components/desktop/apps/GameStore";
+import SoftwareCenter from "@/components/desktop/apps/SoftwareCenter";
 
 const DesktopWrapper: React.FC = () => {
   const { contextValue, desktopRef } = useDesktop();
@@ -17,8 +18,10 @@ const DesktopWrapper: React.FC = () => {
     switch (windowItem.itemId) {
       case "browser":
         return <Browser />;
-      case "game-launcher":
-        return <GameLauncher />;
+      case "game-store":
+        return <GameStore />;
+      case "software-center":
+        return <SoftwareCenter />;
       default:
         return (
           <div className="p-4 font-mono text-xs text-zinc-500">

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, RotateCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useWindow } from "@/hooks/useWindow";
+import { useSearch } from "@/hooks/useSearch";
 import { games } from "@/config/games";
 import {
   Carousel,
@@ -18,18 +19,11 @@ import {
   InputGroupInput,
 } from "@/components/ui/Input-Group";
 
-const GameLauncher = () => {
-  const {
-    currentUrl,
-    inputUrl,
-    setInputUrl,
-    viewMode,
-    refreshKey,
-    navigateTo,
-    goHome,
-    refreshPage,
-  } = useWindow();
+const GameStore = () => {
+  const { currentUrl, viewMode, refreshKey, navigateTo, goHome, refreshPage } =
+    useWindow();
 
+  const search = useSearch(games);
   const featuredGames = games.filter((game) => game.isFeatured == true);
   const [activeItemIndex, setActiveItemIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
@@ -110,11 +104,16 @@ const GameLauncher = () => {
         </div>
         {/* Search Bar */}
         <InputGroup className="absolute right-3 w-2/5 bg-white dark:bg-background border border-zinc-200 text-zinc-700 dark:text-foreground rounded pl-2 py-1 text-xs outline-none transition dark:border-border has-[input:focus-visible]:!border-zinc-400 has-[input:focus-visible]:!ring-1 has-[input:focus-visible]:!ring-zinc-400/20">
-          <InputGroupInput placeholder="Search the store" />
+          <InputGroupInput
+            value={search.query}
+            onChange={(e) => search.setQuery(e.target.value)}
+            placeholder="Search the store"
+          />
           <InputGroupAddon align="inline-end">
             <InputGroupButton
               variant="window"
               className="hover:bg-zinc-200/50 dark:hover:bg-secondary rounded transition cursor-pointer"
+              disabled
             >
               <Search className="size-3.5 text-zinc-400" />
             </InputGroupButton>
@@ -126,7 +125,7 @@ const GameLauncher = () => {
       <div className="flex-1 w-full bg-white dark:bg-popover overflow-y-auto">
         {viewMode === "homepage" ? (
           /* ================= GOOGLE HOMEPAGE CUSTOM INDEX ================= */
-          <div className="max-w-2xl mx-auto items-center px-6 py-8 flex flex-col gap-8">
+          <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col gap-8">
             {/* Carousel */}
             <Carousel setApi={setApi}>
               <CarouselContent>
@@ -143,7 +142,12 @@ const GameLauncher = () => {
               <CarouselNext />
             </Carousel>
             <div className="flex flex-col gap-6 max-w-2xl">
-              {games.map((site) => {
+              {search.results.length === 0 && search.query.trim() && (
+                <p className="text-sm text-zinc-500 text-center">
+                  No results found.
+                </p>
+              )}
+              {search.results.map((site) => {
                 const displayUrl = site.url
                   .replace("https://", "")
                   .replace("www.", "")
@@ -222,4 +226,4 @@ const GameLauncher = () => {
   );
 };
 
-export default GameLauncher;
+export default GameStore;

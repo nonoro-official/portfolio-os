@@ -3,7 +3,7 @@ import type { Item } from "@/types/desktop";
 export const initialItems: Item[] = [
   {
     icon: "🎮",
-    id: "game-launcher",
+    id: "game-store",
     name: "Games",
     type: "app",
     parentId: null,
