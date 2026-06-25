@@ -215,12 +215,13 @@ const Browser = () => {
                     </div>
 
                     {/* Right Side: Google-style square snippet thumbnail */}
-                    <button
+                    <Button
+                      variant="window"
                       onClick={() => navigateTo(site.url)}
                       className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden"
                     >
                       {site.preview}
-                    </button>
+                    </Button>
                   </div>
                 );
               })}
