@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, RotateCw, Search } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { useWindow } from "@/hooks/useWindow";
+import { games } from "@/config/games";
 import {
   Carousel,
   CarouselContent,
@@ -17,103 +18,6 @@ import {
   InputGroupInput,
 } from "@/components/ui/Input-Group";
 
-const GAMES = [
-  {
-    name: "Through Your Eyes",
-    url: "https://nonoro-official.github.io/vnd.github.io/",
-    gameTags: {
-      stack: ["Ren'Py"],
-      genre: ["Visual Novel", "Narrative"],
-    },
-    desc: "Green Light Records is a records shop.",
-    isFeatured: true,
-    preview: "💬",
-    featuredImage: "",
-  },
-  {
-    name: "Talinghaga: Kuwento ng mga Kaluluwa",
-    url: "https://roll-your-reps.vercel.app",
-    gameTags: {
-      stack: ["Ren'Py"],
-      genre: ["Visual Novel", "Narrative"],
-    },
-    desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
-    isFeatured: true,
-    preview: "🛍️",
-    featuredImage: "",
-  },
-  {
-    name: "CoDecipher: Unmask the Code",
-    url: "https://github.com/Jerp010/CoDecipher",
-    gameTags: {
-      stack: ["Web"],
-      genre: ["Multiplayer", "Puzzle"],
-    },
-    desc: "CoDecipher is an interactive multiplayer coding game where players decipher masked code segments, fill in the blanks, and compete to master programming concepts. Built for the Hackathon Jam 2026 by Barney and Friends.",
-    isFeatured: true,
-    preview: "💬",
-    featuredImage: "",
-  },
-  {
-    name: "Rover I",
-    url: "https://sbsonk.itch.io/rover-i",
-    embedId: "3273222",
-    gameTags: {
-      stack: ["Web"],
-      genre: ["Adventure", "Puzzle"],
-    },
-    desc: "A mega menu me and my partner made for our internship using WordPress.",
-    isFeatured: true,
-    preview: "💬",
-    featuredImage: "",
-  },
-  {
-    name: "Day Trading Simulator",
-    url: "https://roll-your-reps.vercel.app",
-    gameTags: {
-      stack: ["Raylib"],
-      genre: ["Simulator"],
-    },
-    desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
-    isFeatured: true,
-    preview: "🛍️",
-    featuredImage: "",
-  },
-  {
-    name: "Rizz Riot: The Unwanted Magnet",
-    url: "https://nonoro-official.github.io/vnd.github.io/",
-    gameTags: {
-      stack: ["Unity"],
-      genre: ["Visual Novel", "Narrative"],
-    },
-    desc: "Green Light Records is a records shop.",
-    isFeatured: false,
-    preview: "💬",
-  },
-  {
-    name: "Eden Academy",
-    url: "https://nonoro-official.github.io/vnd.github.io/",
-    gameTags: {
-      stack: ["Ren'Py"],
-      genre: ["Visual Novel", "Narrative", "Simulation"],
-    },
-    desc: "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school.",
-    isFeatured: false,
-    preview: "💬",
-  },
-  {
-    name: "MIRO",
-    url: "https://nonoro-official.github.io/noahpenaranda-personalwebsite.github.io/",
-    gameTags: {
-      stack: ["Ren'Py"],
-      genre: ["Visual Novel", "Narrative", "Adventure"],
-    },
-    desc: "Personal website made for college.",
-    isFeatured: false,
-    preview: "📊",
-  },
-];
-
 const GameLauncher = () => {
   const {
     currentUrl,
@@ -126,7 +30,7 @@ const GameLauncher = () => {
     refreshPage,
   } = useWindow();
 
-  const featuredGames = GAMES.filter((game) => game.isFeatured == true);
+  const featuredGames = games.filter((game) => game.isFeatured == true);
   const [activeItemIndex, setActiveItemIndex] = useState(0);
   const [api, setApi] = useState<CarouselApi>();
 
@@ -239,7 +143,7 @@ const GameLauncher = () => {
               <CarouselNext />
             </Carousel>
             <div className="flex flex-col gap-6 max-w-2xl">
-              {GAMES.map((site) => {
+              {games.map((site) => {
                 const displayUrl = site.url
                   .replace("https://", "")
                   .replace("www.", "")

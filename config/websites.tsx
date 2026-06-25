@@ -1,0 +1,58 @@
+import { Disc3 } from "lucide-react";
+
+export const websites = [
+  {
+    icon: <Disc3 />,
+    name: "Green Light Records",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    stack: "MongoDB - Express - React - Node.js",
+    desc: "Green Light Records is a records shop.",
+    hasReadMore: false,
+    preview: "💬",
+  },
+  {
+    icon: "💬",
+    name: "Roll Your Reps",
+    url: "https://roll-your-reps.vercel.app",
+    stack: "React - Typescript - Node.js",
+    desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
+    hasReadMore: false,
+    preview: "🛍️",
+  },
+  {
+    icon: "💬",
+    name: "Company Website Mega Menu",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    stack: "WordPress",
+    desc: "A mega menu me and my partner made for our internship using WordPress.",
+    hasReadMore: false,
+    preview: "💬",
+  },
+  {
+    icon: "💬",
+    name: "VND School Dating Sim",
+    url: "https://nonoro-official.github.io/vnd.github.io/",
+    stack: "HTML - CSS",
+    desc: "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school.",
+    hasReadMore: true,
+    preview: "💬",
+  },
+  {
+    icon: "🍋",
+    name: "Personal Website",
+    url: "https://nonoro-official.github.io/noahpenaranda-personalwebsite.github.io/",
+    stack: "HTML - CSS",
+    desc: "Personal website made for college.",
+    hasReadMore: false,
+    preview: "📊",
+  },
+  {
+    icon: "🍋",
+    name: "Portfolio",
+    url: "https://nonoro-official.github.io/portfolio/",
+    stack: "HTML - CSS",
+    desc: "Original portfolio website. Based from the personal website.",
+    hasReadMore: false,
+    preview: "🌐",
+  },
+];
