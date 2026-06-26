@@ -19,6 +19,5 @@ export const useSearch = <
     query,
     setQuery,
     results,
-    hasResults: results.length > 0,
   };
 };
