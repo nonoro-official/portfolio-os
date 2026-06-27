@@ -146,11 +146,11 @@ const Browser = () => {
               </div>
             </div>
 
-            {/* Optional: Show a "Showing 1 result" or "Clear filter" banner */}
+            {/* "Show result" or "Clear filter" banner */}
             {filteredSite && (
               <div className="mb-4 text-sm text-zinc-500 flex gap-2 items-center">
                 <span>Showing result for {filteredSite.name}</span>
-                <button
+                <Button
                   onClick={() => {
                     setFilteredSite(null);
                     search.setQuery("");
@@ -158,7 +158,7 @@ const Browser = () => {
                   className="text-amber-600 hover:underline font-medium"
                 >
                   Clear filter
-                </button>
+                </Button>
               </div>
             )}
             <div className="flex flex-col gap-6 max-w-2xl">
