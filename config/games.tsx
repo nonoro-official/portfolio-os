@@ -5,6 +5,7 @@ export const games = [
     gameTags: {
       stack: ["Ren'Py"],
       genre: ["Visual Novel", "Narrative"],
+      competition: [],
     },
     desc: "Green Light Records is a records shop.",
     isFeatured: true,
@@ -29,6 +30,7 @@ export const games = [
     gameTags: {
       stack: ["Ren'Py"],
       genre: ["Visual Novel", "Narrative"],
+      competition: [],
     },
     desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
     isFeatured: true,
@@ -58,6 +60,7 @@ export const games = [
     gameTags: {
       stack: ["Web"],
       genre: ["Multiplayer", "Puzzle"],
+      competition: ["Hackathon"],
     },
     desc: "CoDecipher is an interactive multiplayer coding game where players decipher masked code segments, fill in the blanks, and compete to master programming concepts. Built for the Hackathon Jam 2026 by Barney and Friends.",
     isFeatured: true,
@@ -87,6 +90,7 @@ export const games = [
     gameTags: {
       stack: ["Web"],
       genre: ["Adventure", "Puzzle"],
+      competition: ["Game Jam"],
     },
     desc: "A mega menu me and my partner made for our internship using WordPress.",
     isFeatured: true,
@@ -116,6 +120,7 @@ export const games = [
     gameTags: {
       stack: ["Raylib"],
       genre: ["Simulator"],
+      competition: [],
     },
     desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
     isFeatured: true,
@@ -145,6 +150,7 @@ export const games = [
     gameTags: {
       stack: ["Unity"],
       genre: ["Visual Novel", "Narrative"],
+      competition: [],
     },
     desc: "Green Light Records is a records shop.",
     isFeatured: false,
@@ -173,6 +179,7 @@ export const games = [
     gameTags: {
       stack: ["Ren'Py"],
       genre: ["Visual Novel", "Narrative", "Simulation"],
+      competition: [],
     },
     desc: "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school.",
     isFeatured: false,
@@ -201,6 +208,7 @@ export const games = [
     gameTags: {
       stack: ["Ren'Py"],
       genre: ["Visual Novel", "Narrative", "Adventure"],
+      competition: [],
     },
     desc: "Personal website made for college.",
     isFeatured: false,
@@ -223,4 +231,16 @@ export const games = [
       },
     ],
   },
+];
+
+export const genres = [
+  ...new Set(games.flatMap((game) => game.gameTags.genre)),
+];
+
+export const stacks = [
+  ...new Set(games.flatMap((game) => game.gameTags.stack)),
+];
+
+export const competitions = [
+  ...new Set(games.flatMap((game) => game.gameTags.competition || [])),
 ];

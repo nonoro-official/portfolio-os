@@ -1,13 +1,16 @@
-import React from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, RotateCw, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { Label } from "@/components/ui/Label";
+import { Checkbox } from "@/components/ui/Checkbox";
 import { useWindow } from "@/hooks/useWindow";
 import { useSearch } from "@/hooks/useSearch";
-import { games } from "@/config/games";
+import { competitions, games, genres, stacks } from "@/config/games";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { FeaturedBanner } from "@/components/ui/custom/FeaturedBanner";
 import { ThumbnailPreview } from "@/components/ui/custom/ThumbnailPreview";
+import { NavMenu } from "@/components/ui/custom/NavMenu";
 
 const GameStore = () => {
   const { currentUrl, viewMode, navigateTo, goHome, refreshPage } = useWindow();
@@ -16,6 +19,39 @@ const GameStore = () => {
   const featuredGames = games.filter((game) => game.isFeatured === true);
 
   const activeGame = games.find((game) => game.url === currentUrl);
+
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [selectedStacks, setSelectedStacks] = useState<string[]>([]);
+  const [selectedComps, setSelectedComps] = useState<string[]>([]);
+
+  const filteredGames = games.filter((game) => {
+    const genreMatch =
+      selectedGenres.length === 0 ||
+      game.gameTags.genre.some((g) => selectedGenres.includes(g));
+
+    const stackMatch =
+      selectedStacks.length === 0 ||
+      game.gameTags.stack.some((s) => selectedStacks.includes(s));
+
+    const compMatch =
+      selectedComps.length === 0 ||
+      game.gameTags.competition.some((c) => selectedComps.includes(c));
+
+    return genreMatch && stackMatch && compMatch;
+  });
+
+  const isFiltering =
+    selectedGenres.length > 0 ||
+    selectedStacks.length > 0 ||
+    selectedComps.length > 0 ||
+    search.query.trim() !== "";
+
+  const resetFilters = () => {
+    setSelectedGenres([]);
+    setSelectedStacks([]);
+    setSelectedComps([]);
+    search.setQuery("");
+  };
 
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
@@ -55,43 +91,77 @@ const GameStore = () => {
 
       {/* Browse and Search Tab */}
       <div className="flex items-center gap-3 px-4 py-2 bg-[#ecebe7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
-        <div className="flex items-center gap-1.5 text-zinc-300">
+        <div className="flex items-center gap-1.5">
           <Button
             variant="link"
-            onClick={goHome}
+            onClick={() => {
+              goHome();
+              resetFilters();
+            }}
             className="p-1 hover:bg-zinc-200/50 rounded transition"
           >
-            <p className="text-sm font-medium text-zinc-600 hover:text-zinc-800">
-              Browse
-            </p>
+            Browse
           </Button>
-          <Button
-            variant="link"
-            onClick={goHome}
-            className="p-1 hover:bg-zinc-200/50 rounded transition"
-          >
-            <p className="text-sm font-medium text-zinc-600 hover:text-zinc-800">
-              Competitions
-            </p>
-          </Button>
-          <Button
-            variant="link"
-            onClick={goHome}
-            className="p-1 hover:bg-zinc-200/50 rounded transition"
-          >
-            <p className="text-sm font-medium text-zinc-600 hover:text-zinc-800">
-              Genre
-            </p>
-          </Button>
-          <Button
-            variant="link"
-            onClick={goHome}
-            className="p-1 hover:bg-zinc-200/50 rounded transition"
-          >
-            <p className="text-sm font-medium text-zinc-600 hover:text-zinc-800">
-              Stack
-            </p>
-          </Button>
+          <NavMenu buttonName="Competitions">
+            <div className="flex flex-col gap-2">
+              {competitions.map((competition) => (
+                <Label
+                  key={competition}
+                  className="flex items-center gap-2 text-sm"
+                >
+                  <Checkbox
+                    checked={selectedComps.includes(competition)}
+                    onCheckedChange={(checked) => {
+                      setSelectedComps((prev) =>
+                        checked
+                          ? [...prev, competition]
+                          : prev.filter((g) => g !== competition),
+                      );
+                    }}
+                  />
+                  {competition}
+                </Label>
+              ))}
+            </div>
+          </NavMenu>
+          <NavMenu buttonName="Genre">
+            <div className="flex flex-col gap-2">
+              {genres.map((genre) => (
+                <Label key={genre} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    checked={selectedGenres.includes(genre)}
+                    onCheckedChange={(checked) => {
+                      setSelectedGenres((prev) =>
+                        checked
+                          ? [...prev, genre]
+                          : prev.filter((g) => g !== genre),
+                      );
+                    }}
+                  />
+                  {genre}
+                </Label>
+              ))}
+            </div>
+          </NavMenu>
+          <NavMenu buttonName="Stack">
+            <div className="flex flex-col gap-2">
+              {stacks.map((stack) => (
+                <Label key={stack} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    checked={selectedStacks.includes(stack)}
+                    onCheckedChange={(checked) => {
+                      setSelectedStacks((prev) =>
+                        checked
+                          ? [...prev, stack]
+                          : prev.filter((g) => g !== stack),
+                      );
+                    }}
+                  />
+                  {stack}
+                </Label>
+              ))}
+            </div>
+          </NavMenu>
         </div>
 
         {/* Search Bar */}
@@ -112,42 +182,49 @@ const GameStore = () => {
         {viewMode === "homepage" || !activeGame ? (
           /* ================= HOMEPAGE VIEW ================= */
           <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col gap-8">
-            {/* Carousel */}
-            <FeaturedBanner
-              items={featuredGames}
-              renderItem={(game) => (
-                <div
-                  className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
-                  onClick={() => navigateTo(game.url)}
-                >
-                  {/* Image Container */}
-                  <div className="relative flex-1 h-full bg-zinc-950">
-                    <Image
-                      src={game.featuredImage || "/images/rover-i/r3.png"} // replace with a default image if none is provided
-                      alt={game.name}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 60vw"
-                      className="object-cover"
-                      priority
-                    />
-                  </div>
+            {isFiltering && filteredGames.length === 0 && (
+              <p className="text-sm text-zinc-500 image-center justify-center flex">
+                No results found.
+              </p>
+            )}
+            {!isFiltering && (
+              // Carousel
+              <FeaturedBanner
+                items={featuredGames}
+                renderItem={(game) => (
+                  <div
+                    className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => navigateTo(game.url)}
+                  >
+                    {/* Image Container */}
+                    <div className="relative flex-1 h-full bg-zinc-950">
+                      <Image
+                        src={game.featuredImage || "/images/rover-i/r3.png"} // replace with a default image if none is provided
+                        alt={game.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 60vw"
+                        className="object-cover"
+                        priority
+                      />
+                    </div>
 
-                  {/* Game Details Sidebar */}
-                  <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 text-sm text-zinc-200 p-4 shrink-0">
-                    <h3 className="font-bold text-base text-white group-hover:text-amber-500 transition-colors">
-                      {game.name}
-                    </h3>
-                    <p className="mt-3 text-xs text-zinc-400 line-clamp-4 leading-relaxed">
-                      {game.desc}
-                    </p>
+                    {/* Game Details Sidebar */}
+                    <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 text-sm text-zinc-200 p-4 shrink-0">
+                      <h3 className="font-bold text-base text-white group-hover:text-amber-500 transition-colors">
+                        {game.name}
+                      </h3>
+                      <p className="mt-3 text-xs text-zinc-400 line-clamp-4 leading-relaxed">
+                        {game.desc}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              )}
-            />
+                )}
+              />
+            )}
 
             {/* Game List */}
             <div className="flex flex-col gap-6 max-w-2xl">
-              {games.map((game) => {
+              {filteredGames.map((game) => {
                 const displayUrl = game.url
                   .replace("https://", "")
                   .replace("www.", "")
@@ -284,7 +361,7 @@ const GameStore = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Play in New Tab
+                  Download Game
                   <ExternalLink className="size-4" />
                 </a>
               </Button>
