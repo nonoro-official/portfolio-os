@@ -36,20 +36,20 @@ export function SearchBar<T extends { name: string }>({
   itemToStringValue,
 }: SearchBarProps<T>) {
   return (
-    <div className={cn("relative w-full max-w-sm", className)}>
+    <div className={cn("relative w-full", className)}>
       <Autocomplete
         value={value}
         onValueChange={onChange}
         items={items}
         itemToStringValue={itemToStringValue ?? ((item) => item.name)}
       >
-        <div className="relative flex items-center">
+        <div className="relative flex items-center w-full h-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-zinc-400 pointer-events-none z-10" />
           <AutocompleteInput
             placeholder={placeholder}
             showClear
             className={cn(
-              "rounded border border-zinc-200 bg-white pl-9 pr-2 py-1 text-xs text-zinc-700 outline-none transition dark:border-border dark:bg-background dark:text-foreground focus-visible:border-zinc-400/20! focus-visible:ring-1 focus-visible:ring-zinc-400! disabled:cursor-not-allowed disabled:opacity-50 w-full",
+              "w-full bg-transparent border-none pl-9 pr-4 py-2 text-sm outline-none transition focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
               inputClassName,
             )}
           />
@@ -57,7 +57,6 @@ export function SearchBar<T extends { name: string }>({
 
         <AutocompleteContent>
           <AutocompleteEmpty>No results found.</AutocompleteEmpty>
-
           <AutocompleteList>
             {(item) => (
               <AutocompleteItem

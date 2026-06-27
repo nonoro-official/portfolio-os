@@ -4,11 +4,12 @@ export const websites = [
   {
     icon: <Disc3 />,
     name: "Green Light Records",
-    url: "https://nonoro-official.github.io/vnd.github.io/",
+    url: "https://github.com/nonoro-official/WDD2",
     stack: "MongoDB - Express - React - Node.js",
     desc: "Green Light Records is a records shop.",
     hasReadMore: false,
     preview: "💬",
+    isIFrameBlocked: true,
   },
   {
     icon: "💬",
@@ -18,6 +19,7 @@ export const websites = [
     desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
     hasReadMore: false,
     preview: "🛍️",
+    isIFrameBlocked: false,
   },
   {
     icon: "💬",
@@ -27,6 +29,7 @@ export const websites = [
     desc: "A mega menu me and my partner made for our internship using WordPress.",
     hasReadMore: false,
     preview: "💬",
+    isIFrameBlocked: false,
   },
   {
     icon: "💬",
@@ -36,6 +39,7 @@ export const websites = [
     desc: "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school.",
     hasReadMore: true,
     preview: "💬",
+    isIFrameBlocked: false,
   },
   {
     icon: "🍋",
@@ -45,6 +49,7 @@ export const websites = [
     desc: "Personal website made for college.",
     hasReadMore: false,
     preview: "📊",
+    isIFrameBlocked: false,
   },
   {
     icon: "🍋",
@@ -54,5 +59,6 @@ export const websites = [
     desc: "Original portfolio website. Based from the personal website.",
     hasReadMore: false,
     preview: "🌐",
+    isIFrameBlocked: false,
   },
 ];

@@ -84,7 +84,12 @@ const GameStore = () => {
         <SearchBar
           value={search.query}
           onChange={search.setQuery}
-          placeholder="Search the store"
+          items={games}
+          placeholder="Search the store..."
+          onSelect={(game) => navigateTo(game.url)}
+          className="flex-1 bg-zinc-50 dark:bg-background border border-zinc-200 dark:border-border rounded-lg flex items-center shadow-sm text-zinc-400 select-none transition-all focus-within:border-zinc-400 dark:focus-within:border-zinc-500 mr-4"
+          inputClassName="text-sm text-zinc-800 dark:text-zinc-100 placeholder-zinc-400"
+          itemToStringValue={(item) => item.name}
         />
       </div>
 
@@ -103,12 +108,7 @@ const GameStore = () => {
               )}
             />
             <div className="flex flex-col gap-6 max-w-2xl">
-              {search.results.length === 0 && search.query.trim() && (
-                <p className="text-sm text-zinc-500 text-center">
-                  No results found.
-                </p>
-              )}
-              {search.results.map((site) => {
+              {games.map((site) => {
                 const displayUrl = site.url
                   .replace("https://", "")
                   .replace("www.", "")

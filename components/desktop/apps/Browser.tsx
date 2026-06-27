@@ -1,7 +1,9 @@
 import React from "react";
 import { useWindow } from "@/hooks/useWindow";
-import { ArrowLeft, Home, RotateCw, Search, X } from "lucide-react";
+import { ArrowLeft, Home, RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { useSearch } from "@/hooks/useSearch";
+import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { websites } from "@/config/websites";
 
 const Browser = () => {
@@ -15,6 +17,31 @@ const Browser = () => {
     goHome,
     refreshPage,
   } = useWindow();
+
+  const search = useSearch(websites);
+
+  // Helper function to handle custom URL submissions or text searches on 'Enter'
+  const handleUrlSubmit = (query: string) => {
+    if (!query) return;
+
+    const cleanQuery = query.trim();
+
+    // Check if they typed a pre-configured website name
+    const exactMatch = websites.find(
+      (site) => site.name.toLowerCase() === cleanQuery.toLowerCase(),
+    );
+
+    if (exactMatch) {
+      if (exactMatch.isIFrameBlocked) {
+        window.open(exactMatch.url, "_blank", "noopener,noreferrer");
+      } else {
+        navigateTo(exactMatch.url);
+      }
+    } else {
+      // Otherwise, treat it as a direct URL entry
+      navigateTo(cleanQuery);
+    }
+  };
 
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
@@ -46,22 +73,23 @@ const Browser = () => {
         </div>
 
         {/* Address Bar */}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (inputUrl.trim()) navigateTo(inputUrl);
+        <div
+          className="flex-1 mr-4"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleUrlSubmit(inputUrl);
           }}
-          className="flex-1 relative flex items-center"
         >
-          <input
-            type="text"
+          <SearchBar
             value={inputUrl}
-            onChange={(e) => setInputUrl(e.target.value)}
+            onChange={setInputUrl}
+            items={websites}
             placeholder="Search Googly or type a URL..."
-            className="w-full bg-white dark:bg-background border border-zinc-200 text-zinc-700 dark:text-foreground rounded pl-8 pr-3 py-1 text-xs outline-none focus:border-zinc-400 dark:border-border focus:ring-1 focus:ring-zinc-400/20 transition"
+            onSelect={(item) => navigateTo(item.url)}
+            className="w-full bg-zinc-50 dark:bg-background border border-zinc-200 dark:border-border rounded-lg flex items-center shadow-sm text-zinc-400 select-none transition-all focus-within:border-zinc-400 dark:focus-within:border-zinc-500"
+            inputClassName="text-sm text-zinc-800 dark:text-zinc-100 placeholder-zinc-400"
+            itemToStringValue={(item) => item.name}
           />
-          <Search className="size-3.5 text-zinc-400 absolute left-2.5 pointer-events-none" />
-        </form>
+        </div>
       </div>
 
       {/* Main Window Canvas Viewport */}
@@ -73,32 +101,21 @@ const Browser = () => {
               <h1 className="text-4xl font-extrabold bg-clip-text text-amber-600 select-none shrink-0 py-1">
                 Googly
               </h1>
-              <div className="flex-1 bg-zinc-50 dark:bg-background border border-zinc-200 dark:border-border rounded-full flex items-center px-4 py-2.5 shadow-sm text-sm text-zinc-400 select-none">
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (inputUrl.trim())
-                      navigateTo(
-                        inputUrl.startsWith("http")
-                          ? inputUrl
-                          : `https://${inputUrl}`,
-                      );
-                  }}
-                  className="flex-1 relative flex items-center"
-                >
-                  <Search className="size-4 text-zinc-400 mr-2 shrink-0" />
-                  <input
-                    type="text"
-                    value={inputUrl}
-                    placeholder="My Web Projects"
-                    onChange={(e) => setInputUrl(e.target.value)}
-                    className="w-full bg-transparent outline-none text-foreground"
-                  />
-                  <X
-                    className="size-4 text-zinc-400 absolute right-2 cursor-pointer hover:text-zinc-600 transition"
-                    onClick={() => setInputUrl("")}
-                  />
-                </form>
+              <div
+                className="flex-1"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleUrlSubmit(search.query);
+                }}
+              >
+                <SearchBar
+                  value={search.query}
+                  onChange={search.setQuery}
+                  items={websites}
+                  placeholder="Search websites..."
+                  onSelect={(item) => navigateTo(item.url)}
+                  className="w-full bg-zinc-50 dark:bg-background border border-zinc-200 dark:border-border rounded-full flex items-center shadow-sm text-zinc-400 select-none transition-all focus-within:border-zinc-400 focus-within:ring-1 focus-within:ring-zinc-500"
+                  inputClassName="text-zinc-800 dark:text-zinc-100 placeholder-zinc-400"
+                />
               </div>
             </div>
 
@@ -118,7 +135,7 @@ const Browser = () => {
                   >
                     {/* Left Side: Content */}
                     <div className="flex-1 min-w-0 flex flex-col">
-                      {/* 1. Header: Icon & Breadcrumb */}
+                      {/* Header: Icon & Breadcrumb */}
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm p-1 bg-zinc-100 rounded-full flex items-center justify-center size-6 select-none shrink-0">
                           {site.icon}
@@ -133,17 +150,16 @@ const Browser = () => {
                         </div>
                       </div>
 
-                      {/* 2. Title Link */}
+                      {/* Title Link */}
                       <Button
                         variant="link"
-                        onClick={() => navigateTo(site.url)}
-                        // Added h-auto, p-0, text-xl, and critically: justify-start text-left
+                        onClick={handleUrlSubmit.bind(null, site.name)}
                         className="h-auto p-0 text-xl text-foreground hover:text-primary hover:underline font-medium leading-tight mb-1 justify-start text-left whitespace-normal"
                       >
                         {site.name}
                       </Button>
 
-                      {/* 3. Description Snippet with Inline Read More */}
+                      {/* Description Snippet with Inline Read More */}
                       <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
                         {site.desc}{" "}
                         <a
@@ -151,7 +167,7 @@ const Browser = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-primary hover:underline inline-block whitespace-nowrap ml-1 cursor-pointer font-normal"
-                          onClick={(e) => e.stopPropagation()} // Keeps click from firing navigateTo
+                          onClick={(e) => e.stopPropagation()}
                         >
                           {site.hasReadMore ? "Read More" : ""}
                         </a>
