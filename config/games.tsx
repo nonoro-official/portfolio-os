@@ -10,6 +10,18 @@ export const games = [
     isFeatured: true,
     preview: "💬",
     featuredImage: "",
+    media: [
+      {
+        type: "video",
+        src: "/videos/codecipher-trailer.mp4",
+        thumbSrc: "/images/thumbs/clip1.jpg",
+      },
+      {
+        type: "image",
+        src: "/images/codecipher-ss1.jpg",
+        thumbSrc: "/images/thumbs/ss1.jpg",
+      },
+    ],
   },
   {
     name: "Talinghaga: Kuwento ng mga Kaluluwa",
@@ -22,6 +34,23 @@ export const games = [
     isFeatured: true,
     preview: "🛍️",
     featuredImage: "",
+    media: [
+      {
+        type: "image",
+        src: "/images/rover-i/r1.png",
+        thumbSrc: "/images/rover-i/r1.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r2.png",
+        thumbSrc: "/images/rover-i/r2.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r3.png",
+        thumbSrc: "/images/rover-i/r3.png",
+      },
+    ],
   },
   {
     name: "CoDecipher: Unmask the Code",
@@ -34,11 +63,27 @@ export const games = [
     isFeatured: true,
     preview: "💬",
     featuredImage: "",
+    media: [
+      {
+        type: "image",
+        src: "/images/rover-i/r1.png",
+        thumbSrc: "/images/rover-i/r1.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r2.png",
+        thumbSrc: "/images/rover-i/r2.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r3.png",
+        thumbSrc: "/images/rover-i/r3.png",
+      },
+    ],
   },
   {
     name: "Rover I",
     url: "https://sbsonk.itch.io/rover-i",
-    embedId: "3273222",
     gameTags: {
       stack: ["Web"],
       genre: ["Adventure", "Puzzle"],
@@ -47,10 +92,27 @@ export const games = [
     isFeatured: true,
     preview: "💬",
     featuredImage: "",
+    media: [
+      {
+        type: "image",
+        src: "/images/rover-i/r1.png",
+        thumbSrc: "/images/rover-i/r1.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r2.png",
+        thumbSrc: "/images/rover-i/r2.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r3.png",
+        thumbSrc: "/images/rover-i/r3.png",
+      },
+    ],
   },
   {
     name: "Day Trading Simulator",
-    url: "https://roll-your-reps.vercel.app",
+    url: "https://sbsonk.itch.io/daytrading-simulator",
     gameTags: {
       stack: ["Raylib"],
       genre: ["Simulator"],
@@ -59,6 +121,23 @@ export const games = [
     isFeatured: true,
     preview: "🛍️",
     featuredImage: "",
+    media: [
+      {
+        type: "image",
+        src: "/images/rover-i/r1.png",
+        thumbSrc: "/images/rover-i/r1.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r2.png",
+        thumbSrc: "/images/rover-i/r2.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r3.png",
+        thumbSrc: "/images/rover-i/r3.png",
+      },
+    ],
   },
   {
     name: "Rizz Riot: The Unwanted Magnet",
@@ -70,6 +149,23 @@ export const games = [
     desc: "Green Light Records is a records shop.",
     isFeatured: false,
     preview: "💬",
+    media: [
+      {
+        type: "image",
+        src: "/images/rover-i/r1.png",
+        thumbSrc: "/images/rover-i/r1.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r2.png",
+        thumbSrc: "/images/rover-i/r2.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r3.png",
+        thumbSrc: "/images/rover-i/r3.png",
+      },
+    ],
   },
   {
     name: "Eden Academy",
@@ -81,6 +177,23 @@ export const games = [
     desc: "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school.",
     isFeatured: false,
     preview: "💬",
+    media: [
+      {
+        type: "image",
+        src: "/images/rover-i/r1.png",
+        thumbSrc: "/images/rover-i/r1.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r2.png",
+        thumbSrc: "/images/rover-i/r2.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r3.png",
+        thumbSrc: "/images/rover-i/r3.png",
+      },
+    ],
   },
   {
     name: "MIRO",
@@ -92,5 +205,22 @@ export const games = [
     desc: "Personal website made for college.",
     isFeatured: false,
     preview: "📊",
+    media: [
+      {
+        type: "image",
+        src: "/images/rover-i/r1.png",
+        thumbSrc: "/images/rover-i/r1.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r2.png",
+        thumbSrc: "/images/rover-i/r2.png",
+      },
+      {
+        type: "image",
+        src: "/images/rover-i/r3.png",
+        thumbSrc: "/images/rover-i/r3.png",
+      },
+    ],
   },
 ];

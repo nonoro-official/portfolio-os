@@ -29,13 +29,11 @@ export const FeaturedBanner = <T,>({
   }, [api]);
 
   return (
-    <Carousel setApi={setApi}>
+    <Carousel setApi={setApi} className="w-full">
       <CarouselContent>
         {items.map((item, index) => (
-          <CarouselItem key={index}>
-            <div className="flex justify-center items-center h-80 min-w-30 bg-zinc-500">
-              {renderItem(item, index)}
-            </div>
+          <CarouselItem key={index} className="relative">
+            {renderItem(item, index)}
           </CarouselItem>
         ))}
       </CarouselContent>
