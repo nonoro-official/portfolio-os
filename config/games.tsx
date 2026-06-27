@@ -91,7 +91,7 @@ export const games = [
     desc: "A mega menu me and my partner made for our internship using WordPress.",
     isFeatured: true,
     preview: "💬",
-    featuredImage: "",
+    featuredImage: "/images/rover-i/r1.png",
     media: [
       {
         type: "image",

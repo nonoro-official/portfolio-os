@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Autoplay from "embla-carousel-autoplay";
 import {
   Carousel,
   CarouselContent,
@@ -29,7 +30,11 @@ export const FeaturedBanner = <T,>({
   }, [api]);
 
   return (
-    <Carousel setApi={setApi} className="w-full">
+    <Carousel
+      setApi={setApi}
+      plugins={[Autoplay({ delay: 3000 })]}
+      className="w-full"
+    >
       <CarouselContent>
         {items.map((item, index) => (
           <CarouselItem key={index} className="relative">

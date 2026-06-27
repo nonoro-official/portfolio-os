@@ -117,17 +117,29 @@ const GameStore = () => {
               items={featuredGames}
               renderItem={(game) => (
                 <div
-                  className="relative flex justify-center items-center h-80 w-full pr-50 bg-zinc-500 rounded-xl overflow-hidden text-white font-semibold cursor-pointer"
+                  className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
                   onClick={() => navigateTo(game.url)}
                 >
-                  <div className="flex-1 flex justify-center items-center">
-                    {game.preview}
+                  {/* Image Container */}
+                  <div className="relative flex-1 h-full bg-zinc-950">
+                    <Image
+                      src={game.featuredImage || "/images/rover-i/r3.png"} // replace with a default image if none is provided
+                      alt={game.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 60vw"
+                      className="object-cover"
+                      priority
+                    />
                   </div>
-                  <div className="absolute right-0 top-0 flex flex-col justify-center h-full w-50 bg-zinc-800/75 text-sm text-zinc-200 p-4 z-10">
-                    <h3 className="font-bold text-base text-white">
+
+                  {/* Game Details Sidebar */}
+                  <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 text-sm text-zinc-200 p-4 shrink-0">
+                    <h3 className="font-bold text-base text-white group-hover:text-amber-500 transition-colors">
                       {game.name}
                     </h3>
-                    <p className="mt-3 text-xs text-zinc-400">{game.desc}</p>
+                    <p className="mt-3 text-xs text-zinc-400 line-clamp-4 leading-relaxed">
+                      {game.desc}
+                    </p>
                   </div>
                 </div>
               )}
@@ -184,7 +196,7 @@ const GameStore = () => {
             </div>
           </div>
         ) : (
-          /* ================= REWORKED GAME DETAIL PAGE ================= */
+          /* ================= GAME DETAIL PAGE ================= */
           <div className="max-w-4xl mx-auto px-6 py-4 flex flex-col gap-3">
             {/* Game Name */}
             <div>
