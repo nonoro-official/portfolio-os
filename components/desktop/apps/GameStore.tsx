@@ -8,7 +8,7 @@ import { useWindow } from "@/hooks/useWindow";
 import { useSearch } from "@/hooks/useSearch";
 import { competitions, games, genres, stacks } from "@/config/games";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
-import { FeaturedBanner } from "@/components/ui/custom/FeaturedBanner";
+import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
 import { ThumbnailPreview } from "@/components/ui/custom/ThumbnailPreview";
 import { NavMenu } from "@/components/ui/custom/NavMenu";
 
@@ -189,8 +189,10 @@ const GameStore = () => {
             )}
             {!isFiltering && (
               // Carousel
-              <FeaturedBanner
+              <PreviewBanner
                 items={featuredGames}
+                enableAutoplay={true}
+                hasCounter={false}
                 renderItem={(game) => (
                   <div
                     className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
