@@ -4,7 +4,7 @@ export const initialItems: Item[] = [
   {
     icon: "🎮",
     id: "game-store",
-    name: "Games",
+    name: "Game Store",
     type: "app",
     parentId: null,
     path: "/desktop/Games",
