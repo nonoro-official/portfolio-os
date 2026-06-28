@@ -1,0 +1,461 @@
+import { useState } from "react";
+import Image from "next/image";
+import {
+  ExternalLink,
+  Layers,
+  MonitorSmartphone,
+  Smartphone,
+  Monitor,
+} from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { Label } from "@/components/ui/Label";
+import { Checkbox } from "@/components/ui/Checkbox";
+import { useWindow } from "@/hooks/useWindow";
+import { useSearch } from "@/hooks/useSearch";
+import { software, devices, stacks, os } from "@/config/software";
+import { SearchBar } from "@/components/ui/custom/SearchBar";
+import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
+import { NavMenu } from "@/components/ui/custom/NavMenu";
+
+const SoftwareCenter = () => {
+  const { currentUrl, viewMode, navigateTo, goHome } = useWindow();
+  const search = useSearch(software);
+
+  const featuredSoftware = software.filter(
+    (software) => software.isFeatured === true,
+  );
+
+  const activeSoftware = software.find(
+    (software) => software.url === currentUrl,
+  );
+
+  const [selectedDevices, setselectedDevices] = useState<string[]>([]);
+  const [selectedStacks, setSelectedStacks] = useState<string[]>([]);
+  const [selectedOs, setSelectedOs] = useState<string[]>([]);
+
+  const filteredSoftware = software.filter((software) => {
+    const deviceMatch =
+      selectedDevices.length === 0 ||
+      software.softwareTags.device.some((d) => selectedDevices.includes(d));
+
+    const stackMatch =
+      selectedStacks.length === 0 ||
+      software.softwareTags.stack.some((s) => selectedStacks.includes(s));
+
+    const osMatch =
+      selectedOs.length === 0 ||
+      software.softwareTags.os.some((o) => selectedOs.includes(o));
+
+    return deviceMatch && stackMatch && osMatch;
+  });
+
+  const isFiltering =
+    selectedDevices.length > 0 ||
+    selectedStacks.length > 0 ||
+    selectedOs.length > 0 ||
+    search.query.trim() !== "";
+
+  const resetFilters = () => {
+    setselectedDevices([]);
+    setSelectedStacks([]);
+    setSelectedOs([]);
+    search.setQuery("");
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
+      {/* Browse and Search Tab */}
+      <div className="flex items-center justify-between w-full px-4 py-2 bg-[#ecebe7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
+        {/* Title */}
+        <div className="flex-1 flex justify-start">
+          <Button
+            variant="link"
+            onClick={() => {
+              goHome();
+              resetFilters();
+            }}
+            className="p-1 hover:bg-zinc-200/50 rounded transition"
+          >
+            <p className="text-2xl font-bold bg-clip-text text-amber-600 select-none shrink-0 py-1 cursor-pointer">
+              AppHub
+            </p>
+          </Button>
+        </div>
+
+        {/* Search Bar */}
+        <div className="flex-2 flex justify-center max-w-xl w-full mx-4">
+          <SearchBar
+            value={search.query}
+            onChange={search.setQuery}
+            items={software}
+            placeholder="Search the store..."
+            onSelect={(software) => navigateTo(software.url)}
+            className="w-full bg-zinc-50 dark:bg-background border border-zinc-200 dark:border-border rounded-lg flex items-center shadow-sm text-zinc-400 select-none transition-all focus-within:border-zinc-400 dark:focus-within:border-zinc-500"
+            inputClassName="text-sm text-zinc-800 dark:text-zinc-100 placeholder-zinc-400"
+            itemToStringValue={(item) => item.name}
+          />
+        </div>
+
+        {/* Nav Menu */}
+        <div className="flex-1 flex justify-end items-center gap-3">
+          <NavMenu buttonName="OS">
+            <div className="flex flex-col gap-2">
+              {os.map((os) => (
+                <Label key={os} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    checked={selectedOs.includes(os)}
+                    onCheckedChange={(checked) => {
+                      setSelectedOs((prev) =>
+                        checked ? [...prev, os] : prev.filter((g) => g !== os),
+                      );
+                    }}
+                  />
+                  {os}
+                </Label>
+              ))}
+            </div>
+          </NavMenu>
+
+          <NavMenu buttonName="Device">
+            <div className="flex flex-col gap-2">
+              {devices.map((device) => (
+                <Label key={device} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    checked={selectedDevices.includes(device)}
+                    onCheckedChange={(checked) => {
+                      setselectedDevices((prev) =>
+                        checked
+                          ? [...prev, device]
+                          : prev.filter((g) => g !== device),
+                      );
+                    }}
+                  />
+                  {device}
+                </Label>
+              ))}
+            </div>
+          </NavMenu>
+
+          <NavMenu buttonName="Stack">
+            <div className="flex flex-col gap-2">
+              {stacks.map((stack) => (
+                <Label key={stack} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    checked={selectedStacks.includes(stack)}
+                    onCheckedChange={(checked) => {
+                      setSelectedStacks((prev) =>
+                        checked
+                          ? [...prev, stack]
+                          : prev.filter((g) => g !== stack),
+                      );
+                    }}
+                  />
+                  {stack}
+                </Label>
+              ))}
+            </div>
+          </NavMenu>
+        </div>
+      </div>
+
+      {/* Main Window Canvas Viewport */}
+      <div className="flex-1 w-full bg-white dark:bg-popover overflow-y-auto">
+        {viewMode === "homepage" || !activeSoftware ? (
+          /* ================= HOMEPAGE VIEW ================= */
+          <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col gap-8">
+            {isFiltering && filteredSoftware.length === 0 && (
+              <p className="text-sm text-zinc-500 image-center justify-center flex">
+                No results found.
+              </p>
+            )}
+            {!isFiltering && (
+              // Carousel
+              <PreviewBanner
+                items={featuredSoftware}
+                enableAutoplay
+                hasCounter={false}
+                renderItem={(software) => (
+                  <div
+                    className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => navigateTo(software.url)}
+                  >
+                    {/* Image Container */}
+                    <div className="relative flex-1 h-full bg-zinc-950">
+                      <Image
+                        src={software.featuredImage || "/images/rover-i/r3.png"} // replace with a default image if none is provided
+                        alt={software.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 60vw"
+                        className="object-cover"
+                        priority
+                      />
+                    </div>
+
+                    {/* Software Details Sidebar */}
+                    <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 text-sm text-zinc-200 p-4 shrink-0">
+                      <h3 className="font-bold text-base text-white group-hover:text-amber-500 transition-colors">
+                        {software.name}
+                      </h3>
+                      <p className="mt-3 text-xs text-zinc-400 line-clamp-4 leading-relaxed">
+                        {software.desc}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              />
+            )}
+
+            {/* Software List */}
+            <div className="flex flex-col gap-6 max-w-2xl">
+              {filteredSoftware.map((software) => {
+                const displayUrl = software.url
+                  .replace("https://", "")
+                  .replace("www.", "")
+                  .split("/")
+                  .filter(Boolean)
+                  .join(" › ");
+
+                return (
+                  <div
+                    key={software.name}
+                    className="flex items-start justify-between gap-4"
+                  >
+                    <Button
+                      variant="window"
+                      onClick={() => navigateTo(software.url)}
+                      className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden"
+                    >
+                      {software.preview}
+                    </Button>
+                    <div className="flex-1 min-w-0 flex flex-col">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
+                          <span className="text-xs font-normal text-foreground truncate">
+                            {software.softwareTags.stack.join(" / ")} |{" "}
+                            {software.softwareTags.device.join(", ")}
+                          </span>
+                          <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
+                            {displayUrl}
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        variant="link"
+                        onClick={() => navigateTo(software.url)}
+                        className="h-auto p-0 text-xl text-foreground hover:text-primary hover:underline font-medium leading-tight mb-1 justify-start text-left whitespace-normal"
+                      >
+                        {software.name}
+                      </Button>
+                      <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
+                        {software.desc}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          /* ================= SOFTWARE DETAIL PAGE ================= */
+          <div className="max-w-4xl mx-auto px-6 py-4 flex flex-col gap-3">
+            <div className="flex items-center justify-between gap-4 w-full">
+              <div className="flex items-center gap-4">
+                {/* Software Preview Box */}
+                <div className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden">
+                  {activeSoftware.preview}
+                </div>
+                {/* Software Text Details */}
+                <div className="flex flex-col">
+                  <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
+                    {activeSoftware.name}
+                    {/* Tags */}
+                    <div className="flex items-center gap-4 mt-2 mb-2 w-full">
+                      <div className="flex items-center gap-4 flex-wrap">
+                        <div className="flex items-center gap-2 text-sm text-zinc-500 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400  px-2 py-1 rounded">
+                          <Layers className="size-4 text-zinc-500" />
+                          {activeSoftware.softwareTags.stack.map((stack) => (
+                            <span
+                              key={stack}
+                              className="text-xs text-zinc-700 dark:text-zinc-300"
+                            >
+                              {stack}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-zinc-500 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400 px-2 py-1 rounded">
+                          {activeSoftware.softwareTags.device.length > 0 && (
+                            <span
+                              key="device"
+                              className="text-xs text-zinc-700 dark:text-zinc-300 flex items-center gap-1"
+                            >
+                              {activeSoftware.softwareTags.device.length ===
+                                1 &&
+                              activeSoftware.softwareTags.device.includes(
+                                "Desktop",
+                              ) ? (
+                                <>
+                                  <Monitor className="size-4 text-zinc-500" />
+                                  <span>Desktop</span>
+                                </>
+                              ) : activeSoftware.softwareTags.device.length ===
+                                  1 &&
+                                activeSoftware.softwareTags.device.includes(
+                                  "Mobile",
+                                ) ? (
+                                <>
+                                  <Smartphone className="size-4 text-zinc-500" />
+                                  <span>Mobile</span>
+                                </>
+                              ) : (
+                                <>
+                                  <MonitorSmartphone className="size-4 text-zinc-500" />
+                                  <span>
+                                    {activeSoftware.softwareTags.device.join(
+                                      " & ",
+                                    )}
+                                  </span>
+                                </>
+                              )}
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {(() => {
+                            const osCount =
+                              activeSoftware.softwareTags.os.length;
+
+                            // More than 3 operating systems
+                            if (osCount > 3) {
+                              return (
+                                <div className="flex items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
+                                  <MonitorSmartphone className="size-3.5 text-zinc-500" />
+                                  <span>Cross-Platform</span>
+                                </div>
+                              );
+                            }
+
+                            // Between 2 and 3 operating systems (Join into ONE badge)
+                            if (osCount > 1 && osCount <= 3) {
+                              // Determine a combined icon if mixed, or fallback
+                              const hasMobile =
+                                activeSoftware.softwareTags.os.some((os) =>
+                                  ["iOS", "Android"].includes(os),
+                                );
+                              const hasDesktop =
+                                activeSoftware.softwareTags.os.some((os) =>
+                                  ["Windows", "macOS", "Linux"].includes(os),
+                                );
+                              const JointIcon =
+                                hasMobile && hasDesktop
+                                  ? MonitorSmartphone
+                                  : hasMobile
+                                    ? Smartphone
+                                    : Monitor;
+
+                              return (
+                                <div className="flex items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
+                                  <JointIcon className="size-3.5 text-zinc-500" />
+                                  <span>
+                                    {activeSoftware.softwareTags.os.join(" & ")}
+                                  </span>
+                                </div>
+                              );
+                            }
+
+                            // Exactly 1 operating system (Render specific badge)
+                            return activeSoftware.softwareTags.os.map((os) => {
+                              let IconComponent = MonitorSmartphone;
+                              if (["Windows", "macOS", "Linux"].includes(os))
+                                IconComponent = Monitor;
+                              if (["iOS", "Android"].includes(os))
+                                IconComponent = Smartphone;
+
+                              return (
+                                <div
+                                  key={os}
+                                  className="flex items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded"
+                                >
+                                  <IconComponent className="size-3.5 text-zinc-500" />
+                                  <span>{os}</span>
+                                </div>
+                              );
+                            });
+                          })()}
+                        </div>
+                      </div>
+                    </div>
+                  </h2>
+                </div>
+              </div>
+              <Button
+                asChild
+                className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm flex items-center gap-2 text-sm"
+              >
+                <a
+                  href={activeSoftware.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Download
+                  <ExternalLink className="size-4" />
+                </a>
+              </Button>
+            </div>
+
+            {/* Software Preview & Detail Columns Layout */}
+            <div className="flex flex-1 gap-6 items-center justify-center w-full flex-wrap">
+              {/* Preview */}
+              <div className="justify-center shrink flex-1 flex gap-3 max-w-2xl mx-auto">
+                <PreviewBanner
+                  items={software}
+                  enableAutoplay={false}
+                  hasCounter
+                  enableCounterDesc
+                  imageDesc={[
+                    "Home Dashboard",
+                    "Project Management",
+                    "Analytics View",
+                    "Settings Page",
+                  ]}
+                  renderItem={(software) => (
+                    <div
+                      className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
+                      onClick={() => navigateTo(software.url)}
+                    >
+                      {/* Image Container */}
+                      <div className="relative flex-1 h-full bg-zinc-950">
+                        <Image
+                          src={
+                            software.featuredImage || "/images/rover-i/r3.png"
+                          } // replace with a default image if none is provided
+                          alt={software.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 60vw"
+                          className="object-cover"
+                          priority
+                        />
+                      </div>
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
+            {/* About Software */}
+            <div className="flex p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl mb-2 h-88 min-h-50">
+              <div className="flex flex-col gap-3">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">
+                  About This Software
+                </h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed whitespace-normal break-word">
+                  {activeSoftware.desc}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default SoftwareCenter;
