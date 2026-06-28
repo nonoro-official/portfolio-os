@@ -16,6 +16,8 @@ interface PreviewBannerProps<T> {
   renderItem: (item: T, index: number) => React.ReactNode;
   enableAutoplay?: boolean;
   hasCounter?: boolean;
+  enableCounterDesc?: boolean;
+  imageDesc?: string[];
 }
 
 export const PreviewBanner = <T,>({
@@ -23,6 +25,8 @@ export const PreviewBanner = <T,>({
   renderItem,
   enableAutoplay = true,
   hasCounter = true,
+  enableCounterDesc = true,
+  imageDesc = [],
 }: PreviewBannerProps<T>) => {
   const [api, setApi] = useState<CarouselApi>();
 
@@ -40,7 +44,7 @@ export const PreviewBanner = <T,>({
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap());
     });
-  }, [api, hasCounter]);
+  }, [api, hasCounter, enableCounterDesc, current, imageDesc]);
 
   return (
     <Carousel
@@ -57,20 +61,27 @@ export const PreviewBanner = <T,>({
       </CarouselContent>
 
       {hasCounter && (
-        <div className="flex justify-center gap-2 py-3">
-          {items.map((item, index) => (
-            <Button
-              key={index}
-              className={cn(
-                "rounded-full p-0 cursor-pointer transition-all duration-500 ease-in-out",
-                index === current
-                  ? "bg-primary h-2 w-5 opacity-100"
-                  : "bg-muted-foreground h-2 w-2 opacity-30 hover:opacity-50",
-              )}
-              onClick={() => api?.scrollTo(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
+        <div className="flex flex-col items-center gap-2 py-3">
+          {enableCounterDesc && imageDesc.length > 0 && (
+            <p className="text-sm text-muted-foreground">
+              {imageDesc[current]}
+            </p>
+          )}
+
+          <div className="flex items-center gap-2">
+            {items.map((_, index) => (
+              <Button
+                key={index}
+                className={cn(
+                  "rounded-full p-0 transition-all duration-500",
+                  index === current
+                    ? "bg-primary h-2 w-5"
+                    : "bg-muted-foreground h-2 w-2 opacity-30",
+                )}
+                onClick={() => api?.scrollTo(index)}
+              />
+            ))}
+          </div>
         </div>
       )}
       <CarouselPrevious />

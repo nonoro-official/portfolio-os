@@ -191,8 +191,8 @@ const GameStore = () => {
               // Carousel
               <PreviewBanner
                 items={featuredGames}
-                enableAutoplay={true}
-                hasCounter={false}
+                enableAutoplay
+                hasCounter
                 renderItem={(game) => (
                   <div
                     className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
