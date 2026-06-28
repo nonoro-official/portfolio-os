@@ -11,19 +11,19 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "../Button";
 
-interface FeaturedBannerProps<T> {
+interface PreviewBannerProps<T> {
   items: T[];
   renderItem: (item: T, index: number) => React.ReactNode;
   enableAutoplay?: boolean;
   hasCounter?: boolean;
 }
 
-export const FeaturedBanner = <T,>({
+export const PreviewBanner = <T,>({
   items,
   renderItem,
   enableAutoplay = true,
   hasCounter = true,
-}: FeaturedBannerProps<T>) => {
+}: PreviewBannerProps<T>) => {
   const [api, setApi] = useState<CarouselApi>();
 
   const [current, setCurrent] = useState(0);
