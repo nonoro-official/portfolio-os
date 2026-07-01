@@ -44,10 +44,10 @@ export const initialItems: Item[] = [
   {
     icon: "🖥️",
     id: "about-me",
-    name: "noro_ver",
+    name: "About NonorOS",
     type: "app",
     parentId: null,
-    path: "/desktop/noro_ver",
+    path: "/desktop/About_NonorOS",
     gridCellId: "0-1",
   },
   {

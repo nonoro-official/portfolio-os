@@ -10,6 +10,7 @@ import Dock from "@/components/dock/Dock";
 import Browser from "@/components/desktop/apps/Browser";
 import GameStore from "@/components/desktop/apps/GameStore";
 import SoftwareCenter from "@/components/desktop/apps/SoftwareCenter";
+import About from "./apps/About";
 
 const DesktopWrapper: React.FC = () => {
   const { contextValue, desktopRef } = useDesktop();
@@ -22,6 +23,8 @@ const DesktopWrapper: React.FC = () => {
         return <GameStore />;
       case "software-center":
         return <SoftwareCenter />;
+      case "about-me":
+        return <About windowItem={windowItem} />;
       default:
         return (
           <div className="p-4 font-mono text-xs text-zinc-500">
