@@ -3,7 +3,7 @@ import type { Item } from "@/types/desktop";
 export const initialItems: Item[] = [
   {
     icon: "🎮",
-    id: "game-store",
+    id: "games",
     name: "Game Store",
     type: "app",
     parentId: null,
@@ -13,7 +13,7 @@ export const initialItems: Item[] = [
   },
   {
     icon: "🌐",
-    id: "browser",
+    id: "websites",
     name: "Web Browser",
     type: "app",
     parentId: null,
@@ -23,7 +23,7 @@ export const initialItems: Item[] = [
   },
   {
     icon: "🖥️",
-    id: "software-center",
+    id: "software",
     name: "Software Center",
     type: "app",
     parentId: null,
@@ -79,7 +79,7 @@ export const initialItems: Item[] = [
   },
   {
     icon: "📄",
-    id: "resume-download",
+    id: "resume",
     name: "Resume.pdf",
     type: "file",
     parentId: null,
