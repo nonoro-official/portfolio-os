@@ -10,21 +10,24 @@ import Dock from "@/components/dock/Dock";
 import Browser from "@/components/desktop/apps/Browser";
 import GameStore from "@/components/desktop/apps/GameStore";
 import SoftwareCenter from "@/components/desktop/apps/SoftwareCenter";
-import About from "./apps/About";
+import About from "@/components/desktop/apps/About";
+import TaskManager from "@/components/desktop/apps/TaskManager";
 
 const DesktopWrapper: React.FC = () => {
   const { contextValue, desktopRef } = useDesktop();
 
   const renderItemContent = (windowItem: Window) => {
     switch (windowItem.itemId) {
-      case "browser":
+      case "websites":
         return <Browser />;
-      case "game-store":
+      case "games":
         return <GameStore />;
-      case "software-center":
+      case "software":
         return <SoftwareCenter />;
       case "about-me":
         return <About windowItem={windowItem} />;
+      case "skills":
+        return <TaskManager />;
       default:
         return (
           <div className="p-4 font-mono text-xs text-zinc-500">
