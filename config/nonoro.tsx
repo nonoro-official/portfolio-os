@@ -6,6 +6,19 @@ import {
   PencilRuler,
 } from "lucide-react";
 
+import {
+  faGithub,
+  faLinkedin,
+  faItchIo,
+  faXTwitter,
+  faFacebook,
+  faDiscord,
+} from "@fortawesome/free-brands-svg-icons";
+
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export const about = [
   {
     icon: "🍋",
@@ -13,6 +26,44 @@ export const about = [
     copyright: "© nonoro-official. All rights reserved.",
     contact: "noah.c.penaranda@gmail.com",
     desc: "A passionate and diligent computer science student skilled in video editing and productivity tools. Proficient in object-oriented programming, game development, database management, and web development. Committed to delivering high-quality results on all projects.",
+  },
+];
+
+export const contacts = [
+  {
+    icon: <FontAwesomeIcon icon={faGithub} />,
+    name: "GitHub",
+    link: "https://github.com/nonoro-official",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faLinkedin} />,
+    name: "LinkedIn",
+    link: "https://www.linkedin.com/in/noah-peñaranda-7b63ba356",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faItchIo} />,
+    name: "itch.io",
+    link: "https://nonoro-official.itch.io/",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faXTwitter} />,
+    name: "Twitter",
+    link: "https://twitter.com/nonoro_official",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faFacebook} />,
+    name: "Facebook",
+    link: "https://www.facebook.com/noah.penaranda.121?mibextid=ZbWKwL",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faDiscord} />,
+    name: "Discord",
+    link: "https://discordapp.com/users/408153808691265567",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faEnvelope} />,
+    name: "Email",
+    link: "mailto:noah.c.penaranda@gmail.com",
   },
 ];
 
