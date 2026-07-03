@@ -12,6 +12,7 @@ import GameStore from "@/components/desktop/apps/GameStore";
 import SoftwareCenter from "@/components/desktop/apps/SoftwareCenter";
 import About from "@/components/desktop/apps/About";
 import TaskManager from "@/components/desktop/apps/TaskManager";
+import Reader from "@/components/desktop/apps/Reader";
 
 const DesktopWrapper: React.FC = () => {
   const { contextValue, desktopRef } = useDesktop();
@@ -28,6 +29,8 @@ const DesktopWrapper: React.FC = () => {
         return <About windowItem={windowItem} />;
       case "skills":
         return <TaskManager />;
+      case "resume":
+        return <Reader />;
       default:
         return (
           <div className="p-4 font-mono text-xs text-zinc-500">
