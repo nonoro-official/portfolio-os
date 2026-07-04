@@ -72,7 +72,7 @@ export const skills = [
     icon: <Code />,
     name: "Languages",
     stack:
-      "Java, Kotlin, C++, C#, Bash, Python, JavaScript, TypeScript, Dart, SQL, HTML, CSS",
+      "Java, Kotlin, C++, C#, Bash, Python, JavaScript, TypeScript, Dart, SQL, HTML, CSS, Sass",
   },
   {
     icon: <Blocks />,
@@ -82,7 +82,7 @@ export const skills = [
   {
     icon: <Database />,
     name: "Databases & Cloud",
-    stack: "Firebase, MongoDB, MySQL, Google Cloud",
+    stack: "Firebase, MongoDB, MySQL,  Google Cloud",
   },
   {
     icon: <MonitorSmartphone />,

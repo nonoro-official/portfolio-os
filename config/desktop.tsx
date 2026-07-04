@@ -2,12 +2,12 @@ import type { Item } from "@/types/desktop";
 
 export const initialItems: Item[] = [
   {
-    icon: "🖥️",
-    id: "software",
-    name: "Software Center",
+    icon: "📦",
+    id: "apps",
+    name: "App Center",
     type: "app",
     parentId: null,
-    path: "/desktop/Software_Center",
+    path: "/desktop/App_Center",
     gridCellId: "0-0",
   },
   {
@@ -41,9 +41,9 @@ export const initialItems: Item[] = [
   //   gridCellId: "3-0",
   // },
   {
-    icon: "🖥️",
+    icon: "ℹ️",
     id: "about-me",
-    name: "About NonorOS",
+    name: "About",
     type: "app",
     parentId: null,
     path: "/desktop/About_NonorOS",
