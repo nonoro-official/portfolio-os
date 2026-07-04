@@ -48,6 +48,17 @@ const Browser = () => {
 
   const displayedWebsites = filteredSite ? [filteredSite] : websites;
 
+  const [expandedSites, setExpandedSites] = useState<Record<string, boolean>>(
+    {},
+  );
+
+  const toggleExpanded = (siteName: string) => {
+    setExpandedSites((prev) => ({
+      ...prev,
+      [siteName]: !prev[siteName],
+    }));
+  };
+
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
       {/* Top Browser Control Bar */}
@@ -202,18 +213,31 @@ const Browser = () => {
                       </Button>
 
                       {/* Description Snippet with Inline Read More */}
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
-                        {site.desc}{" "}
-                        <a
-                          href={displayUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline inline-block whitespace-nowrap ml-1 cursor-pointer font-normal"
-                          onClick={(e) => e.stopPropagation()}
+                      <div className="text-sm text-zinc-500 dark:text-zinc-400 leading-snug">
+                        <p
+                          className={
+                            expandedSites[site.name]
+                              ? "whitespace-pre-line"
+                              : "line-clamp-3"
+                          }
                         >
-                          {site.hasReadMore ? "Read More" : ""}
-                        </a>
-                      </p>
+                          {expandedSites[site.name]
+                            ? (site.fullDesc ?? site.desc)
+                            : site.desc}
+                        </p>
+
+                        {site.hasReadMore && (
+                          <Button
+                            variant="link"
+                            onClick={() => toggleExpanded(site.name)}
+                            className="h-auto p-0 mt-1 text-primary hover:underline"
+                          >
+                            {expandedSites[site.name]
+                              ? "Show Less"
+                              : "Read More"}
+                          </Button>
+                        )}
+                      </div>
                     </div>
 
                     {/* Right Side: Google-style square snippet thumbnail */}
