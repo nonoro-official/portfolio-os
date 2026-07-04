@@ -9,7 +9,7 @@ import StatusBar from "@/components/statusbar/StatusBar";
 import Dock from "@/components/dock/Dock";
 import Browser from "@/components/desktop/apps/Browser";
 import GameStore from "@/components/desktop/apps/GameStore";
-import SoftwareCenter from "@/components/desktop/apps/SoftwareCenter";
+import AppCenter from "@/components/desktop/apps/AppCenter";
 import About from "@/components/desktop/apps/About";
 import TaskManager from "@/components/desktop/apps/TaskManager";
 import Reader from "@/components/desktop/apps/Reader";
@@ -23,8 +23,8 @@ const DesktopWrapper: React.FC = () => {
         return <Browser />;
       case "games":
         return <GameStore />;
-      case "software":
-        return <SoftwareCenter />;
+      case "apps":
+        return <AppCenter />;
       case "about-me":
         return <About windowItem={windowItem} />;
       case "skills":

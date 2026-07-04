@@ -12,39 +12,35 @@ import { Label } from "@/components/ui/Label";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { useWindow } from "@/hooks/useWindow";
 import { useSearch } from "@/hooks/useSearch";
-import { software, devices, stacks, os } from "@/config/software";
+import { app, devices, stacks, os } from "@/config/apps";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
 import { NavMenu } from "@/components/ui/custom/NavMenu";
 
-const SoftwareCenter = () => {
+const AppCenter = () => {
   const { currentUrl, viewMode, navigateTo, goHome } = useWindow();
-  const search = useSearch(software);
+  const search = useSearch(app);
 
-  const featuredSoftware = software.filter(
-    (software) => software.isFeatured === true,
-  );
+  const featuredApp = app.filter((app) => app.isFeatured === true);
 
-  const activeSoftware = software.find(
-    (software) => software.url === currentUrl,
-  );
+  const activeApp = app.find((app) => app.url === currentUrl);
 
   const [selectedDevices, setselectedDevices] = useState<string[]>([]);
   const [selectedStacks, setSelectedStacks] = useState<string[]>([]);
   const [selectedOs, setSelectedOs] = useState<string[]>([]);
 
-  const filteredSoftware = software.filter((software) => {
+  const filteredApp = app.filter((app) => {
     const deviceMatch =
       selectedDevices.length === 0 ||
-      software.softwareTags.device.some((d) => selectedDevices.includes(d));
+      app.appTags.device.some((d) => selectedDevices.includes(d));
 
     const stackMatch =
       selectedStacks.length === 0 ||
-      software.softwareTags.stack.some((s) => selectedStacks.includes(s));
+      app.appTags.stack.some((s) => selectedStacks.includes(s));
 
     const osMatch =
       selectedOs.length === 0 ||
-      software.softwareTags.os.some((o) => selectedOs.includes(o));
+      app.appTags.os.some((o) => selectedOs.includes(o));
 
     return deviceMatch && stackMatch && osMatch;
   });
@@ -87,9 +83,9 @@ const SoftwareCenter = () => {
           <SearchBar
             value={search.query}
             onChange={search.setQuery}
-            items={software}
+            items={app}
             placeholder="Search the store..."
-            onSelect={(software) => navigateTo(software.url)}
+            onSelect={(app) => navigateTo(app.url)}
             className="w-full bg-zinc-50 dark:bg-background border border-zinc-200 dark:border-border rounded-lg flex items-center shadow-sm text-zinc-400 select-none transition-all focus-within:border-zinc-400 dark:focus-within:border-zinc-500"
             inputClassName="text-sm text-zinc-800 dark:text-zinc-100 placeholder-zinc-400"
             itemToStringValue={(item) => item.name}
@@ -160,10 +156,10 @@ const SoftwareCenter = () => {
 
       {/* Main Window Canvas Viewport */}
       <div className="flex-1 w-full bg-white dark:bg-popover overflow-y-auto">
-        {viewMode === "homepage" || !activeSoftware ? (
+        {viewMode === "homepage" || !activeApp ? (
           /* ================= HOMEPAGE VIEW ================= */
           <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col gap-8">
-            {isFiltering && filteredSoftware.length === 0 && (
+            {isFiltering && filteredApp.length === 0 && (
               <p className="text-sm text-zinc-500 image-center justify-center flex">
                 No results found.
               </p>
@@ -171,19 +167,19 @@ const SoftwareCenter = () => {
             {!isFiltering && (
               // Carousel
               <PreviewBanner
-                items={featuredSoftware}
+                items={featuredApp}
                 enableAutoplay
                 hasCounter={false}
-                renderItem={(software) => (
+                renderItem={(app) => (
                   <div
                     className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => navigateTo(software.url)}
+                    onClick={() => navigateTo(app.url)}
                   >
                     {/* Image Container */}
                     <div className="relative flex-1 h-full bg-zinc-950">
                       <Image
-                        src={software.featuredImage || "/images/rover-i/r3.png"} // replace with a default image if none is provided
-                        alt={software.name}
+                        src={app.featuredImage || "/images/rover-i/r3.png"}
+                        alt={app.name}
                         fill
                         sizes="(max-width: 768px) 100vw, 60vw"
                         className="object-cover"
@@ -191,13 +187,13 @@ const SoftwareCenter = () => {
                       />
                     </div>
 
-                    {/* Software Details Sidebar */}
+                    {/* App Details Sidebar */}
                     <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 text-sm text-zinc-200 p-4 shrink-0">
                       <h3 className="font-bold text-base text-white group-hover:text-amber-500 transition-colors">
-                        {software.name}
+                        {app.name}
                       </h3>
                       <p className="mt-3 text-xs text-zinc-400 line-clamp-4 leading-relaxed">
-                        {software.desc}
+                        {app.desc}
                       </p>
                     </div>
                   </div>
@@ -205,10 +201,10 @@ const SoftwareCenter = () => {
               />
             )}
 
-            {/* Software List */}
+            {/* App List */}
             <div className="flex flex-col gap-6 max-w-2xl">
-              {filteredSoftware.map((software) => {
-                const displayUrl = software.url
+              {filteredApp.map((app) => {
+                const displayUrl = app.url
                   .replace("https://", "")
                   .replace("www.", "")
                   .split("/")
@@ -217,22 +213,34 @@ const SoftwareCenter = () => {
 
                 return (
                   <div
-                    key={software.name}
+                    key={app.name}
                     className="flex items-start justify-between gap-4"
                   >
                     <Button
                       variant="window"
-                      onClick={() => navigateTo(software.url)}
-                      className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden"
+                      onClick={() => navigateTo(app.url)}
+                      className="size-24 text-lg rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden"
                     >
-                      {software.preview}
+                      {app.logo.type === "emoji" ? (
+                        <span className="text-6xl line-height-none default-flex-center">
+                          {app.logo.value}
+                        </span>
+                      ) : (
+                        <Image
+                          src={app.logo.value}
+                          alt={`${app.name} icon`}
+                          width={96}
+                          height={96}
+                          className="object-contain"
+                        />
+                      )}
                     </Button>
                     <div className="flex-1 min-w-0 flex flex-col">
                       <div className="flex items-center gap-2 mb-1">
                         <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
                           <span className="text-xs font-normal text-foreground truncate">
-                            {software.softwareTags.stack.join(" / ")} |{" "}
-                            {software.softwareTags.device.join(", ")}
+                            {app.appTags.stack.join(" / ")} |{" "}
+                            {app.appTags.device.join(", ")}
                           </span>
                           <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
                             {displayUrl}
@@ -241,13 +249,13 @@ const SoftwareCenter = () => {
                       </div>
                       <Button
                         variant="link"
-                        onClick={() => navigateTo(software.url)}
+                        onClick={() => navigateTo(app.url)}
                         className="h-auto p-0 text-xl text-foreground hover:text-primary hover:underline font-medium leading-tight mb-1 justify-start text-left whitespace-normal"
                       >
-                        {software.name}
+                        {app.name}
                       </Button>
                       <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
-                        {software.desc}
+                        {app.desc}
                       </p>
                     </div>
                   </div>
@@ -260,20 +268,32 @@ const SoftwareCenter = () => {
           <div className="max-w-4xl mx-auto px-6 py-4 flex flex-col gap-3">
             <div className="flex items-center justify-between gap-4 w-full">
               <div className="flex items-center gap-4">
-                {/* Software Preview Box */}
+                {/* App Preview Box */}
                 <div className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden">
-                  {activeSoftware.preview}
+                  {activeApp.logo.type === "emoji" ? (
+                    <span className="text-6xl line-height-none default-flex-center">
+                      {activeApp.logo.value}
+                    </span>
+                  ) : (
+                    <Image
+                      src={activeApp.logo.value}
+                      alt={`${activeApp.name} icon`}
+                      width={96}
+                      height={96}
+                      className="object-contain"
+                    />
+                  )}
                 </div>
-                {/* Software Text Details */}
+                {/* App Text Details */}
                 <div className="flex flex-col">
                   <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
-                    {activeSoftware.name}
+                    {activeApp.name}
                     {/* Tags */}
                     <div className="flex items-center gap-4 mt-2 mb-2 w-full">
                       <div className="flex items-center gap-4 flex-wrap">
                         <div className="flex items-center gap-2 text-sm text-zinc-500 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400  px-2 py-1 rounded">
                           <Layers className="size-4 text-zinc-500" />
-                          {activeSoftware.softwareTags.stack.map((stack) => (
+                          {activeApp.appTags.stack.map((stack) => (
                             <span
                               key={stack}
                               className="text-xs text-zinc-700 dark:text-zinc-300"
@@ -283,24 +303,20 @@ const SoftwareCenter = () => {
                           ))}
                         </div>
                         <div className="flex items-center gap-2 text-sm text-zinc-500 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-400 px-2 py-1 rounded">
-                          {activeSoftware.softwareTags.device.length > 0 && (
+                          {activeApp.appTags.device.length > 0 && (
                             <span
                               key="device"
                               className="text-xs text-zinc-700 dark:text-zinc-300 flex items-center gap-1"
                             >
-                              {activeSoftware.softwareTags.device.length ===
-                                1 &&
-                              activeSoftware.softwareTags.device.includes(
-                                "Desktop",
-                              ) ? (
+                              {activeApp.appTags.device.length === 1 &&
+                              activeApp.appTags.device.includes(devices[0]) ? (
                                 <>
                                   <Monitor className="size-4 text-zinc-500" />
                                   <span>Desktop</span>
                                 </>
-                              ) : activeSoftware.softwareTags.device.length ===
-                                  1 &&
-                                activeSoftware.softwareTags.device.includes(
-                                  "Mobile",
+                              ) : activeApp.appTags.device.length === 1 &&
+                                activeApp.appTags.device.includes(
+                                  devices[1],
                                 ) ? (
                                 <>
                                   <Smartphone className="size-4 text-zinc-500" />
@@ -310,9 +326,7 @@ const SoftwareCenter = () => {
                                 <>
                                   <MonitorSmartphone className="size-4 text-zinc-500" />
                                   <span>
-                                    {activeSoftware.softwareTags.device.join(
-                                      " & ",
-                                    )}
+                                    {activeApp.appTags.device.join(" & ")}
                                   </span>
                                 </>
                               )}
@@ -321,8 +335,7 @@ const SoftwareCenter = () => {
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
                           {(() => {
-                            const osCount =
-                              activeSoftware.softwareTags.os.length;
+                            const osCount = activeApp.appTags.os.length;
 
                             // More than 3 operating systems
                             if (osCount > 3) {
@@ -337,14 +350,13 @@ const SoftwareCenter = () => {
                             // Between 2 and 3 operating systems (Join into ONE badge)
                             if (osCount > 1 && osCount <= 3) {
                               // Determine a combined icon if mixed, or fallback
-                              const hasMobile =
-                                activeSoftware.softwareTags.os.some((os) =>
-                                  ["iOS", "Android"].includes(os),
-                                );
-                              const hasDesktop =
-                                activeSoftware.softwareTags.os.some((os) =>
+                              const hasMobile = activeApp.appTags.os.some(
+                                (os) => ["iOS", "Android"].includes(os),
+                              );
+                              const hasDesktop = activeApp.appTags.os.some(
+                                (os) =>
                                   ["Windows", "macOS", "Linux"].includes(os),
-                                );
+                              );
                               const JointIcon =
                                 hasMobile && hasDesktop
                                   ? MonitorSmartphone
@@ -356,14 +368,14 @@ const SoftwareCenter = () => {
                                 <div className="flex items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
                                   <JointIcon className="size-3.5 text-zinc-500" />
                                   <span>
-                                    {activeSoftware.softwareTags.os.join(" & ")}
+                                    {activeApp.appTags.os.join(" & ")}
                                   </span>
                                 </div>
                               );
                             }
 
                             // Exactly 1 operating system (Render specific badge)
-                            return activeSoftware.softwareTags.os.map((os) => {
+                            return activeApp.appTags.os.map((os) => {
                               let IconComponent = MonitorSmartphone;
                               if (["Windows", "macOS", "Linux"].includes(os))
                                 IconComponent = Monitor;
@@ -392,7 +404,7 @@ const SoftwareCenter = () => {
                 className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm flex items-center gap-2 text-sm"
               >
                 <a
-                  href={activeSoftware.url}
+                  href={activeApp.url}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -402,52 +414,69 @@ const SoftwareCenter = () => {
               </Button>
             </div>
 
-            {/* Software Preview & Detail Columns Layout */}
+            {/* App Preview & Detail Columns Layout */}
             <div className="flex flex-1 gap-6 items-center justify-center w-full flex-wrap">
               {/* Preview */}
               <div className="justify-center shrink flex-1 flex gap-3 max-w-2xl mx-auto">
                 <PreviewBanner
-                  items={software}
+                  items={activeApp.media}
                   enableAutoplay={false}
                   hasCounter
                   enableCounterDesc
-                  imageDesc={[
-                    "Home Dashboard",
-                    "Project Management",
-                    "Analytics View",
-                    "Settings Page",
-                  ]}
-                  renderItem={(software) => (
+                  imageDesc={activeApp.media.map((item) => item.imgDesc || "")}
+                  enableImagePreview={true}
+                  renderItem={(mediaItem, index, { openPreview }) => (
                     <div
                       className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
-                      onClick={() => navigateTo(software.url)}
+                      onClick={() => navigateTo(activeApp.url)}
                     >
-                      {/* Image Container */}
-                      <div className="relative flex-1 h-full bg-zinc-950">
-                        <Image
-                          src={
-                            software.featuredImage || "/images/rover-i/r3.png"
-                          } // replace with a default image if none is provided
-                          alt={software.name}
-                          fill
-                          sizes="(max-width: 768px) 100vw, 60vw"
-                          className="object-cover"
-                          priority
-                        />
-                      </div>
+                      {mediaItem.type === "image" ? (
+                        <div
+                          className="relative flex-1 h-full bg-zinc-950 cursor-zoom-in"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openPreview(mediaItem.src);
+                          }}
+                        >
+                          <Image
+                            src={mediaItem.src}
+                            alt={mediaItem.imgDesc || activeApp.name}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 60vw"
+                            className="object-cover"
+                            priority={index === 0}
+                          />
+                        </div>
+                      ) : (
+                        <div className="relative flex-1 h-full bg-zinc-950">
+                          <video
+                            src={mediaItem.src}
+                            poster={mediaItem.thumbSrc}
+                            className="h-full w-full object-cover"
+                            muted
+                            playsInline
+                            loop
+                            autoPlay
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openPreview(mediaItem.src);
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   )}
                 />
               </div>
             </div>
-            {/* About Software */}
+            {/* About App */}
             <div className="flex p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl mb-2 h-88 min-h-50">
               <div className="flex flex-col gap-3">
                 <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">
-                  About This Software
+                  About This App
                 </h3>
                 <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed whitespace-normal break-word">
-                  {activeSoftware.desc}
+                  {activeApp.desc}
                 </p>
               </div>
             </div>
@@ -458,4 +487,4 @@ const SoftwareCenter = () => {
   );
 };
 
-export default SoftwareCenter;
+export default AppCenter;
