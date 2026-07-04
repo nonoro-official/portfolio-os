@@ -33,6 +33,3 @@ export const WINDOW_HEIGHT = 600;
 
 export const STATUS_BAR_HEIGHT = 48;
 export const DOCK_HEIGHT = 85;
-
-// Browser
-// Gallery
