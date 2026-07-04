@@ -1,14 +1,12 @@
-import { Disc3 } from "lucide-react";
-
 export const websites = [
   {
-    icon: <Disc3 />,
+    icon: "💿",
     name: "Green Light Records",
     url: "https://github.com/nonoro-official/WDD2",
     stack: "MongoDB - Express - React - Node.js",
     desc: "Green Light Records is a records shop.",
     hasReadMore: false,
-    preview: "💬",
+    preview: "/images/codecipher-ss1.jpg",
     isIFrameBlocked: true,
   },
   {
@@ -18,17 +16,17 @@ export const websites = [
     stack: "React - Typescript - Node.js",
     desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
     hasReadMore: false,
-    preview: "🛍️",
+    preview: "/images/codecipher-ss1.jpg",
     isIFrameBlocked: false,
   },
   {
     icon: "💬",
-    name: "Company Website Mega Menu",
+    name: "Hooman Design Corporation Mega Menu",
     url: "https://nonoro-official.github.io/vnd.github.io/",
     stack: "WordPress",
     desc: "A mega menu me and my partner made for our internship using WordPress.",
     hasReadMore: false,
-    preview: "💬",
+    preview: "/images/codecipher-ss1.jpg",
     isIFrameBlocked: false,
   },
   {
@@ -38,7 +36,7 @@ export const websites = [
     stack: "HTML - CSS",
     desc: "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school.",
     hasReadMore: true,
-    preview: "💬",
+    preview: "/images/codecipher-ss1.jpg",
     isIFrameBlocked: false,
   },
   {
@@ -48,7 +46,7 @@ export const websites = [
     stack: "HTML - CSS",
     desc: "Personal website made for college.",
     hasReadMore: false,
-    preview: "📊",
+    preview: "/images/codecipher-ss1.jpg",
     isIFrameBlocked: false,
   },
   {
@@ -58,7 +56,7 @@ export const websites = [
     stack: "HTML - CSS",
     desc: "Original portfolio website. Based from the personal website.",
     hasReadMore: false,
-    preview: "🌐",
+    preview: "/images/codecipher-ss1.jpg",
     isIFrameBlocked: false,
   },
 ];
