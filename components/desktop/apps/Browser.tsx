@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useWindow } from "@/hooks/useWindow";
 import { ArrowLeft, Home, RotateCw } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { useSearch } from "@/hooks/useSearch";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
@@ -190,12 +191,22 @@ const Browser = () => {
                     <div className="flex-1 min-w-0 flex flex-col">
                       {/* Header: Icon & Breadcrumb */}
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm p-1 bg-zinc-100 rounded-full flex items-center justify-center size-6 select-none shrink-0">
-                          {site.icon}
-                        </span>
+                        <div className="size-7 rounded-full bg-zinc-100 flex items-center justify-center overflow-hidden">
+                          {site.icon.type === "emoji" ? (
+                            <span className="text-lg">{site.icon.value}</span>
+                          ) : (
+                            <Image
+                              src={site.icon.value}
+                              alt={`${site.name} icon`}
+                              width={28}
+                              height={28}
+                              className="object-contain"
+                            />
+                          )}
+                        </div>
                         <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
                           <span className="text-xs font-normal text-foreground truncate">
-                            {site.stack}
+                            {site.stack.join(" - ")}
                           </span>
                           <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
                             {displayUrl}
@@ -244,9 +255,15 @@ const Browser = () => {
                     <Button
                       variant="window"
                       onClick={handleUrlSubmit.bind(null, site.name)}
-                      className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden"
+                      className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden"
                     >
-                      {site.preview}
+                      <Image
+                        src={site.preview}
+                        alt={`${site.name} preview`}
+                        width={128}
+                        height={128}
+                        className="object-contain"
+                      />
                     </Button>
                   </div>
                 );

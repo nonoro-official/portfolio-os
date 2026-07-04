@@ -242,9 +242,15 @@ const GameStore = () => {
                     <Button
                       variant="window"
                       onClick={() => navigateTo(game.url)}
-                      className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden"
+                      className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden"
                     >
-                      {game.preview}
+                      <Image
+                        src={game.preview}
+                        alt={`${game.name} preview`}
+                        width={128}
+                        height={128}
+                        className="object-contain"
+                      />
                     </Button>
                     <div className="flex-1 min-w-0 flex flex-col">
                       <div className="flex items-center gap-2 mb-1">
@@ -298,9 +304,10 @@ const GameStore = () => {
                       {media.type === "video" ? (
                         <video
                           src={media.src}
+                          controls
                           autoPlay
-                          muted
                           loop
+                          playsInline
                           className="w-full h-full object-cover"
                         />
                       ) : (
