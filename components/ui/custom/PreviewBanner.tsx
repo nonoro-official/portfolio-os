@@ -29,7 +29,6 @@ export const PreviewBanner = <T,>({
   imageDesc = [],
 }: PreviewBannerProps<T>) => {
   const [api, setApi] = useState<CarouselApi>();
-
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
 
@@ -41,10 +40,16 @@ export const PreviewBanner = <T,>({
       setCurrent(api.selectedScrollSnap());
     }
 
-    api.on("select", () => {
+    const onSelect = () => {
       setCurrent(api.selectedScrollSnap());
-    });
-  }, [api, hasCounter, enableCounterDesc, current, imageDesc]);
+    };
+
+    api.on("select", onSelect);
+
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api, hasCounter]);
 
   return (
     <Carousel
@@ -63,7 +68,7 @@ export const PreviewBanner = <T,>({
       {hasCounter && (
         <div className="flex flex-col items-center gap-2 py-3">
           {enableCounterDesc && imageDesc.length > 0 && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground transition-all">
               {imageDesc[current]}
             </p>
           )}
