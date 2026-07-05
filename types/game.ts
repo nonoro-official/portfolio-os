@@ -6,6 +6,16 @@ export enum Stack {
   yahaha = "Yahaha",
 }
 
+export enum WebTech {
+  js = "JavaScript",
+  html = "HTML",
+  css = "CSS",
+  ws = "WebSocket",
+  ngrok = "Ngrok",
+  node = "Node.js",
+  express = "Express.js",
+}
+
 export enum Genre {
   vn = "Visual Novel",
   narrative = "Narrative",
@@ -28,9 +38,11 @@ export interface Game {
     genre: Genre[];
     competition: Competition[];
   };
+  webTech?: WebTech[];
   desc: string;
   about: string;
   isFeatured: boolean;
+  award?: string[];
   preview: string;
   featuredImage?: string;
   media: (
