@@ -261,7 +261,6 @@ const GameStore = () => {
                         />
                       </Button>
                     )}
-                    {/* Place the dialog outside of the button, passing ALL your items to it */}
                     <ImagePreview
                       items={filteredGames}
                       previewIndex={previewIndex}
@@ -279,7 +278,7 @@ const GameStore = () => {
                         }
                       }}
                       renderPreview={(activeGame) => {
-                        // if currentSite hasn't resolved yet, don't break the render
+                        // if activeGame hasn't resolved yet, don't break the render
                         if (!activeGame?.preview) return null;
 
                         return (
@@ -326,23 +325,48 @@ const GameStore = () => {
           </div>
         ) : (
           /* ================= GAME DETAIL PAGE ================= */
-          <div className="max-w-4xl mx-auto px-6 py-4 flex flex-col gap-3">
-            {/* Game Name */}
+          <div className="max-w-4xl mx-auto px-6 py-4 flex flex-col gap-4">
+            {/* Game Name Header */}
             <div>
               <p className="text-xs text-zinc-400">
                 {activeGame.gameTags.stack.join(" / ")} •{" "}
                 {activeGame.gameTags.genre.join(", ")}
               </p>
-              <h1 className="text-3xl mt-1 font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              <h1 className="text-3xl mt-0.5 font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
                 {activeGame.name}
               </h1>
             </div>
+
             {/* Game Preview & Detail Columns Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start w-full">
-              {/* Left Column (Takes up 7 slots out of 12) */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start w-full -mt-2">
+              {/* Left Column: Media Track (Takes up 7 slots) */}
               <div className="md:col-span-7 w-full block">
                 <ThumbnailPreview
                   items={activeGame.media || []}
+                  enableImagePreview={true}
+                  imageDesc={(activeGame.media || []).map(
+                    (_, i) => `${activeGame.name} Media ${i + 1}`,
+                  )}
+                  renderPreview={(mediaItem) => {
+                    if (mediaItem.type === "video") {
+                      return (
+                        <video
+                          src={mediaItem.src}
+                          controls
+                          className="max-h-full max-w-full"
+                        />
+                      );
+                    }
+                    return (
+                      <Image
+                        src={mediaItem.src}
+                        alt="Full Preview"
+                        fill
+                        className="object-contain p-4"
+                        priority
+                      />
+                    );
+                  }}
                   renderMainItem={(media) => (
                     <div className="relative aspect-video w-full bg-zinc-900 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 flex items-center justify-center">
                       {media.type === "video" ? (
@@ -367,7 +391,6 @@ const GameStore = () => {
                     </div>
                   )}
                   renderThumbItem={(media) => (
-                    // Wrapped the thumbnail in a forced absolute fill container so it can't collapse
                     <div className="absolute inset-0 w-full h-full">
                       <Image
                         src={media.thumbSrc || media.src}
@@ -381,9 +404,11 @@ const GameStore = () => {
                 />
               </div>
 
-              {/* Right Column (Takes up 5 slots out of 12) */}
-              <div className="md:col-span-5 flex flex-col justify-between p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl h-full min-h-50">
-                <div className="flex flex-col gap-3">
+              {/* Right Column: About & Buttons (Takes up 5 slots) */}
+              <div className="md:col-span-5 flex flex-col gap-3 w-full">
+                {" "}
+                {/* About */}
+                <div className="flex flex-col gap-3 p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl min-h-68.5">
                   <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">
                     About This Game
                   </h3>
@@ -391,33 +416,33 @@ const GameStore = () => {
                     {activeGame.desc}
                   </p>
                 </div>
+                {/* Action Buttons */}
+                <div className="flex items-center justify-end gap-3 mt-8 w-full">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      goHome();
+                      search.setQuery("");
+                    }}
+                    className="text-sm"
+                  >
+                    Back to Store
+                  </Button>
+                  <Button
+                    asChild
+                    className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm flex items-center gap-2 text-sm"
+                  >
+                    <a
+                      href={activeGame.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Download Game
+                      <ExternalLink className="size-4" />
+                    </a>
+                  </Button>
+                </div>
               </div>
-            </div>
-            {/* Bottom Action Buttons */}
-            <div className="flex items-center justify-end gap-3 pb-4 pt-3">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  goHome();
-                  search.setQuery("");
-                }}
-                className="text-sm"
-              >
-                Back to Store
-              </Button>
-              <Button
-                asChild
-                className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm flex items-center gap-2 text-sm"
-              >
-                <a
-                  href={activeGame.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Download Game
-                  <ExternalLink className="size-4" />
-                </a>
-              </Button>
             </div>
           </div>
         )}
