@@ -170,6 +170,8 @@ const AppCenter = () => {
                 items={featuredApp}
                 enableAutoplay
                 hasCounter={false}
+                enableCounterDesc={false}
+                enableImagePreview={false}
                 renderItem={(app) => (
                   <div
                     className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
@@ -435,7 +437,7 @@ const AppCenter = () => {
                           className="relative flex-1 h-full bg-zinc-950 cursor-zoom-in"
                           onClick={(e) => {
                             e.stopPropagation();
-                            openPreview(mediaItem.src);
+                            openPreview();
                           }}
                         >
                           <Image
@@ -459,13 +461,30 @@ const AppCenter = () => {
                             autoPlay
                             onClick={(e) => {
                               e.stopPropagation();
-                              openPreview(mediaItem.src);
+                              openPreview();
                             }}
                           />
                         </div>
                       )}
                     </div>
                   )}
+                  renderPreview={(media) =>
+                    media.type === "image" ? (
+                      <Image
+                        src={media.src}
+                        alt={media.imgDesc || activeApp.name}
+                        fill
+                        className="object-contain"
+                      />
+                    ) : (
+                      <video
+                        src={media.src}
+                        controls
+                        autoPlay
+                        className="h-full w-full object-contain"
+                      />
+                    )
+                  }
                 />
               </div>
             </div>
