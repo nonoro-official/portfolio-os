@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { useSearch } from "@/hooks/useSearch";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { websites } from "@/config/websites";
+import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 
 const Browser = () => {
   const {
@@ -22,6 +23,7 @@ const Browser = () => {
   const [filteredSite, setFilteredSite] = useState<(typeof websites)[0] | null>(
     null,
   );
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const search = useSearch(websites);
 
   // Helper function to handle custom URL submissions or text searches
@@ -252,19 +254,63 @@ const Browser = () => {
                     </div>
 
                     {/* Right Side: Google-style square snippet thumbnail */}
-                    <Button
-                      variant="window"
-                      onClick={handleUrlSubmit.bind(null, site.name)}
-                      className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden"
-                    >
-                      <Image
-                        src={site.preview}
-                        alt={`${site.name} preview`}
-                        width={128}
-                        height={128}
-                        className="object-contain"
-                      />
-                    </Button>
+                    {site.preview && (
+                      <Button
+                        variant="window"
+                        onClick={() => {
+                          // Find where this item lives in our currently active/filtered list
+                          const index = displayedWebsites.findIndex(
+                            (s) => s.name === site.name,
+                          );
+                          setPreviewIndex(index);
+                        }}
+                        className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden bg-transparent"
+                      >
+                        <Image
+                          src={site.preview}
+                          alt={`${site.name} preview`}
+                          width={128}
+                          height={128}
+                          className="object-contain"
+                        />
+                      </Button>
+                    )}
+                    {/* Place the dialog outside of the button, passing ALL your items to it */}
+                    <ImagePreview
+                      items={displayedWebsites}
+                      previewIndex={previewIndex}
+                      onClose={() => setPreviewIndex(null)}
+                      onNavigate={(direction) => {
+                        if (previewIndex === null) return;
+                        if (direction === "prev" && previewIndex > 0) {
+                          setPreviewIndex(previewIndex - 1);
+                        }
+                        if (
+                          direction === "next" &&
+                          previewIndex < displayedWebsites.length - 1
+                        ) {
+                          setPreviewIndex(previewIndex + 1);
+                        }
+                      }}
+                      renderPreview={(currentSite) => {
+                        // if currentSite hasn't resolved yet, don't break the render
+                        if (!currentSite?.preview) return null;
+
+                        return (
+                          <Image
+                            src={currentSite.preview}
+                            alt={`${currentSite.name} full preview`}
+                            fill
+                            className="object-contain p-4"
+                            priority
+                          />
+                        );
+                      }}
+                      imageDesc={displayedWebsites.map(
+                        (s) => `${s.name} Preview`,
+                      )}
+                      totalCount={displayedWebsites.length}
+                    />
                   </div>
                 );
               })}

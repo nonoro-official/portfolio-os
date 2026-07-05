@@ -11,13 +11,14 @@ import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
 import { ThumbnailPreview } from "@/components/ui/custom/ThumbnailPreview";
 import { NavMenu } from "@/components/ui/custom/NavMenu";
+import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 
 const GameStore = () => {
   const { currentUrl, viewMode, navigateTo, goHome, refreshPage } = useWindow();
   const search = useSearch(games);
 
   const featuredGames = games.filter((game) => game.isFeatured === true);
-
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
   const activeGame = games.find((game) => game.url === currentUrl);
 
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
@@ -239,19 +240,62 @@ const GameStore = () => {
                     key={game.name}
                     className="flex items-start justify-between gap-4"
                   >
-                    <Button
-                      variant="window"
-                      onClick={() => navigateTo(game.url)}
-                      className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden"
-                    >
-                      <Image
-                        src={game.preview}
-                        alt={`${game.name} preview`}
-                        width={128}
-                        height={128}
-                        className="object-contain"
-                      />
-                    </Button>
+                    {game.preview && (
+                      <Button
+                        variant="window"
+                        onClick={() => {
+                          // Find where this item lives in our currently active/filtered list
+                          const index = filteredGames.findIndex(
+                            (g) => g.name === game.name,
+                          );
+                          setPreviewIndex(index);
+                        }}
+                        className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden bg-transparent"
+                      >
+                        <Image
+                          src={game.preview}
+                          alt={`${game.name} preview`}
+                          width={128}
+                          height={128}
+                          className="object-contain"
+                        />
+                      </Button>
+                    )}
+                    {/* Place the dialog outside of the button, passing ALL your items to it */}
+                    <ImagePreview
+                      items={filteredGames}
+                      previewIndex={previewIndex}
+                      onClose={() => setPreviewIndex(null)}
+                      onNavigate={(direction) => {
+                        if (previewIndex === null) return;
+                        if (direction === "prev" && previewIndex > 0) {
+                          setPreviewIndex(previewIndex - 1);
+                        }
+                        if (
+                          direction === "next" &&
+                          previewIndex < filteredGames.length - 1
+                        ) {
+                          setPreviewIndex(previewIndex + 1);
+                        }
+                      }}
+                      renderPreview={(activeGame) => {
+                        // if currentSite hasn't resolved yet, don't break the render
+                        if (!activeGame?.preview) return null;
+
+                        return (
+                          <Image
+                            src={activeGame.preview}
+                            alt={`${activeGame.name} full preview`}
+                            fill
+                            className="object-contain p-4"
+                            priority
+                          />
+                        );
+                      }}
+                      imageDesc={filteredGames.map((g) => `${g.name} Preview`)}
+                      totalCount={filteredGames.length}
+                    />
+
                     <div className="flex-1 min-w-0 flex flex-col">
                       <div className="flex items-center gap-2 mb-1">
                         <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
