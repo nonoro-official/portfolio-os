@@ -29,24 +29,48 @@ function SkillsView() {
 
 function HistoryView() {
   return (
-    <div className="space-y-4 max-w-2xl">
-      {history.map((job, idx) => (
-        <div
-          key={idx}
-          className="p-4 bg-card rounded-md border border-border flex flex-col gap-2"
-        >
-          <div className="flex justify-between items-baseline text-xs text-muted-foreground font-mono">
-            <span className="text-primary font-bold">{job.dates}</span>
-            <span>{job.company}</span>
+    <div className="space-y-4 max-w-2xl font-sans">
+      {history.map((job, idx) => {
+        const subtitle = [job.company, job.project, job.location]
+          .filter(Boolean)
+          .join(" — ");
+
+        return (
+          <div
+            key={idx}
+            className="p-4 bg-card rounded-lg border border-border flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow"
+          >
+            {/* Dates & Status Badge */}
+            <div className="flex justify-between items-center text-xs text-muted-foreground font-medium">
+              <span className="text-primary font-semibold">{job.dates}</span>
+              {job.status && (
+                <span className="px-2 py-0.5 text-[11px] rounded-full bg-muted border border-border text-foreground font-medium">
+                  {job.status}
+                </span>
+              )}
+            </div>
+
+            {/* Core Job Title & Context */}
+            <div className="space-y-0.5">
+              <h3 className="text-base font-bold tracking-tight text-foreground">
+                {job.role}
+              </h3>
+              {subtitle && (
+                <p className="text-xs text-muted-foreground font-medium">
+                  {subtitle}
+                </p>
+              )}
+            </div>
+
+            {/* Bullet Points */}
+            <ul className="list-disc pl-4 text-xs text-muted-foreground space-y-1.5 leading-relaxed">
+              {job.highlights.map((h, i) => (
+                <li key={i}>{h}</li>
+              ))}
+            </ul>
           </div>
-          <h3 className="text-sm font-bold">{job.role}</h3>
-          <ul className="list-disc pl-4 text-xs text-muted-foreground space-y-1">
-            {job.highlights.map((h, i) => (
-              <li key={i}>{h}</li>
-            ))}
-          </ul>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
