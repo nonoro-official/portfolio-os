@@ -33,7 +33,7 @@ const Reader = () => {
 
       {/* Content */}
       <div className="flex h-full justify-center overflow-auto p-8">
-        <div className="w-full max-w-[900px]">
+        <div className="w-full max-w-225">
           {/* Document Viewer */}
           <div className="justify-center items-center">
             <div className="relative aspect-[1/1.4] overflow-hidden rounded-xl border border-zinc-200 bg-zinc-100 shadow-inner">
