@@ -8,11 +8,15 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/Carousel";
+import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 
 interface ThumbnailPreviewProps<T> {
   items: T[];
   renderMainItem: (item: T, index: number) => React.ReactNode;
   renderThumbItem: (item: T, index: number) => React.ReactNode;
+  imageDesc?: string[];
+  enableImagePreview?: boolean;
+  renderPreview?: (item: T) => React.ReactNode;
   className?: string;
 }
 
@@ -20,11 +24,15 @@ export const ThumbnailPreview = <T,>({
   items,
   renderMainItem,
   renderThumbItem,
+  imageDesc = [],
+  enableImagePreview = false,
+  renderPreview,
   className,
 }: ThumbnailPreviewProps<T>) => {
   const [mainApi, setMainApi] = useState<CarouselApi>();
   const [thumbApi, setThumbApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
 
   const onThumbClick = useCallback(
     (index: number) => {
@@ -52,13 +60,34 @@ export const ThumbnailPreview = <T,>({
     };
   }, [mainApi, onSelect]);
 
+  const handleNavigate = (direction: "prev" | "next") => {
+    if (previewIndex === null) return;
+
+    let nextIndex = previewIndex;
+    if (direction === "prev" && previewIndex > 0) {
+      nextIndex = previewIndex - 1;
+    }
+    if (direction === "next" && previewIndex < items.length - 1) {
+      nextIndex = previewIndex + 1;
+    }
+
+    setPreviewIndex(nextIndex);
+    // Sync the background slider with our modal navigation!
+    mainApi?.scrollTo(nextIndex);
+  };
+
   return (
     <div className={cn("flex w-full flex-col gap-3", className)}>
       {/* Main Feature Display */}
       <Carousel setApi={setMainApi} className="w-full">
         <CarouselContent>
           {items.map((item, index) => (
-            <CarouselItem key={index}>
+            <CarouselItem
+              key={index}
+              // Clicking the main item opens the preview modal at its current index
+              onClick={() => enableImagePreview && setPreviewIndex(index)}
+              className={cn(enableImagePreview && "cursor-zoom-in")}
+            >
               {renderMainItem(item, index)}
             </CarouselItem>
           ))}
@@ -95,6 +124,18 @@ export const ThumbnailPreview = <T,>({
           ))}
         </CarouselContent>
       </Carousel>
+
+      {enableImagePreview && (
+        <ImagePreview
+          items={items}
+          previewIndex={previewIndex}
+          onClose={() => setPreviewIndex(null)}
+          onNavigate={handleNavigate}
+          renderPreview={renderPreview}
+          imageDesc={imageDesc}
+          totalCount={items.length}
+        />
+      )}
     </div>
   );
 };
