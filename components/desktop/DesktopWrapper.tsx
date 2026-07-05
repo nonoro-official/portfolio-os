@@ -13,9 +13,12 @@ import AppCenter from "@/components/desktop/apps/AppCenter";
 import About from "@/components/desktop/apps/About";
 import TaskManager from "@/components/desktop/apps/TaskManager";
 import Reader from "@/components/desktop/apps/Reader";
+import TypewriterEffect from "@/components/effects/TypewriterEffect";
 
 const DesktopWrapper: React.FC = () => {
   const { contextValue, desktopRef } = useDesktop();
+  const bgText =
+    "Hello!\nI'm Noah.\nAlways learning \nand creating.\nI hope you enjoy \nyour stay!";
 
   const renderItemContent = (windowItem: Window) => {
     switch (windowItem.itemId) {
@@ -57,6 +60,14 @@ const DesktopWrapper: React.FC = () => {
               {renderItemContent(windowItem)}
             </DraggableWindow>
           ))}
+
+          <TypewriterEffect
+            text={bgText}
+            delay={50}
+            showCursor={false}
+            enableLoop={true}
+            className="absolute right-12 top-1/2 -translate-y-1/2 max-w-1xl text-right font-bold font-mono text-7xl text-primary/50 pointer-events-none select-none z-0 tracking-tight whitespace-pre-line"
+          />
 
           <Dock />
           <p className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground text-center">
