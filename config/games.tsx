@@ -1,4 +1,4 @@
-import { Game, Stack, Genre, Competition } from "@/types/game";
+import { Game, Stack, Genre, Competition, WebTech } from "@/types/game";
 
 export const games: Game[] = [
   {
@@ -9,7 +9,7 @@ export const games: Game[] = [
       genre: [Genre.vn, Genre.narrative],
       competition: [],
     },
-    desc: "A visual novel demo me and my groupmates made for art appreciation class using Ren'Py. Full game is still in development. Stay tuned!",
+    desc: "A visual novel demo me and my groupmates made for art appreciation class using Ren'Py.",
     about:
       "A visual novel demo me and my groupmates made for art appreciation class using Ren'Py. Full game is still in development. Stay tuned!",
     isFeatured: true,
@@ -42,6 +42,7 @@ export const games: Game[] = [
     isFeatured: true,
     preview: "/images/games/talinghaga/preview.png",
     featuredImage: "/images/games/talinghaga/main_menu.png",
+    award: ["HIBLA NG HUSAY: GENERAL EDUCATION WINNER"],
     media: [
       {
         type: "image",
@@ -63,28 +64,62 @@ export const games: Game[] = [
   {
     name: "CoDecipher: Unmask the Code",
     url: "https://github.com/Jerp010/CoDecipher",
-
     gameTags: {
       stack: [Stack.web],
       genre: [Genre.multi, Genre.puzzle],
       competition: [Competition.hackathon],
     },
-    desc: "An interactive multiplayer coding game where players decipher masked code segments, fill in the blanks, and compete to master programming concepts. Built for the Hackathon Jam 2026 by Barney and Friends.",
+    webTech: [
+      WebTech.js,
+      WebTech.html,
+      WebTech.css,
+      WebTech.ws,
+      WebTech.ngrok,
+      WebTech.node,
+      WebTech.express,
+    ],
+    desc: "An interactive multiplayer coding game where players decipher masked code segments, fill in the blanks, and compete to master programming concepts.",
     about:
-      "A visual novel demo me and my groupmates made for art appreciation class using Ren'Py. Full game is still in development. Stay tuned!",
+      "An interactive multiplayer coding game where players decipher masked code segments, fill in the blanks, and compete to master programming concepts. Built for the Hackathon Jam 2026 by Barney and Friends.",
     isFeatured: true,
-    preview: "/images/codecipher/preview.png",
-    featuredImage: "/images/codecipher/preview.png",
+    award: ["Best Theme Interpretation", "3rd Place Overall"],
+    preview: "/images/games/codecipher/preview.png",
+    featuredImage: "/images/games/codecipher/preview.png",
     media: [
       {
         type: "video",
         src: "/videos/codecipher/demo.mp4",
-        thumbSrc: "/images/codecipher/preview.png",
+        thumbSrc: "/images/games/codecipher/preview.png",
       },
       {
         type: "image",
-        src: "/images/games/codecipher/preview.png",
-        thumbSrc: "/images/games/codecipher/preview.png",
+        src: "/images/games/codecipher/ss1.png",
+        thumbSrc: "/images/games/codecipher/ss1.png",
+      },
+      {
+        type: "image",
+        src: "/images/games/codecipher/ss2.png",
+        thumbSrc: "/images/games/codecipher/ss2.png",
+      },
+      {
+        type: "image",
+        src: "/images/games/codecipher/ss3.png",
+        thumbSrc: "/images/games/codecipher/ss3.png",
+      },
+      {
+        type: "image",
+        src: "/images/games/codecipher/ss4.png",
+        thumbSrc: "/images/games/codecipher/ss4.png",
+      },
+      {
+        type: "image",
+        src: "/images/games/codecipher/ss5.png",
+        thumbSrc: "/images/games/codecipher/ss5.png",
+      },
+      {
+        type: "image",
+        src: "/images/games/codecipher/ss6.png",
+        thumbSrc: "/images/games/codecipher/ss6.png",
       },
     ],
   },
@@ -100,6 +135,7 @@ export const games: Game[] = [
     about:
       "A visual novel demo me and my groupmates made for art appreciation class using Ren'Py. Full game is still in development. Stay tuned!",
     isFeatured: true,
+    award: ["3rd Place in Most Innovative Game"],
     preview: "/images/rover-i/preview.png",
     featuredImage: "/images/rover-i/preview.png",
     media: [
@@ -137,9 +173,14 @@ export const games: Game[] = [
     about:
       "A visual novel demo me and my groupmates made for art appreciation class using Ren'Py. Full game is still in development. Stay tuned!",
     isFeatured: true,
-    preview: "/images/day-trading-sim/ss1.png",
-    featuredImage: "/images/day-trading-sim/ss1.png",
+    preview: "/images/games/day-trading-sim/preview.png",
+    featuredImage: "/images/games/day-trading-sim/preview.png",
     media: [
+      {
+        type: "image",
+        src: "/images/games/day-trading-sim/preview.png",
+        thumbSrc: "/images/games/day-trading-sim/preview.png",
+      },
       {
         type: "image",
         src: "/images/games/day-trading-sim/ss1.png",

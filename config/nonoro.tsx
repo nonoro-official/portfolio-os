@@ -25,7 +25,7 @@ export const about = [
     name: "Noah Francine Adrianna Mireille C. Peñaranda",
     copyright: "© nonoro-official. All rights reserved.",
     contact: "noah.c.penaranda@gmail.com",
-    desc: "A passionate and diligent computer science student skilled in video editing and productivity tools. Proficient in object-oriented programming, game development, database management, and web development. Committed to delivering high-quality results on all projects.",
+    desc: "A driven computer science student and full-stack developer with a strong focus on game development and web technologies. Proficient across the development lifecycle, database management, and creative tools like video editing. Committed to continuous learning, high-quality execution, and exploring emerging technologies to build impactful digital experiences.",
   },
 ];
 
@@ -82,7 +82,7 @@ export const skills = [
   {
     icon: <Database />,
     name: "Databases & Cloud",
-    stack: "Firebase, MongoDB, MySQL,  Google Cloud",
+    stack: "Firebase, MongoDB, MySQL, SQLite,  Google Cloud",
   },
   {
     icon: <MonitorSmartphone />,
