@@ -180,7 +180,7 @@ const AppCenter = () => {
                     {/* Image Container */}
                     <div className="relative flex-1 h-full bg-zinc-950">
                       <Image
-                        src={app.featuredImage || "/images/rover-i/r3.png"}
+                        src={app.featuredImage || "/images/default.png"}
                         alt={app.name}
                         fill
                         sizes="(max-width: 768px) 100vw, 60vw"
@@ -489,13 +489,13 @@ const AppCenter = () => {
               </div>
             </div>
             {/* About App */}
-            <div className="flex p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl mb-2 h-88 min-h-50">
-              <div className="flex flex-col gap-3">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">
-                  About This App
-                </h3>
-                <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed whitespace-normal break-word">
+            <div className="flex p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl mb-2 min-h-50 h-auto">
+              <div className="flex flex-col gap-3 w-full">
+                <h3 className="text-md font-semibold uppercase tracking-wider text-zinc-600">
                   {activeApp.desc}
+                </h3>
+                <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-300 leading-relaxed whitespace-pre-line">
+                  {activeApp.about}
                 </p>
               </div>
             </div>

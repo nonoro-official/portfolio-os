@@ -202,7 +202,7 @@ const GameStore = () => {
                     {/* Image Container */}
                     <div className="relative flex-1 h-full bg-zinc-950">
                       <Image
-                        src={game.featuredImage || "/images/rover-i/r3.png"} // replace with a default image if none is provided
+                        src={game.featuredImage || "/images/default.png"}
                         alt={game.name}
                         fill
                         sizes="(max-width: 768px) 100vw, 60vw"
@@ -409,15 +409,22 @@ const GameStore = () => {
                 {" "}
                 {/* About */}
                 <div className="flex flex-col gap-3 p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl min-h-68.5">
-                  <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">
-                    About This Game
-                  </h3>
-                  <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed whitespace-normal break-word">
-                    {activeGame.desc}
+                  <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed whitespace-pre-line">
+                    {activeGame.about}
                   </p>
+                  {activeGame.webTech && activeGame.webTech.length > 0 && (
+                    <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-300 leading-relaxed whitespace-pre-line">
+                      Built with: {activeGame.webTech.join(", ")}
+                    </p>
+                  )}
+                  {activeGame.award && (
+                    <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-300 leading-relaxed whitespace-pre-line">
+                      Award/s: {activeGame.award.join(", ")}
+                    </p>
+                  )}
                 </div>
                 {/* Action Buttons */}
-                <div className="flex items-center justify-end gap-3 mt-8 w-full">
+                <div className="flex items-center justify-end gap-3 mt-2 w-full">
                   <Button
                     variant="outline"
                     onClick={() => {
