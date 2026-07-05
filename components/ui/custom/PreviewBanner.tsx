@@ -130,8 +130,12 @@ export const PreviewBanner = <T,>({
             </div>
           </div>
         )}
-        <CarouselPrevious />
-        <CarouselNext />
+        {items.length > 1 && (
+          <>
+            <CarouselPrevious />
+            <CarouselNext />
+          </>
+        )}
       </Carousel>
 
       <DialogContent className="w-[95vw] max-w-[95vw] sm:max-w-none h-[95vh] sm:max-h-none p-4 bg-background border border-border rounded-xl shadow-2xl flex flex-col gap-4 overflow-hidden">
