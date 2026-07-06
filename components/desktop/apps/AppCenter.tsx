@@ -221,17 +221,10 @@ const AppCenter = () => {
             {/* App List */}
             <div className="flex flex-col gap-6 max-w-2xl">
               {filteredApp.map((app) => {
-                const displayUrl = app.url
-                  .replace("https://", "")
-                  .replace("www.", "")
-                  .split("/")
-                  .filter(Boolean)
-                  .join(" › ");
-
                 return (
                   <div
                     key={app.name}
-                    className="flex items-start justify-between gap-4"
+                    className="flex items-center justify-between gap-4"
                   >
                     <Button
                       variant="window"
@@ -258,9 +251,6 @@ const AppCenter = () => {
                           <span className="text-xs font-normal text-foreground truncate">
                             {app.appTags.stack.join(" / ")} |{" "}
                             {app.appTags.device.join(", ")}
-                          </span>
-                          <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
-                            {displayUrl}
                           </span>
                         </div>
                       </div>

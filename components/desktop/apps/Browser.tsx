@@ -175,7 +175,7 @@ const Browser = () => {
                 </Button>
               </div>
             )}
-            <div className="flex flex-col gap-6 max-w-2xl">
+            <div className="flex flex-col gap-3 max-w-2xl">
               {displayedWebsites.map((site) => {
                 const displayUrl = site.url
                   .replace("https://", "")

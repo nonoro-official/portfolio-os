@@ -226,19 +226,12 @@ const GameStore = () => {
             )}
 
             {/* Game List */}
-            <div className="flex flex-col gap-6 max-w-2xl">
+            <div className="flex flex-col gap-3 max-w-2xl">
               {filteredGames.map((game) => {
-                const displayUrl = game.url
-                  .replace("https://", "")
-                  .replace("www.", "")
-                  .split("/")
-                  .filter(Boolean)
-                  .join(" › ");
-
                 return (
                   <div
                     key={game.name}
-                    className="flex items-start justify-between gap-4"
+                    className="flex items-center justify-between gap-4"
                   >
                     {game.preview && (
                       <Button
@@ -296,14 +289,11 @@ const GameStore = () => {
                     />
 
                     <div className="flex-1 min-w-0 flex flex-col">
-                      <div className="flex items-center gap-2 mb-1">
+                      <div className="flex items-center gap-2">
                         <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
                           <span className="text-xs font-normal text-foreground truncate">
                             {game.gameTags.stack.join(" / ")} |{" "}
                             {game.gameTags.genre.join(", ")}
-                          </span>
-                          <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
-                            {displayUrl}
                           </span>
                         </div>
                       </div>
