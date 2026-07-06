@@ -434,6 +434,7 @@ const AppCenter = () => {
                     >
                       {mediaItem.type === "image" ? (
                         <div
+                          // Changed background to zinc-950 (or black) to act as the pillarbox color
                           className="relative flex-1 h-full bg-zinc-950 cursor-zoom-in"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -445,7 +446,8 @@ const AppCenter = () => {
                             alt={mediaItem.imgDesc || activeApp.name}
                             fill
                             sizes="(max-width: 768px) 100vw, 60vw"
-                            className="object-cover"
+                            // CHANGED HERE: object-contain preserves the whole portrait image
+                            className="object-contain"
                             priority={index === 0}
                           />
                         </div>
@@ -454,7 +456,8 @@ const AppCenter = () => {
                           <video
                             src={mediaItem.src}
                             poster={mediaItem.thumbSrc}
-                            className="h-full w-full object-cover"
+                            // CHANGED HERE: object-contain preserves the whole video aspect ratio
+                            className="h-full w-full object-contain"
                             muted
                             playsInline
                             loop
