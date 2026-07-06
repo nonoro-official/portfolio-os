@@ -238,9 +238,9 @@ export const games: Game[] = [
       genre: [Genre.vn, Genre.narrative, Genre.sim],
       competition: [],
     },
-    desc: "A visual novel dating simulator demo about supernatural characters in a magic school. I made in the VND (Visual Novel Development) club using Ren'Py.",
+    desc: "A visual novel dating simulator demo about supernatural characters in a magic school.",
     about:
-      "Made for Art Appreciation class. \n\nA visual novel demo me and my groupmates made for art appreciation class using Ren'Py. Full game is still in development. Stay tuned!",
+      "Made in the Visual Novel Development club. \n\nA visual novel dating simulator demo about supernatural characters in a magic school.",
     isFeatured: false,
     preview: "/images/games/eden-academy/preview.png",
     media: [
@@ -264,9 +264,9 @@ export const games: Game[] = [
       genre: [Genre.vn, Genre.narrative, Genre.adventure],
       competition: [],
     },
-    desc: "An apocalyptic adventure visual novel demo I made in the VND club using Ren'Py.",
+    desc: "An apocalyptic adventure visual novel demo.",
     about:
-      "A visual novel demo me and my groupmates made for art appreciation class using Ren'Py. Full game is still in development. Stay tuned!",
+      "Made in the Visual Novel Development club. \n\nA visual novel apocalyptic adventure demo about robots.",
     isFeatured: false,
     preview: "/images/games/miro/preview.png",
     media: [
