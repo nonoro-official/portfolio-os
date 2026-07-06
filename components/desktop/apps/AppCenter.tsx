@@ -174,9 +174,34 @@ const AppCenter = () => {
                 enableImagePreview={false}
                 renderItem={(app) => (
                   <div
-                    className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
+                    className="relative flex h-80 w-full bg-zinc-950 border dark:border-text-foreground rounded-xl overflow-hidden cursor-pointer group"
                     onClick={() => navigateTo(app.url)}
                   >
+                    {/* App Details Sidebar (Centered & Color-Matched) */}
+                    <div className="flex flex-col justify-center items-center text-center h-full w-52 bg-sidebar border-r border-zinc-800/50 text-sm text-foreground p-5 shrink-0 z-10">
+                      {app.logo.type === "emoji" ? (
+                        <span className="text-6xl leading-none mb-3 selection:bg-transparent">
+                          {app.logo.value}
+                        </span>
+                      ) : (
+                        <div className="mb-3">
+                          <Image
+                            src={app.logo.value}
+                            alt={`${app.name} icon`}
+                            width={80}
+                            height={80}
+                            className="object-contain"
+                          />
+                        </div>
+                      )}
+                      <h3 className="font-bold text-base text-foreground group-hover:text-amber-500 transition-colors">
+                        {app.name}
+                      </h3>
+                      <p className="mt-2 text-xs text-zinc-500 line-clamp-4 leading-relaxed">
+                        {app.desc}
+                      </p>
+                    </div>
+
                     {/* Image Container */}
                     <div className="relative flex-1 h-full bg-zinc-950">
                       <Image
@@ -187,16 +212,6 @@ const AppCenter = () => {
                         className="object-cover"
                         priority
                       />
-                    </div>
-
-                    {/* App Details Sidebar */}
-                    <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 text-sm text-zinc-200 p-4 shrink-0">
-                      <h3 className="font-bold text-base text-white group-hover:text-amber-500 transition-colors">
-                        {app.name}
-                      </h3>
-                      <p className="mt-3 text-xs text-zinc-400 line-clamp-4 leading-relaxed">
-                        {app.desc}
-                      </p>
                     </div>
                   </div>
                 )}
@@ -434,7 +449,6 @@ const AppCenter = () => {
                     >
                       {mediaItem.type === "image" ? (
                         <div
-                          // Changed background to zinc-950 (or black) to act as the pillarbox color
                           className="relative flex-1 h-full bg-zinc-950 cursor-zoom-in"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -446,7 +460,6 @@ const AppCenter = () => {
                             alt={mediaItem.imgDesc || activeApp.name}
                             fill
                             sizes="(max-width: 768px) 100vw, 60vw"
-                            // CHANGED HERE: object-contain preserves the whole portrait image
                             className="object-contain"
                             priority={index === 0}
                           />
@@ -456,7 +469,6 @@ const AppCenter = () => {
                           <video
                             src={mediaItem.src}
                             poster={mediaItem.thumbSrc}
-                            // CHANGED HERE: object-contain preserves the whole video aspect ratio
                             className="h-full w-full object-contain"
                             muted
                             playsInline
@@ -500,6 +512,20 @@ const AppCenter = () => {
                 <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-300 leading-relaxed whitespace-pre-line">
                   {activeApp.about}
                 </p>
+                {activeApp.fullStack &&
+                  (() => {
+                    const allTech = [
+                      ...(activeApp.fullStack.language || []),
+                      ...(activeApp.fullStack.frontend || []),
+                      ...(activeApp.fullStack.backend || []),
+                      ...(activeApp.fullStack.database || []),
+                    ];
+                    return allTech.length > 0 ? (
+                      <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-300 leading-relaxed whitespace-pre-line">
+                        Built with: {allTech.join(", ")}
+                      </p>
+                    ) : null;
+                  })()}
               </div>
             </div>
           </div>
