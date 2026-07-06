@@ -47,12 +47,14 @@ export interface App {
   url: string;
   appTags: {
     stack: Stack[];
+    device: Device[];
+    os: OS[];
+  };
+  fullStack: {
     frontend: Frontend[];
     backend: Backend[];
     database: Database[];
     language: Language[];
-    device: Device[];
-    os: OS[];
   };
   desc: string;
   about: string;
