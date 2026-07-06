@@ -43,7 +43,7 @@ export interface Website {
   url: string;
   stack: (Frontend | Backend | Language | Tech | Database)[];
   desc: string;
-  fullDesc: string;
+  fullDesc?: string;
   hasReadMore: boolean;
   preview: string;
   isIFrameBlocked: boolean;
