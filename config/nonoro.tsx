@@ -82,7 +82,7 @@ export const skills = [
   {
     icon: <Database />,
     name: "Databases & Cloud",
-    stack: "Firebase, MongoDB, MySQL, SQLite,  Google Cloud",
+    stack: "Firebase, MongoDB, MySQL, SQLite,  Google Cloud, Vercel",
   },
   {
     icon: <MonitorSmartphone />,
@@ -151,5 +151,5 @@ export const resume = {
   link: "https://docs.google.com/document/d/1RcfydmLiKHflmqPUgxS8G4w-paj2iNOGng6KX3Fgnps/edit?usp=sharing",
   downloadUrl:
     "https://docs.google.com/document/d/1RcfydmLiKHflmqPUgxS8G4w-paj2iNOGng6KX3Fgnps/export?format=pdf",
-  src: "/documents/resume.pdf",
+  src: "/docs/resume.pdf",
 };
