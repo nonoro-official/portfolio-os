@@ -86,14 +86,13 @@ export const skills = [
   },
   {
     icon: <MonitorSmartphone />,
-    name: "Systems & Platforms",
-    stack: "Linux, Raspberry Pi",
+    name: "Tools & Platforms",
+    stack: "Git, Linux, Raspberry Pi, ngrok",
   },
   {
     icon: <PencilRuler />,
-    name: "Design & Tools",
-    stack:
-      "WordPress, FlutterFlow, Wix, Canva, Figma, Penpot, draw.io, Git, ngrok",
+    name: "Design & CMS",
+    stack: "WordPress, FlutterFlow, Wix, Canva, Figma, Penpot, draw.io",
   },
 ];
 

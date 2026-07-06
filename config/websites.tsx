@@ -16,9 +16,7 @@ export const websites: Website[] = [
     name: "Green Light Records",
     url: "https://github.com/nonoro-official/WDD2",
     stack: [Database.mongo, Backend.node, Backend.express, Frontend.react],
-    desc: "Green Light Records is a records shop.",
-    fullDesc:
-      "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school. The website contains information about the game, the characters, and the development process. It also has a download link for the game and a link to the game's social media pages.",
+    desc: "A full-stack records shop to buy vinyl records, CDs & cassettes, artist merchandise, and audio gear.",
     hasReadMore: false,
     preview: "/images/websites/green-light-records/preview.png",
     isIFrameBlocked: true,
@@ -31,9 +29,7 @@ export const websites: Website[] = [
     name: "Roll Your Reps",
     url: "https://roll-your-reps.vercel.app",
     stack: [Frontend.react, Language.ts, Backend.node],
-    desc: "PATHFIT 4 Final - Sports Advocacy Campaign",
-    fullDesc:
-      "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school. The website contains information about the game, the characters, and the development process. It also has a download link for the game and a link to the game's social media pages.",
+    desc: "An edutainment-style website that blends educational content and exercise with interactive elements, visuals, and mascots!",
     hasReadMore: false,
     preview: "/images/websites/roll-your-reps/preview.png",
     isIFrameBlocked: false,
@@ -46,10 +42,10 @@ export const websites: Website[] = [
     name: "MedSync",
     url: "https://github.com/SBSonk/Medsync---Clinic-Managment-System.git",
     stack: [Frontend.react, Backend.flask, Database.sqlite, Language.sass],
-    desc: "MedSync is a medical records management system.",
+    desc: "A database management system designed to efficiently handle the operations of a small clinic. This system ensures seamless...",
     fullDesc:
-      "A full stack clinic management system for information management class using React, Flask, and sqlite3.",
-    hasReadMore: false,
+      "A database management system designed to efficiently handle the operations of a small clinic. This system ensures seamless organization and accessibility of essential records, improving overall clinic management.",
+    hasReadMore: true,
     preview: "/images/websites/medsync/preview.png",
     isIFrameBlocked: true,
   },
@@ -62,8 +58,6 @@ export const websites: Website[] = [
     url: "https://hooman.design/",
     stack: [Tech.wp],
     desc: "Made for my internship at Hooman Design Corporation. A mega menu me and my partner made using WordPress.",
-    fullDesc:
-      "Made for my internship at Hooman Design Corporation. A mega menu me and my partner made using WordPress.",
     hasReadMore: false,
     preview: "/images/websites/hooman/preview.png",
     isIFrameBlocked: true,
@@ -106,11 +100,11 @@ export const websites: Website[] = [
     name: "Personal Website",
     url: "https://nonoro-official.github.io/noahpenaranda-personalwebsite.github.io/",
     stack: [Language.html, Language.css],
-    desc: "Personal website made for college.",
+    desc: "A website I made about myself. I made this in college for my intro to computing class. It contains information about me, my projects, and...",
     fullDesc:
       "A website I made about myself. I made this in college for my intro to computing class. It contains information about me, my projects, and my skills. It also has a contact form and a link to my resume.",
-    hasReadMore: false,
-    preview: "/images/websites/codecipher-ss1.jpg",
+    hasReadMore: true,
+    preview: "/images/websites/personal/preview.png",
     isIFrameBlocked: false,
   },
   {
@@ -121,11 +115,9 @@ export const websites: Website[] = [
     name: "Portfolio",
     url: "https://nonoro-official.github.io/portfolio/",
     stack: [Language.html, Language.css],
-    desc: "Original portfolio website. Based from the personal website.",
-    fullDesc:
-      "This is a website about a video game that was developed in my school club Visual Novel Development Club! The video game is a visual novel dating simulator about supernatural characters in a magic school. The website contains information about the game, the characters, and the development process. It also has a download link for the game and a link to the game's social media pages.",
+    desc: "My current portfolio website designed as a desktop OS. When you run this here, you can try something like Inception.",
     hasReadMore: false,
-    preview: "/images/websites/codecipher-ss1.jpg",
+    preview: "/images/websites/portfolio/preview.png",
     isIFrameBlocked: false,
   },
 ];
