@@ -113,7 +113,7 @@ export const websites: Website[] = [
       value: "🍋",
     },
     name: "Portfolio",
-    url: "https://nonoro-official.github.io/portfolio/",
+    url: "https://nonoro.vercel.app/",
     stack: [Language.html, Language.css],
     desc: "My current portfolio website designed as a desktop OS. When you run this here, you can try something like Inception.",
     hasReadMore: false,
