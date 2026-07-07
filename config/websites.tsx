@@ -114,7 +114,7 @@ export const websites: Website[] = [
     },
     name: "Portfolio",
     url: "https://nonoro.vercel.app/",
-    stack: [Language.html, Language.css],
+    stack: [Frontend.next, Backend.node, Language.ts],
     desc: "My current portfolio website designed as a desktop OS. When you run this here, you can try something like Inception.",
     hasReadMore: false,
     preview: "/images/websites/portfolio/preview.png",
