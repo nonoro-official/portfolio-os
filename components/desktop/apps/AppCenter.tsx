@@ -219,7 +219,7 @@ const AppCenter = () => {
             )}
 
             {/* App List */}
-            <div className="flex flex-col gap-6 max-w-2xl">
+            <div className="flex flex-col gap-4 max-w-2xl">
               {filteredApp.map((app) => {
                 return (
                   <div

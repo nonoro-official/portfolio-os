@@ -182,7 +182,7 @@ const GameStore = () => {
       <div className="flex-1 w-full bg-white dark:bg-popover overflow-y-auto">
         {viewMode === "homepage" || !activeGame ? (
           /* ================= HOMEPAGE VIEW ================= */
-          <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col gap-8">
+          <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col">
             {isFiltering && filteredGames.length === 0 && (
               <p className="text-sm text-zinc-500 image-center justify-center flex">
                 No results found.
@@ -226,7 +226,7 @@ const GameStore = () => {
             )}
 
             {/* Game List */}
-            <div className="flex flex-col gap-3 max-w-2xl">
+            <div className="flex flex-col max-w-2xl">
               {filteredGames.map((game) => {
                 return (
                   <div
