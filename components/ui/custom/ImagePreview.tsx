@@ -39,7 +39,7 @@ export const ImagePreview = <T,>({
             <Button
               variant="outline"
               size="icon"
-              className="absolute left-4 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-background/80 backdrop-blur-xs shadow-md transition-all hover:bg-background"
+              className="absolute z-20 left-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-background/80 text-foreground dark:text-foreground backdrop-blur-xs shadow-md transition-all hover:bg-background"
               disabled={previewIndex === 0}
               onClick={() => onNavigate("prev")}
             >
@@ -53,7 +53,7 @@ export const ImagePreview = <T,>({
             <Button
               variant="outline"
               size="icon"
-              className="absolute right-4 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-background/80 backdrop-blur-xs shadow-md transition-all hover:bg-background"
+              className="absolute z-20 right-4 top-1/2 -translate-y-1/2 h-11 w-11 rounded-full bg-background/80 text-foreground dark:text-foreground backdrop-blur-xs shadow-md transition-all hover:bg-background"
               disabled={previewIndex === items.length - 1}
               onClick={() => onNavigate("next")}
             >
