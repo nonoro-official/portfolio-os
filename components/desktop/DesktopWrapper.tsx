@@ -28,9 +28,9 @@ const DesktopWrapper: React.FC = () => {
         return <GameStore />;
       case "apps":
         return <AppCenter />;
-      case "about-me":
+      case "about":
         return <About windowItem={windowItem} />;
-      case "skills":
+      case "profile":
         return <TaskManager />;
       case "resume":
         return <Reader />;
