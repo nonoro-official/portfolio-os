@@ -83,7 +83,7 @@ export const websites: Website[] = [
       value: "🍞",
     },
     name: "Bakery Management System",
-    url: "https://github.com/nonoro-official/WDD2",
+    url: "https://github.com/nonoro-official/Bakery-Management-System.git",
     stack: [Frontend.jsf, Backend.jee, Database.mysql],
     desc: "Bakery Management System is a web application for managing bakery operations.",
     fullDesc:
