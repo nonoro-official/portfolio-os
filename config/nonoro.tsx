@@ -87,7 +87,7 @@ export const skills = [
   {
     icon: <MonitorSmartphone />,
     name: "Tools & Platforms",
-    stack: "Git, Linux, Raspberry Pi, ngrok",
+    stack: "Git, Linux, Raspberry Pi, ngrok, Vite, Docker, nginx",
   },
   {
     icon: <PencilRuler />,
