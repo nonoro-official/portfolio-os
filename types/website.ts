@@ -34,6 +34,8 @@ export enum Database {
 
 export enum Tech {
   wp = "WordPress",
+  docker = "Docker",
+  nginx = "nginx",
 }
 
 export interface Website {

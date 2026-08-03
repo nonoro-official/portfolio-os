@@ -10,11 +10,33 @@ import {
 export const websites: Website[] = [
   {
     icon: {
+      type: "image",
+      value: "/images/websites/moda/logo.svg",
+    },
+    name: "Cafe Management System",
+    url: "https://github.com/nonoro-official/Cafe-Management-System.git",
+    stack: [
+      Backend.node,
+      Backend.express,
+      Database.mongo,
+      Frontend.react,
+      Tech.docker,
+      Tech.nginx,
+    ],
+    desc: "A full-stack MERN cafe platform with a customer ordering kiosk, an admin dashboard, and a single REST API backing both. Implements...",
+    fullDesc:
+      "A full-stack MERN cafe platform with a customer ordering kiosk, an admin dashboard, and a single REST API backing both. Implements JWT authentication, role-based authorization, and a complete ordering workflow with carts, checkout, and PDF receipt generation, backed by an automated test suite and containerized with Docker/nginx on an isolated-LAN-ready Ubuntu Server.",
+    hasReadMore: true,
+    preview: "/images/websites/moda/preview.png",
+    isIFrameBlocked: true,
+  },
+  {
+    icon: {
       type: "emoji",
       value: "💿",
     },
     name: "Green Light Records",
-    url: "https://github.com/nonoro-official/WDD2",
+    url: "https://github.com/nonoro-official/WDD2.git",
     stack: [Database.mongo, Backend.node, Backend.express, Frontend.react],
     desc: "A full-stack records shop to buy vinyl records, CDs & cassettes, artist merchandise, and audio gear.",
     hasReadMore: false,
