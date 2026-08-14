@@ -7,15 +7,14 @@ import {
   Monitor,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Label } from "@/components/ui/Label";
-import { Checkbox } from "@/components/ui/Checkbox";
 import { useWindow } from "@/hooks/useWindow";
 import { useStoreFilters } from "@/hooks/useStoreFilters";
 import { useSearch } from "@/hooks/useSearch";
 import { app, devices, stacks, os } from "@/config/apps";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
-import { NavMenu } from "@/components/ui/custom/NavMenu";
+import { FilterMenu } from "@/components/ui/custom/FilterMenu";
+import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 
 const AppCenter = () => {
   const { currentUrl, viewMode, navigateTo, goHome } = useWindow();
@@ -76,69 +75,26 @@ const AppCenter = () => {
 
         {/* Nav Menu */}
         <div className="flex-1 flex justify-end items-center gap-3">
-          <NavMenu buttonName="OS">
-            <div className="flex flex-col gap-2">
-              {os.map((os) => (
-                <Label key={os} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={store.selected["os"].includes(os)}
-                    onCheckedChange={(checked) => {
-                      store.toggle("os", os, checked === true);
-                    }}
-                  />
-                  {os}
-                </Label>
-              ))}
-            </div>
-          </NavMenu>
-
-          <NavMenu buttonName="Device">
-            <div className="flex flex-col gap-2">
-              {devices.map((device) => (
-                <Label key={device} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={store.selected["device"].includes(device)}
-                    onCheckedChange={(checked) => {
-                      store.toggle("device", device, checked === true);
-                    }}
-                  />
-                  {device}
-                </Label>
-              ))}
-            </div>
-          </NavMenu>
-
-          <NavMenu buttonName="Stack">
-            <div className="flex flex-col gap-2">
-              {stacks.map((stack) => (
-                <Label key={stack} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={store.selected["stack"].includes(stack)}
-                    onCheckedChange={(checked) => {
-                      store.toggle("stack", stack, checked === true);
-                    }}
-                  />
-                  {stack}
-                </Label>
-              ))}
-            </div>
-          </NavMenu>
-
-          <NavMenu buttonName="Stack">
-            <div className="flex flex-col gap-2">
-              {stacks.map((stack) => (
-                <Label key={stack} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={store.selected["stack"].includes(stack)}
-                    onCheckedChange={(checked) => {
-                      store.toggle("stack", stack, checked === true);
-                    }}
-                  />
-                  {stack}
-                </Label>
-              ))}
-            </div>
-          </NavMenu>
+          <FilterMenu
+            label="OS"
+            options={os}
+            selected={store.selected.os ?? []}
+            onToggle={(value, checked) => store.toggle("os", value, checked)}
+          />
+          <FilterMenu
+            label="Device"
+            options={devices}
+            selected={store.selected.device ?? []}
+            onToggle={(value, checked) =>
+              store.toggle("device", value, checked)
+            }
+          />
+          <FilterMenu
+            label="Stack"
+            options={stacks}
+            selected={store.selected.stack ?? []}
+            onToggle={(value, checked) => store.toggle("stack", value, checked)}
+          />
         </div>
       </div>
 
@@ -207,52 +163,42 @@ const AppCenter = () => {
             )}
 
             {/* App List */}
-            <div className="flex flex-col gap-4 max-w-2xl">
+            <div className="flex flex-col gap-8 max-w-2xl">
               {store.filtered.map((app) => {
                 return (
                   <div
                     key={app.name}
                     className="flex items-center justify-between gap-4"
                   >
-                    <Button
-                      variant="window"
-                      onClick={() => navigateTo(app.url)}
-                      className="size-24 text-lg rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden"
-                    >
-                      {app.logo.type === "emoji" ? (
-                        <span className="text-6xl line-height-none default-flex-center">
-                          {app.logo.value}
-                        </span>
-                      ) : (
-                        <Image
-                          src={app.logo.value}
-                          alt={`${app.name} icon`}
-                          width={96}
-                          height={96}
-                          className="object-contain"
-                        />
-                      )}
-                    </Button>
-                    <div className="flex-1 min-w-0 flex flex-col">
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
-                          <span className="text-xs font-normal text-foreground truncate">
-                            {app.appTags.stack.join(" / ")} |{" "}
-                            {app.appTags.device.join(", ")}
-                          </span>
+                    <StoreListItem
+                      align="start"
+                      title={app.name}
+                      onTitleClick={() => navigateTo(app.url)}
+                      mediaPosition="start"
+                      tagLine={`${app.appTags.stack.join(" / ")} | ${app.appTags.device.join(", ")}`}
+                      description={
+                        <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
+                          {app.desc}
+                        </p>
+                      }
+                      media={
+                        <div className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden">
+                          {app.logo.type === "emoji" ? (
+                            <span className="text-6xl line-height-none default-flex-center">
+                              {app.logo.value}
+                            </span>
+                          ) : (
+                            <Image
+                              src={app.logo.value}
+                              alt={`${app.name} icon`}
+                              width={96}
+                              height={96}
+                              className="object-contain"
+                            />
+                          )}
                         </div>
-                      </div>
-                      <Button
-                        variant="link"
-                        onClick={() => navigateTo(app.url)}
-                        className="h-auto p-0 text-xl text-foreground hover:text-primary hover:underline font-medium leading-tight mb-1 justify-start text-left whitespace-normal"
-                      >
-                        {app.name}
-                      </Button>
-                      <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
-                        {app.desc}
-                      </p>
-                    </div>
+                      }
+                    />
                   </div>
                 );
               })}

@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { ArrowLeft, RotateCw, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { Label } from "@/components/ui/Label";
-import { Checkbox } from "@/components/ui/Checkbox";
 import { useWindow } from "@/hooks/useWindow";
 import { useStoreFilters } from "@/hooks/useStoreFilters";
 import { useSearch } from "@/hooks/useSearch";
@@ -11,8 +9,9 @@ import { competitions, games, genres, stacks } from "@/config/games";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
 import { ThumbnailPreview } from "@/components/ui/custom/ThumbnailPreview";
-import { NavMenu } from "@/components/ui/custom/NavMenu";
+import { FilterMenu } from "@/components/ui/custom/FilterMenu";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
+import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 
 const GameStore = () => {
   const { currentUrl, viewMode, navigateTo, goHome, refreshPage } = useWindow();
@@ -87,60 +86,26 @@ const GameStore = () => {
           >
             Browse
           </Button>
-          <NavMenu buttonName="Competitions">
-            <div className="flex flex-col gap-2">
-              {competitions.map((competition) => (
-                <Label
-                  key={competition}
-                  className="flex items-center gap-2 text-sm"
-                >
-                  <Checkbox
-                    checked={store.selected["competition"]?.includes(
-                      competition,
-                    )}
-                    onCheckedChange={(checked) => {
-                      store.toggle(
-                        "competition",
-                        competition,
-                        checked === true,
-                      );
-                    }}
-                  />
-                  {competition}
-                </Label>
-              ))}
-            </div>
-          </NavMenu>
-          <NavMenu buttonName="Genre">
-            <div className="flex flex-col gap-2">
-              {genres.map((genre) => (
-                <Label key={genre} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={store.selected["genre"]?.includes(genre)}
-                    onCheckedChange={(checked) => {
-                      store.toggle("genre", genre, checked === true);
-                    }}
-                  />
-                  {genre}
-                </Label>
-              ))}
-            </div>
-          </NavMenu>
-          <NavMenu buttonName="Stack">
-            <div className="flex flex-col gap-2">
-              {stacks.map((stack) => (
-                <Label key={stack} className="flex items-center gap-2 text-sm">
-                  <Checkbox
-                    checked={store.selected["stack"]?.includes(stack)}
-                    onCheckedChange={(checked) => {
-                      store.toggle("stack", stack, checked === true);
-                    }}
-                  />
-                  {stack}
-                </Label>
-              ))}
-            </div>
-          </NavMenu>
+          <FilterMenu
+            label="Competition"
+            options={competitions}
+            selected={store.selected.competition ?? []}
+            onToggle={(value, checked) =>
+              store.toggle("competition", value, checked)
+            }
+          />
+          <FilterMenu
+            label="Genre"
+            options={genres}
+            selected={store.selected.genre ?? []}
+            onToggle={(value, checked) => store.toggle("genre", value, checked)}
+          />
+          <FilterMenu
+            label="Stack"
+            options={stacks}
+            selected={store.selected.stack ?? []}
+            onToggle={(value, checked) => store.toggle("stack", value, checked)}
+          />
         </div>
 
         {/* Search Bar */}
@@ -162,45 +127,46 @@ const GameStore = () => {
           /* ================= HOMEPAGE VIEW ================= */
           <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col">
             {search.query && search.query.trim().length === 0 && (
-              <p className="text-sm text-zinc-500 image-center justify-center flex">
+              <p className="text-sm text-zinc-500 image-center justify-center flex mb-4">
                 No results found.
               </p>
             )}
             {!search.query && (
-              // Carousel
-              <PreviewBanner
-                items={featuredGames}
-                enableAutoplay
-                hasCounter
-                renderItem={(game) => (
-                  <div
-                    className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => navigateTo(game.url)}
-                  >
-                    {/* Image Container */}
-                    <div className="relative flex-1 h-full bg-zinc-950">
-                      <Image
-                        src={game.featuredImage || "/images/default.png"}
-                        alt={game.name}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 60vw"
-                        className="object-cover"
-                        priority
-                      />
-                    </div>
+              <div className="mb-2">
+                <PreviewBanner
+                  items={featuredGames}
+                  enableAutoplay
+                  hasCounter
+                  renderItem={(game) => (
+                    <div
+                      className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
+                      onClick={() => navigateTo(game.url)}
+                    >
+                      {/* Image Container */}
+                      <div className="relative flex-1 h-full bg-zinc-950">
+                        <Image
+                          src={game.featuredImage || "/images/default.png"}
+                          alt={game.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 60vw"
+                          className="object-cover"
+                          priority
+                        />
+                      </div>
 
-                    {/* Game Details Sidebar */}
-                    <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 dark:bg-zinc-50 dark:border-zinc-400 text-sm text-zinc-200 dark:text-zinc-800 p-4 shrink-0">
-                      <h3 className="font-bold text-base text-zinc-50 dark:text-zinc-800 group-hover:text-amber-500 transition-colors">
-                        {game.name}
-                      </h3>
-                      <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-600 dark:line-clamp-4 leading-relaxed">
-                        {game.desc}
-                      </p>
+                      {/* Game Details Sidebar */}
+                      <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 dark:bg-zinc-50 dark:border-zinc-400 text-sm text-zinc-200 dark:text-zinc-800 p-4 shrink-0">
+                        <h3 className="font-bold text-base text-zinc-50 dark:text-zinc-800 group-hover:text-amber-500 transition-colors">
+                          {game.name}
+                        </h3>
+                        <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-600 dark:line-clamp-4 leading-relaxed">
+                          {game.desc}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                )}
-              />
+                  )}
+                />
+              </div>
             )}
 
             {/* Game List */}
@@ -211,33 +177,46 @@ const GameStore = () => {
                     key={game.name}
                     className="flex items-center justify-between gap-4"
                   >
-                    {game.preview && (
-                      <Button
-                        variant="window"
-                        onClick={() => {
-                          preview.open(index);
-                        }}
-                        className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden bg-transparent"
-                      >
-                        <Image
-                          src={game.preview}
-                          alt={`${game.name} preview`}
-                          width={128}
-                          height={128}
-                          className="object-contain"
-                        />
-                      </Button>
-                    )}
+                    <StoreListItem
+                      align="center"
+                      title={game.name}
+                      onTitleClick={() => navigateTo(game.url)}
+                      mediaPosition="start"
+                      tagLine={`${game.gameTags.stack.join(" / ")} | ${game.gameTags.genre.join(", ")}`}
+                      description={
+                        <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
+                          {game.desc}
+                        </p>
+                      }
+                      media={
+                        game.preview ? (
+                          <Button
+                            variant="window"
+                            onClick={() => preview.open(index)}
+                            className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden bg-transparent"
+                          >
+                            <Image
+                              src={game.preview}
+                              alt={`${game.name} preview`}
+                              width={128}
+                              height={128}
+                              className="object-contain"
+                            />
+                          </Button>
+                        ) : undefined
+                      }
+                    />
+
                     <ImagePreview
                       items={store.filtered}
                       previewIndex={preview.previewIndex}
                       onClose={preview.close}
                       onNavigate={preview.navigate}
-                      renderPreview={(game) =>
-                        game?.preview ? (
+                      renderPreview={(g) =>
+                        g?.preview ? (
                           <Image
-                            src={game.preview}
-                            alt={`${game.name} full preview`}
+                            src={g.preview}
+                            alt={`${g.name} full preview`}
                             fill
                             className="object-contain p-4"
                             priority
@@ -247,27 +226,6 @@ const GameStore = () => {
                       imageDesc={store.filtered.map((g) => `${g.name} Preview`)}
                       totalCount={store.filtered.length}
                     />
-
-                    <div className="flex-1 min-w-0 flex flex-col">
-                      <div className="flex items-center gap-2">
-                        <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
-                          <span className="text-xs font-normal text-foreground truncate">
-                            {game.gameTags.stack.join(" / ")} |{" "}
-                            {game.gameTags.genre.join(", ")}
-                          </span>
-                        </div>
-                      </div>
-                      <Button
-                        variant="link"
-                        onClick={() => navigateTo(game.url)}
-                        className="h-auto p-0 text-xl text-foreground hover:text-primary hover:underline font-medium leading-tight mb-1 justify-start text-left whitespace-normal"
-                      >
-                        {game.name}
-                      </Button>
-                      <p className="text-sm text-zinc-400 leading-snug line-clamp-3 whitespace-normal wrap-break-word">
-                        {game.desc}
-                      </p>
-                    </div>
                   </div>
                 );
               })}
@@ -356,7 +314,6 @@ const GameStore = () => {
 
               {/* Right Column: About & Buttons (Takes up 5 slots) */}
               <div className="md:col-span-5 flex flex-col gap-3 w-full">
-                {" "}
                 {/* About */}
                 <div className="flex flex-col gap-3 p-6 bg-zinc-50 dark:bg-zinc-900/50 border border-zinc-200/60 dark:border-zinc-800 rounded-xl min-h-68.5">
                   <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed whitespace-pre-line">

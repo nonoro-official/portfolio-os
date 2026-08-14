@@ -8,6 +8,7 @@ import { usePreviewNav } from "@/hooks/usePreviewNav";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { websites } from "@/config/websites";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
+import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 
 const Browser = () => {
   const {
@@ -192,44 +193,36 @@ const Browser = () => {
                     key={site.name}
                     className="flex items-start justify-between gap-4"
                   >
-                    {/* Left Side: Content */}
-                    <div className="flex-1 min-w-0 flex flex-col">
-                      {/* Header: Icon & Breadcrumb */}
-                      <div className="flex items-center gap-2 mb-1">
-                        <div className="size-7 rounded-full bg-zinc-100 flex items-center justify-center overflow-hidden">
-                          {site.icon.type === "emoji" ? (
-                            <span className="text-lg">{site.icon.value}</span>
-                          ) : (
-                            <Image
-                              src={site.icon.value}
-                              alt={`${site.name} icon`}
-                              width={28}
-                              height={28}
-                              className="object-contain"
-                            />
-                          )}
+                    <StoreListItem
+                      title={site.name}
+                      onTitleClick={() => handleUrlSubmit(site.name)}
+                      mediaPosition="end"
+                      tagLine={
+                        <div className="flex items-center gap-2">
+                          <div className="size-7 rounded-full bg-zinc-100 flex items-center justify-center overflow-hidden">
+                            {site.icon.type === "emoji" ? (
+                              <span className="text-lg">{site.icon.value}</span>
+                            ) : (
+                              <Image
+                                src={site.icon.value}
+                                alt={`${site.name} icon`}
+                                width={28}
+                                height={28}
+                                className="object-contain"
+                              />
+                            )}
+                          </div>
+                          <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
+                            <span className="text-xs font-normal text-foreground truncate">
+                              {site.stack.join(" - ")}
+                            </span>
+                            <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
+                              {displayUrl}
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex flex-col text-left leading-tight min-w-0 flex-1">
-                          <span className="text-xs font-normal text-foreground truncate">
-                            {site.stack.join(" - ")}
-                          </span>
-                          <span className="text-[10px] text-zinc-500 break-all whitespace-normal">
-                            {displayUrl}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Title Link */}
-                      <Button
-                        variant="link"
-                        onClick={handleUrlSubmit.bind(null, site.name)}
-                        className="h-auto p-0 text-xl text-foreground hover:text-primary hover:underline font-medium leading-tight mb-1 justify-start text-left whitespace-normal"
-                      >
-                        {site.name}
-                      </Button>
-
-                      {/* Description Snippet with Inline Read More */}
-                      <div className="text-sm text-zinc-500 dark:text-zinc-400 leading-snug">
+                      }
+                      description={
                         <p
                           className={
                             expandedSites[site.name]
@@ -241,40 +234,60 @@ const Browser = () => {
                             ? (site.fullDesc ?? site.desc)
                             : site.desc}
                         </p>
-
-                        {site.hasReadMore && (
+                      }
+                      footer={
+                        site.hasReadMore ? (
                           <Button
                             variant="link"
                             onClick={() => toggleExpanded(site.name)}
-                            className="h-auto p-0 mt-1 text-primary hover:underline"
+                            className="h-auto i p-0 mt-1 justify-start text-primary hover:underline"
                           >
                             {expandedSites[site.name]
                               ? "Show Less"
                               : "Read More"}
                           </Button>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Right Side: Google-style square snippet thumbnail */}
-                    {site.preview && (
-                      <Button
-                        variant="window"
-                        onClick={() => {
-                          // Find where this item lives in our currently active/filtered list
-                          preview.open(index);
-                        }}
-                        className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden bg-transparent"
-                      >
-                        <Image
-                          src={site.preview}
-                          alt={`${site.name} preview`}
-                          width={128}
-                          height={128}
-                          className="object-contain"
-                        />
-                      </Button>
-                    )}
+                        ) : null
+                      }
+                      media={
+                        site.preview ? (
+                          <Button
+                            variant="window"
+                            onClick={() => preview.open(index)}
+                            className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden bg-transparent"
+                          >
+                            <Image
+                              src={site.preview}
+                              alt={`${site.name} preview`}
+                              width={128}
+                              height={128}
+                              className="object-contain"
+                            />
+                          </Button>
+                        ) : undefined
+                      }
+                    />
+                    {/* Place the dialog outside of the button, passing ALL your items to it */}
+                    <ImagePreview
+                      items={displayedWebsites}
+                      previewIndex={preview.previewIndex}
+                      onClose={() => preview.close()}
+                      onNavigate={preview.navigate}
+                      renderPreview={(site) =>
+                        site?.preview ? (
+                          <Image
+                            src={site.preview}
+                            alt={`${site.name} full preview`}
+                            fill
+                            className="object-contain p-4"
+                            priority
+                          />
+                        ) : null
+                      }
+                      imageDesc={displayedWebsites.map(
+                        (site) => `${site.name} Preview`,
+                      )}
+                      totalCount={displayedWebsites.length}
+                    />
                     {/* Place the dialog outside of the button, passing ALL your items to it */}
                     <ImagePreview
                       items={displayedWebsites}
