@@ -1,11 +1,12 @@
-import { useState } from "react";
 import Image from "next/image";
 import { ArrowLeft, RotateCw, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { useWindow } from "@/hooks/useWindow";
+import { useStoreFilters } from "@/hooks/useStoreFilters";
 import { useSearch } from "@/hooks/useSearch";
+import { usePreviewNav } from "@/hooks/usePreviewNav";
 import { competitions, games, genres, stacks } from "@/config/games";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
@@ -15,44 +16,27 @@ import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 
 const GameStore = () => {
   const { currentUrl, viewMode, navigateTo, goHome, refreshPage } = useWindow();
-  const search = useSearch(games);
 
-  const featuredGames = games.filter((game) => game.isFeatured === true);
-  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-  const activeGame = games.find((game) => game.url === currentUrl);
-
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-  const [selectedStacks, setSelectedStacks] = useState<string[]>([]);
-  const [selectedComps, setSelectedComps] = useState<string[]>([]);
-
-  const filteredGames = games.filter((game) => {
-    const genreMatch =
-      selectedGenres.length === 0 ||
-      game.gameTags.genre.some((g) => selectedGenres.includes(g));
-
-    const stackMatch =
-      selectedStacks.length === 0 ||
-      game.gameTags.stack.some((s) => selectedStacks.includes(s));
-
-    const compMatch =
-      selectedComps.length === 0 ||
-      game.gameTags.competition.some((c) => selectedComps.includes(c));
-
-    return genreMatch && stackMatch && compMatch;
+  const search = useSearch();
+  const store = useStoreFilters({
+    items: games,
+    query: search.query,
+    facets: {
+      competition: (g) => g.gameTags.competition,
+      genre: (g) => g.gameTags.genre,
+      stack: (g) => g.gameTags.stack,
+    },
   });
 
-  const isFiltering =
-    selectedGenres.length > 0 ||
-    selectedStacks.length > 0 ||
-    selectedComps.length > 0 ||
-    search.query.trim() !== "";
-
   const resetFilters = () => {
-    setSelectedGenres([]);
-    setSelectedStacks([]);
-    setSelectedComps([]);
+    store.reset();
     search.setQuery("");
   };
+
+  const featuredGames = games.filter((game) => game.isFeatured === true);
+  const activeGame = games.find((game) => game.url === currentUrl);
+
+  const preview = usePreviewNav(store.filtered.length);
 
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
@@ -111,12 +95,14 @@ const GameStore = () => {
                   className="flex items-center gap-2 text-sm"
                 >
                   <Checkbox
-                    checked={selectedComps.includes(competition)}
+                    checked={store.selected["competition"]?.includes(
+                      competition,
+                    )}
                     onCheckedChange={(checked) => {
-                      setSelectedComps((prev) =>
-                        checked
-                          ? [...prev, competition]
-                          : prev.filter((g) => g !== competition),
+                      store.toggle(
+                        "competition",
+                        competition,
+                        checked === true,
                       );
                     }}
                   />
@@ -130,13 +116,9 @@ const GameStore = () => {
               {genres.map((genre) => (
                 <Label key={genre} className="flex items-center gap-2 text-sm">
                   <Checkbox
-                    checked={selectedGenres.includes(genre)}
+                    checked={store.selected["genre"]?.includes(genre)}
                     onCheckedChange={(checked) => {
-                      setSelectedGenres((prev) =>
-                        checked
-                          ? [...prev, genre]
-                          : prev.filter((g) => g !== genre),
-                      );
+                      store.toggle("genre", genre, checked === true);
                     }}
                   />
                   {genre}
@@ -149,13 +131,9 @@ const GameStore = () => {
               {stacks.map((stack) => (
                 <Label key={stack} className="flex items-center gap-2 text-sm">
                   <Checkbox
-                    checked={selectedStacks.includes(stack)}
+                    checked={store.selected["stack"]?.includes(stack)}
                     onCheckedChange={(checked) => {
-                      setSelectedStacks((prev) =>
-                        checked
-                          ? [...prev, stack]
-                          : prev.filter((g) => g !== stack),
-                      );
+                      store.toggle("stack", stack, checked === true);
                     }}
                   />
                   {stack}
@@ -183,12 +161,12 @@ const GameStore = () => {
         {viewMode === "homepage" || !activeGame ? (
           /* ================= HOMEPAGE VIEW ================= */
           <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col">
-            {isFiltering && filteredGames.length === 0 && (
+            {search.query && search.query.trim().length === 0 && (
               <p className="text-sm text-zinc-500 image-center justify-center flex">
                 No results found.
               </p>
             )}
-            {!isFiltering && (
+            {!search.query && (
               // Carousel
               <PreviewBanner
                 items={featuredGames}
@@ -227,7 +205,7 @@ const GameStore = () => {
 
             {/* Game List */}
             <div className="flex flex-col max-w-2xl">
-              {filteredGames.map((game) => {
+              {store.filtered.map((game, index) => {
                 return (
                   <div
                     key={game.name}
@@ -237,11 +215,7 @@ const GameStore = () => {
                       <Button
                         variant="window"
                         onClick={() => {
-                          // Find where this item lives in our currently active/filtered list
-                          const index = filteredGames.findIndex(
-                            (g) => g.name === game.name,
-                          );
-                          setPreviewIndex(index);
+                          preview.open(index);
                         }}
                         className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden bg-transparent"
                       >
@@ -255,37 +229,23 @@ const GameStore = () => {
                       </Button>
                     )}
                     <ImagePreview
-                      items={filteredGames}
-                      previewIndex={previewIndex}
-                      onClose={() => setPreviewIndex(null)}
-                      onNavigate={(direction) => {
-                        if (previewIndex === null) return;
-                        if (direction === "prev" && previewIndex > 0) {
-                          setPreviewIndex(previewIndex - 1);
-                        }
-                        if (
-                          direction === "next" &&
-                          previewIndex < filteredGames.length - 1
-                        ) {
-                          setPreviewIndex(previewIndex + 1);
-                        }
-                      }}
-                      renderPreview={(activeGame) => {
-                        // if activeGame hasn't resolved yet, don't break the render
-                        if (!activeGame?.preview) return null;
-
-                        return (
+                      items={store.filtered}
+                      previewIndex={preview.previewIndex}
+                      onClose={preview.close}
+                      onNavigate={preview.navigate}
+                      renderPreview={(game) =>
+                        game?.preview ? (
                           <Image
-                            src={activeGame.preview}
-                            alt={`${activeGame.name} full preview`}
+                            src={game.preview}
+                            alt={`${game.name} full preview`}
                             fill
                             className="object-contain p-4"
                             priority
                           />
-                        );
-                      }}
-                      imageDesc={filteredGames.map((g) => `${g.name} Preview`)}
-                      totalCount={filteredGames.length}
+                        ) : null
+                      }
+                      imageDesc={store.filtered.map((g) => `${g.name} Preview`)}
+                      totalCount={store.filtered.length}
                     />
 
                     <div className="flex-1 min-w-0 flex flex-col">

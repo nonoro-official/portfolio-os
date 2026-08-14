@@ -9,6 +9,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/Carousel";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
+import { usePreviewNav } from "@/hooks/usePreviewNav";
 
 interface ThumbnailPreviewProps<T> {
   items: T[];
@@ -60,21 +61,9 @@ export const ThumbnailPreview = <T,>({
     };
   }, [mainApi, onSelect]);
 
-  const handleNavigate = (direction: "prev" | "next") => {
-    if (previewIndex === null) return;
-
-    let nextIndex = previewIndex;
-    if (direction === "prev" && previewIndex > 0) {
-      nextIndex = previewIndex - 1;
-    }
-    if (direction === "next" && previewIndex < items.length - 1) {
-      nextIndex = previewIndex + 1;
-    }
-
-    setPreviewIndex(nextIndex);
-    // Sync the background slider with our modal navigation!
-    mainApi?.scrollTo(nextIndex);
-  };
+  const handleNavigate = usePreviewNav(items.length, (i) =>
+    mainApi?.scrollTo(i),
+  );
 
   return (
     <div className={cn("flex w-full flex-col gap-3", className)}>
@@ -130,7 +119,7 @@ export const ThumbnailPreview = <T,>({
           items={items}
           previewIndex={previewIndex}
           onClose={() => setPreviewIndex(null)}
-          onNavigate={handleNavigate}
+          onNavigate={handleNavigate.navigate}
           renderPreview={renderPreview}
           imageDesc={imageDesc}
           totalCount={items.length}

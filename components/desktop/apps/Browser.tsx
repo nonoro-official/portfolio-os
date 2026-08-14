@@ -4,6 +4,7 @@ import { ArrowLeft, Home, RotateCw } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { useSearch } from "@/hooks/useSearch";
+import { usePreviewNav } from "@/hooks/usePreviewNav";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
 import { websites } from "@/config/websites";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
@@ -23,8 +24,8 @@ const Browser = () => {
   const [filteredSite, setFilteredSite] = useState<(typeof websites)[0] | null>(
     null,
   );
-  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-  const search = useSearch(websites);
+
+  const search = useSearch();
 
   // Helper function to handle custom URL submissions or text searches
   const handleUrlSubmit = (query: string) => {
@@ -61,6 +62,8 @@ const Browser = () => {
       [siteName]: !prev[siteName],
     }));
   };
+
+  const preview = usePreviewNav(displayedWebsites.length);
 
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
@@ -176,7 +179,7 @@ const Browser = () => {
               </div>
             )}
             <div className="flex flex-col gap-3 max-w-2xl">
-              {displayedWebsites.map((site) => {
+              {displayedWebsites.map((site, index) => {
                 const displayUrl = site.url
                   .replace("https://", "")
                   .replace("www.", "")
@@ -259,10 +262,7 @@ const Browser = () => {
                         variant="window"
                         onClick={() => {
                           // Find where this item lives in our currently active/filtered list
-                          const index = displayedWebsites.findIndex(
-                            (s) => s.name === site.name,
-                          );
-                          setPreviewIndex(index);
+                          preview.open(index);
                         }}
                         className="size-36 rounded flex items-center justify-center hover:shadow-sm transition shrink-0 select-none overflow-hidden bg-transparent"
                       >
@@ -278,36 +278,22 @@ const Browser = () => {
                     {/* Place the dialog outside of the button, passing ALL your items to it */}
                     <ImagePreview
                       items={displayedWebsites}
-                      previewIndex={previewIndex}
-                      onClose={() => setPreviewIndex(null)}
-                      onNavigate={(direction) => {
-                        if (previewIndex === null) return;
-                        if (direction === "prev" && previewIndex > 0) {
-                          setPreviewIndex(previewIndex - 1);
-                        }
-                        if (
-                          direction === "next" &&
-                          previewIndex < displayedWebsites.length - 1
-                        ) {
-                          setPreviewIndex(previewIndex + 1);
-                        }
-                      }}
-                      renderPreview={(currentSite) => {
-                        // if currentSite hasn't resolved yet, don't break the render
-                        if (!currentSite?.preview) return null;
-
-                        return (
+                      previewIndex={preview.previewIndex}
+                      onClose={() => preview.close()}
+                      onNavigate={preview.navigate}
+                      renderPreview={(site) =>
+                        site?.preview ? (
                           <Image
-                            src={currentSite.preview}
-                            alt={`${currentSite.name} full preview`}
+                            src={site.preview}
+                            alt={`${site.name} full preview`}
                             fill
                             className="object-contain p-4"
                             priority
                           />
-                        );
-                      }}
+                        ) : null
+                      }
                       imageDesc={displayedWebsites.map(
-                        (s) => `${s.name} Preview`,
+                        (site) => `${site.name} Preview`,
                       )}
                       totalCount={displayedWebsites.length}
                     />

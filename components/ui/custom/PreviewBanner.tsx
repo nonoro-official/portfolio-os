@@ -11,6 +11,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
+import { usePreviewNav } from "@/hooks/usePreviewNav";
 
 interface PreviewBannerProps<T> {
   items: T[];
@@ -40,7 +41,7 @@ export const PreviewBanner = <T,>({
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
-  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const preview = usePreviewNav(items.length);
 
   useEffect(() => {
     if (!api) return;
@@ -65,19 +66,9 @@ export const PreviewBanner = <T,>({
     };
   }, [api, hasCounter]);
 
-  const handleNavigate = (direction: "prev" | "next") => {
-    if (previewIndex === null) return;
+  const handleNavigate = preview.navigate;
 
-    if (direction === "prev" && previewIndex > 0) {
-      setPreviewIndex(previewIndex - 1);
-    }
-
-    if (direction === "next" && previewIndex < items.length - 1) {
-      setPreviewIndex(previewIndex + 1);
-    }
-  };
-
-  const activeIndex = previewIndex ?? current;
+  const activeIndex = preview.previewIndex ?? current;
 
   return (
     <>
@@ -91,7 +82,7 @@ export const PreviewBanner = <T,>({
             <CarouselItem key={index} className="relative">
               {renderItem(item, index, {
                 openPreview: () => {
-                  setPreviewIndex(index);
+                  preview.open(index);
                 },
               })}
             </CarouselItem>
@@ -133,8 +124,8 @@ export const PreviewBanner = <T,>({
       {enableImagePreview && (
         <ImagePreview
           items={items}
-          previewIndex={previewIndex}
-          onClose={() => setPreviewIndex(null)}
+          previewIndex={preview.previewIndex}
+          onClose={() => preview.close()}
           onNavigate={handleNavigate}
           renderPreview={renderPreview}
           imageDesc={imageDesc}

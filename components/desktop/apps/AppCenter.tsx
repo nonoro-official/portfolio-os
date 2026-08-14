@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Image from "next/image";
 import {
   ExternalLink,
@@ -11,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { Label } from "@/components/ui/Label";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { useWindow } from "@/hooks/useWindow";
+import { useStoreFilters } from "@/hooks/useStoreFilters";
 import { useSearch } from "@/hooks/useSearch";
 import { app, devices, stacks, os } from "@/config/apps";
 import { SearchBar } from "@/components/ui/custom/SearchBar";
@@ -19,44 +19,26 @@ import { NavMenu } from "@/components/ui/custom/NavMenu";
 
 const AppCenter = () => {
   const { currentUrl, viewMode, navigateTo, goHome } = useWindow();
-  const search = useSearch(app);
 
-  const featuredApp = app.filter((app) => app.isFeatured === true);
+  const search = useSearch();
 
-  const activeApp = app.find((app) => app.url === currentUrl);
-
-  const [selectedDevices, setselectedDevices] = useState<string[]>([]);
-  const [selectedStacks, setSelectedStacks] = useState<string[]>([]);
-  const [selectedOs, setSelectedOs] = useState<string[]>([]);
-
-  const filteredApp = app.filter((app) => {
-    const deviceMatch =
-      selectedDevices.length === 0 ||
-      app.appTags.device.some((d) => selectedDevices.includes(d));
-
-    const stackMatch =
-      selectedStacks.length === 0 ||
-      app.appTags.stack.some((s) => selectedStacks.includes(s));
-
-    const osMatch =
-      selectedOs.length === 0 ||
-      app.appTags.os.some((o) => selectedOs.includes(o));
-
-    return deviceMatch && stackMatch && osMatch;
+  const store = useStoreFilters({
+    items: app,
+    query: search.query,
+    facets: {
+      os: (a) => a.appTags.os,
+      device: (a) => a.appTags.device,
+      stack: (a) => a.appTags.stack,
+    },
   });
 
-  const isFiltering =
-    selectedDevices.length > 0 ||
-    selectedStacks.length > 0 ||
-    selectedOs.length > 0 ||
-    search.query.trim() !== "";
-
   const resetFilters = () => {
-    setselectedDevices([]);
-    setSelectedStacks([]);
-    setSelectedOs([]);
+    store.reset();
     search.setQuery("");
   };
+
+  const featuredApp = app.filter((app) => app.isFeatured === true);
+  const activeApp = app.find((app) => app.url === currentUrl);
 
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
@@ -99,11 +81,9 @@ const AppCenter = () => {
               {os.map((os) => (
                 <Label key={os} className="flex items-center gap-2 text-sm">
                   <Checkbox
-                    checked={selectedOs.includes(os)}
+                    checked={store.selected["os"].includes(os)}
                     onCheckedChange={(checked) => {
-                      setSelectedOs((prev) =>
-                        checked ? [...prev, os] : prev.filter((g) => g !== os),
-                      );
+                      store.toggle("os", os, checked === true);
                     }}
                   />
                   {os}
@@ -117,13 +97,9 @@ const AppCenter = () => {
               {devices.map((device) => (
                 <Label key={device} className="flex items-center gap-2 text-sm">
                   <Checkbox
-                    checked={selectedDevices.includes(device)}
+                    checked={store.selected["device"].includes(device)}
                     onCheckedChange={(checked) => {
-                      setselectedDevices((prev) =>
-                        checked
-                          ? [...prev, device]
-                          : prev.filter((g) => g !== device),
-                      );
+                      store.toggle("device", device, checked === true);
                     }}
                   />
                   {device}
@@ -137,13 +113,25 @@ const AppCenter = () => {
               {stacks.map((stack) => (
                 <Label key={stack} className="flex items-center gap-2 text-sm">
                   <Checkbox
-                    checked={selectedStacks.includes(stack)}
+                    checked={store.selected["stack"].includes(stack)}
                     onCheckedChange={(checked) => {
-                      setSelectedStacks((prev) =>
-                        checked
-                          ? [...prev, stack]
-                          : prev.filter((g) => g !== stack),
-                      );
+                      store.toggle("stack", stack, checked === true);
+                    }}
+                  />
+                  {stack}
+                </Label>
+              ))}
+            </div>
+          </NavMenu>
+
+          <NavMenu buttonName="Stack">
+            <div className="flex flex-col gap-2">
+              {stacks.map((stack) => (
+                <Label key={stack} className="flex items-center gap-2 text-sm">
+                  <Checkbox
+                    checked={store.selected["stack"].includes(stack)}
+                    onCheckedChange={(checked) => {
+                      store.toggle("stack", stack, checked === true);
                     }}
                   />
                   {stack}
@@ -159,12 +147,12 @@ const AppCenter = () => {
         {viewMode === "homepage" || !activeApp ? (
           /* ================= HOMEPAGE VIEW ================= */
           <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col gap-8">
-            {isFiltering && filteredApp.length === 0 && (
+            {search.query && search.query.trim().length === 0 && (
               <p className="text-sm text-zinc-500 image-center justify-center flex">
                 No results found.
               </p>
             )}
-            {!isFiltering && (
+            {!search.query && (
               // Carousel
               <PreviewBanner
                 items={featuredApp}
@@ -220,7 +208,7 @@ const AppCenter = () => {
 
             {/* App List */}
             <div className="flex flex-col gap-4 max-w-2xl">
-              {filteredApp.map((app) => {
+              {store.filtered.map((app) => {
                 return (
                   <div
                     key={app.name}
