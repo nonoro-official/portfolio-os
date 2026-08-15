@@ -154,7 +154,7 @@ const AppCenter = () => {
                       fill
                       sizes="(max-width: 768px) 100vw, 60vw"
                       className="object-cover"
-                      priority
+                      fetchPriority="high"
                     />
                   </div>
                 </div>
@@ -376,7 +376,7 @@ const AppCenter = () => {
                           fill
                           sizes="(max-width: 768px) 100vw, 60vw"
                           className="object-contain"
-                          priority={index === 0}
+                          fetchPriority={index === 0 ? "high" : "auto"}
                         />
                       </div>
                     ) : (
@@ -388,6 +388,7 @@ const AppCenter = () => {
                           muted
                           playsInline
                           loop
+                          preload="none"
                           autoPlay
                           onClick={(e) => {
                             e.stopPropagation();
@@ -411,6 +412,7 @@ const AppCenter = () => {
                       src={media.src}
                       controls
                       autoPlay
+                      preload="none"
                       className="h-full w-full object-contain"
                     />
                   )

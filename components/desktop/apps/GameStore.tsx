@@ -130,7 +130,7 @@ const GameStore = () => {
                 items={featuredGames}
                 enableAutoplay
                 hasCounter
-                renderItem={(game) => (
+                renderItem={(game, index) => (
                   <div
                     className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
                     onClick={() => navigateTo(game.url)}
@@ -143,7 +143,7 @@ const GameStore = () => {
                         fill
                         sizes="(max-width: 768px) 100vw, 60vw"
                         className="object-cover"
-                        priority
+                        fetchPriority={index === 0 ? "high" : "auto"}
                       />
                     </div>
 
@@ -212,7 +212,7 @@ const GameStore = () => {
                           alt={`${g.name} full preview`}
                           fill
                           className="object-contain p-4"
-                          priority
+                          fetchPriority="high"
                         />
                       ) : null
                     }
@@ -254,6 +254,7 @@ const GameStore = () => {
                       <video
                         src={mediaItem.src}
                         controls
+                        preload="none"
                         className="max-h-full max-w-full"
                       />
                     );
@@ -264,19 +265,21 @@ const GameStore = () => {
                       alt="Full Preview"
                       fill
                       className="object-contain p-4"
-                      priority
+                      fetchPriority="high"
                     />
                   );
                 }}
-                renderMainItem={(media) => (
+                renderMainItem={(media, index) => (
                   <div className="relative aspect-video w-full bg-zinc-900 rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-800 flex items-center justify-center">
                     {media.type === "video" ? (
                       <video
                         src={media.src}
                         controls
+                        muted
                         autoPlay
                         loop
                         playsInline
+                        preload="none"
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -286,7 +289,7 @@ const GameStore = () => {
                         fill
                         sizes="(max-width: 768px) 100vw, 60vw"
                         className="object-cover"
-                        priority
+                        fetchPriority={index === 0 ? "high" : "auto"}
                       />
                     )}
                   </div>

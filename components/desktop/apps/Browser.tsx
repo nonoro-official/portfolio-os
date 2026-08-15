@@ -254,7 +254,6 @@ const Browser = () => {
                           alt={`${site.name} full preview`}
                           fill
                           className="object-contain p-4"
-                          priority
                         />
                       ) : null
                     }
