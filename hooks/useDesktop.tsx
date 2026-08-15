@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useRef } from "react";
 import type { Item, Window } from "@/types/desktop";
 import { initialItems } from "@/config/desktop";
 import { WINDOW_WIDTH, WINDOW_HEIGHT } from "@/types/desktop";
@@ -44,160 +44,142 @@ export const useDesktop = () => {
   const desktopRef = useRef<HTMLDivElement>(null);
 
   // Helper to get the next highest zIndex
-  const getNextZIndex = useCallback((currentWindows: Window[]) => {
+  const getNextZIndex = (currentWindows: Window[]) => {
     if (currentWindows.length === 0) return 1;
     return Math.max(...currentWindows.map((w) => w.zIndex)) + 1;
-  }, []);
+  };
 
-  const openWindow = useCallback(
-    (item: Item) => {
-      setWindows((prev) => {
-        // Check if a window for this item is already open
-        const existingWindow = prev.find((w) => w.itemId === item.id);
+  const openWindow = (item: Item) => {
+    setWindows((prev) => {
+      // Check if a window for this item is already open
+      const existingWindow = prev.find((w) => w.itemId === item.id);
 
-        if (existingWindow) {
-          // If it exists, bring it to the front and make sure it's visible
-          const nextZIndex = getNextZIndex(prev);
-          return prev.map((w) =>
-            w.itemId === item.id
-              ? {
-                  ...w,
-                  zIndex: nextZIndex,
-                  state: w.state === "minimized" ? "normal" : w.state,
-                }
-              : w,
-          );
-        }
-
-        // Otherwise, create a new window
+      if (existingWindow) {
+        // If it exists, bring it to the front and make sure it's visible
         const nextZIndex = getNextZIndex(prev);
-
-        if (typeof window === "undefined") {
-          // If window is not defined (e.g., during SSR), return a default position
-          return [
-            ...prev,
-            {
-              id: Date.now().toString(),
-              itemId: item.id,
-              title: item.name,
-              position: { x: 50 + prev.length * 20, y: 50 + prev.length * 20 },
-              size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
-              zIndex: nextZIndex,
-              state: "normal",
-              url: item.link,
-            },
-          ];
-        }
-
-        // Calculate initial position (centered, but offset for each new window)
-        const desktopWidth = window.innerWidth;
-        const desktopHeight = window.innerHeight;
-        let initialX = (desktopWidth - WINDOW_WIDTH) / 2 + prev.length * 20;
-        let initialY = (desktopHeight - WINDOW_HEIGHT) / 2 + prev.length * 20;
-
-        // Constrain within viewport
-        initialX = Math.max(0, Math.min(initialX, desktopWidth - WINDOW_WIDTH));
-        initialY = Math.max(
-          0,
-          Math.min(initialY, desktopHeight - WINDOW_HEIGHT),
+        return prev.map((w) =>
+          w.itemId === item.id
+            ? {
+                ...w,
+                zIndex: nextZIndex,
+                state: w.state === "minimized" ? "normal" : w.state,
+              }
+            : w,
         );
+      }
 
+      // Otherwise, create a new window
+      const nextZIndex = getNextZIndex(prev);
+
+      if (typeof window === "undefined") {
+        // If window is not defined (e.g., during SSR), return a default position
         return [
           ...prev,
           {
             id: Date.now().toString(),
             itemId: item.id,
             title: item.name,
-            position: { x: initialX, y: initialY },
+            position: { x: 50 + prev.length * 20, y: 50 + prev.length * 20 },
             size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
             zIndex: nextZIndex,
             state: "normal",
             url: item.link,
           },
         ];
-      });
-    },
-    [getNextZIndex],
-  );
+      }
 
-  const closeWindow = useCallback((windowId: string) => {
+      // Calculate initial position (centered, but offset for each new window)
+      const desktopWidth = window.innerWidth;
+      const desktopHeight = window.innerHeight;
+      let initialX = (desktopWidth - WINDOW_WIDTH) / 2 + prev.length * 20;
+      let initialY = (desktopHeight - WINDOW_HEIGHT) / 2 + prev.length * 20;
+
+      // Constrain within viewport
+      initialX = Math.max(0, Math.min(initialX, desktopWidth - WINDOW_WIDTH));
+      initialY = Math.max(0, Math.min(initialY, desktopHeight - WINDOW_HEIGHT));
+
+      return [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          itemId: item.id,
+          title: item.name,
+          position: { x: initialX, y: initialY },
+          size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
+          zIndex: nextZIndex,
+          state: "normal",
+          url: item.link,
+        },
+      ];
+    });
+  };
+
+  const closeWindow = (windowId: string) => {
     setWindows((prev) => prev.filter((w) => w.id !== windowId));
-  }, []);
+  };
 
-  const toggleMinimizeWindow = useCallback(
-    (windowId: string) => {
-      setWindows((prev) => {
-        const nextZIndex = getNextZIndex(prev);
-        return prev.map((w) => {
-          if (w.id !== windowId) return w;
+  const toggleMinimizeWindow = (windowId: string) => {
+    setWindows((prev) => {
+      const nextZIndex = getNextZIndex(prev);
+      return prev.map((w) => {
+        if (w.id !== windowId) return w;
 
-          // Toggle between minimized and normal
-          const isCurrentlyMinimized = w.state === "minimized";
-          return {
-            ...w,
-            state: isCurrentlyMinimized ? "normal" : "minimized",
-            // Focus the window when restoring it
-            zIndex: isCurrentlyMinimized ? nextZIndex : 0,
-          };
-        });
+        // Toggle between minimized and normal
+        const isCurrentlyMinimized = w.state === "minimized";
+        return {
+          ...w,
+          state: isCurrentlyMinimized ? "normal" : "minimized",
+          // Focus the window when restoring it
+          zIndex: isCurrentlyMinimized ? nextZIndex : 0,
+        };
       });
-    },
-    [getNextZIndex],
-  );
+    });
+  };
 
-  const toggleMaximizeWindow = useCallback(
-    (windowId: string) => {
-      setWindows((prev) => {
-        const nextZIndex = getNextZIndex(prev);
+  const toggleMaximizeWindow = (windowId: string) => {
+    setWindows((prev) => {
+      const nextZIndex = getNextZIndex(prev);
 
-        return prev.map((w) => {
-          if (w.id !== windowId) return w;
+      return prev.map((w) => {
+        if (w.id !== windowId) return w;
 
-          const isCurrentlyMaximized = w.state === "maximized";
-          return {
-            ...w,
-            state: isCurrentlyMaximized ? "normal" : "maximized",
-            zIndex: isCurrentlyMaximized ? 0 : nextZIndex,
-          };
-        });
+        const isCurrentlyMaximized = w.state === "maximized";
+        return {
+          ...w,
+          state: isCurrentlyMaximized ? "normal" : "maximized",
+          zIndex: isCurrentlyMaximized ? 0 : nextZIndex,
+        };
       });
-    },
-    [getNextZIndex],
-  );
+    });
+  };
 
-  const focusWindow = useCallback(
-    (windowId: string, title: string) => {
-      setWindows((prev) => {
-        const nextZIndex = getNextZIndex(prev);
-        return prev.map((w) =>
-          w.id === windowId ? { ...w, zIndex: nextZIndex, title } : w,
-        );
-      });
-    },
-    [getNextZIndex],
-  );
-
-  const moveWindow = useCallback(
-    (windowId: string, position: { x: number; y: number }) => {
-      setWindows((prev) =>
-        prev.map((w) => (w.id === windowId ? { ...w, position } : w)),
+  const focusWindow = (windowId: string, title: string) => {
+    setWindows((prev) => {
+      const nextZIndex = getNextZIndex(prev);
+      return prev.map((w) =>
+        w.id === windowId ? { ...w, zIndex: nextZIndex, title } : w,
       );
-    },
-    [],
-  );
+    });
+  };
 
-  const moveItem = useCallback((itemId: string, gridCell: { id: string }) => {
+  const moveWindow = (windowId: string, position: { x: number; y: number }) => {
+    setWindows((prev) =>
+      prev.map((w) => (w.id === windowId ? { ...w, position } : w)),
+    );
+  };
+
+  const moveItem = (itemId: string, gridCell: { id: string }) => {
     // This function would update the position of the desktop item in the grid
     setItems((prev) =>
       prev.map((item) =>
         item.id === itemId ? { ...item, gridCellId: gridCell.id } : item,
       ),
     );
-  }, []);
+  };
 
-  const getAllWindows = useCallback(() => windows, [windows]);
+  const getAllWindows = () => windows;
 
-  const getFocusedWindow = useCallback(() => {
+  const getFocusedWindow = () => {
     if (windows.length === 0) return null;
     return windows.reduce(
       (highest, current) => {
@@ -209,7 +191,7 @@ export const useDesktop = () => {
       },
       null as Window | null,
     );
-  }, [windows]);
+  };
 
   const contextValue: DesktopContextValue = {
     items,

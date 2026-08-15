@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Carousel,
@@ -35,31 +35,29 @@ export const ThumbnailPreview = <T,>({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
 
-  const onThumbClick = useCallback(
-    (index: number) => {
-      if (!mainApi || !thumbApi) return;
-      mainApi.scrollTo(index);
-    },
-    [mainApi, thumbApi],
-  );
-
-  const onSelect = useCallback(() => {
+  const onThumbClick = (index: number) => {
     if (!mainApi || !thumbApi) return;
-    const index = mainApi.selectedScrollSnap();
-    setSelectedIndex(index);
-    thumbApi.scrollTo(index);
-  }, [mainApi, thumbApi]);
+    mainApi.scrollTo(index);
+  };
 
   useEffect(() => {
-    if (!mainApi) return;
+    if (!mainApi || !thumbApi) return;
+
+    const onSelect = () => {
+      const index = mainApi.selectedScrollSnap();
+      setSelectedIndex(index);
+      thumbApi.scrollTo(index);
+    };
+
     onSelect();
     mainApi.on("select", onSelect);
     mainApi.on("reInit", onSelect);
+
     return () => {
       mainApi.off("select", onSelect);
       mainApi.off("reInit", onSelect);
     };
-  }, [mainApi, onSelect]);
+  }, [mainApi, thumbApi]);
 
   const handleNavigate = usePreviewNav(items.length, (i) =>
     mainApi?.scrollTo(i),

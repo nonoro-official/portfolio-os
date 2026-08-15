@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Minus, Maximize, Square, X } from "lucide-react";
 import type { Window } from "@/types/desktop";
 import { useDesktopContext } from "@/context/DesktopContext";
@@ -38,53 +38,52 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
     });
   };
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
-      if (isDragging && !isMaximized) {
-        let nextX = e.clientX - dragStart.x;
-        let nextY = e.clientY - dragStart.y;
-
-        // Constrain within viewport
-        const desktopWidth = window.innerWidth;
-        const desktopHeight = window.innerHeight;
-        const { width, height } = windowItem.size;
-
-        nextX = Math.max(0, Math.min(nextX, desktopWidth - width));
-        nextY = Math.max(
-          STATUS_BAR_HEIGHT,
-          Math.min(nextY, desktopHeight - height - DOCK_HEIGHT),
-        );
-
-        moveWindow(windowItem.id, {
-          x: nextX,
-          y: nextY,
-        });
-      }
-    },
-    [
-      isDragging,
-      isMaximized,
-      dragStart,
-      moveWindow,
-      windowItem.id,
-      windowItem.size,
-    ],
-  );
-
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-  }, []);
-
   useEffect(() => {
-    if (isDragging) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseup", handleMouseUp);
-    }
+    // If not dragging, we don't need to attach any listeners
+    if (!isDragging) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isMaximized) return;
+
+      let nextX = e.clientX - dragStart.x;
+      let nextY = e.clientY - dragStart.y;
+
+      const desktopWidth = window.innerWidth;
+      const desktopHeight = window.innerHeight;
+
+      nextX = Math.max(
+        0,
+        Math.min(nextX, desktopWidth - windowItem.size.width),
+      );
+      nextY = Math.max(
+        STATUS_BAR_HEIGHT,
+        Math.min(nextY, desktopHeight - windowItem.size.height - DOCK_HEIGHT),
+      );
+
+      moveWindow(windowItem.id, { x: nextX, y: nextY });
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  }, [
+    isDragging,
+    isMaximized,
+    dragStart.x,
+    dragStart.y,
+    moveWindow,
+    windowItem.id,
+    windowItem.size.width,
+    windowItem.size.height,
+  ]);
 
   // Completely hide window if minimized
   if (windowItem.state === "minimized") return null;

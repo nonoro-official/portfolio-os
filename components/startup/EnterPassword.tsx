@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import TypewriterEffect from "@/components/effects/TypewriterEffect";
 import { ArrowRightCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -9,16 +9,16 @@ const EnterPassword = () => {
   const passwordText = "Hello! Welcome to my portfolio!";
   const router = useRouter();
 
-  const handleLogin = useCallback(() => {
+  const handleLogin = () => {
     router.push("/desktop");
-  }, [router]);
+  };
 
   useEffect(() => {
     if (!isFinished) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Enter") {
-        handleLogin();
+        router.push("/desktop");
       }
     };
 
@@ -27,7 +27,7 @@ const EnterPassword = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isFinished, handleLogin]);
+  }, [isFinished, router]);
 
   return (
     <div className="w-full px-4 py-3 bg-card border border-border rounded text-foreground flex items-center justify-between font-sans">
