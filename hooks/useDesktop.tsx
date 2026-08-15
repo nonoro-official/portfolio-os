@@ -6,6 +6,7 @@ import { WINDOW_WIDTH, WINDOW_HEIGHT } from "@/types/desktop";
 export interface DesktopContextValue {
   items: Item[];
   windows: Window[];
+  focusedWindow: Window | null;
   openWindow: (item: Item) => void;
   closeWindow: (windowId: string) => void;
   toggleMinimizeWindow: (windowId: string) => void;
@@ -13,8 +14,6 @@ export interface DesktopContextValue {
   focusWindow: (windowId: string, title: string) => void;
   moveWindow: (windowId: string, position: { x: number; y: number }) => void;
   moveItem: (itemId: string, gridCell: { id: string }) => void;
-  getAllWindows: () => Window[];
-  getFocusedWindow: () => Window | null;
 }
 
 const MAX_ROWS_PER_COLUMN = 8;
@@ -177,25 +176,17 @@ export const useDesktop = () => {
     );
   };
 
-  const getAllWindows = () => windows;
-
-  const getFocusedWindow = () => {
-    if (windows.length === 0) return null;
-    return windows.reduce(
-      (highest, current) => {
-        if (current.state === "minimized") return highest; // Skip minimized windows
-        if (!highest) return current;
-        return (current.zIndex ?? 0) > (highest.zIndex ?? 0)
-          ? current
-          : highest;
-      },
-      null as Window | null,
-    );
-  };
+  // Derive focusedWindow directly from the windows state
+  const focusedWindow = windows.reduce<Window | null>((highest, current) => {
+    if (current.state === "minimized") return highest; // Skip minimized windows
+    if (!highest) return current;
+    return (current.zIndex ?? 0) > (highest.zIndex ?? 0) ? current : highest;
+  }, null);
 
   const contextValue: DesktopContextValue = {
     items,
     windows,
+    focusedWindow,
     openWindow,
     closeWindow,
     toggleMinimizeWindow,
@@ -203,8 +194,6 @@ export const useDesktop = () => {
     focusWindow,
     moveWindow,
     moveItem,
-    getAllWindows,
-    getFocusedWindow,
   };
 
   return {

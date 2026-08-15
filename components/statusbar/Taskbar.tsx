@@ -2,9 +2,9 @@ import React from "react";
 import { useDesktopContext } from "@/context/DesktopContext";
 
 const Taskbar = () => {
-  const { getAllWindows, getFocusedWindow, focusWindow, toggleMinimizeWindow } =
+  // Directly destructure the derived values instead of the getter functions
+  const { windows, focusedWindow, focusWindow, toggleMinimizeWindow } =
     useDesktopContext();
-  const focusedWindow = getFocusedWindow();
 
   const handleTabClick = (windowId: string, title: string, state: string) => {
     const isFocused = focusedWindow?.id === windowId;
@@ -22,7 +22,8 @@ const Taskbar = () => {
 
   return (
     <div className="flex items-center space-x-2 h-full whitespace-nowrap overflow-x-auto overflow-y-hidden">
-      {getAllWindows().map((window) => (
+      {/* Map directly over the windows array */}
+      {windows.map((window) => (
         <div
           key={window.id}
           className={`h-8 px-3 rounded-md flex items-center justify-center shrink-0 text-sm text-foreground ${
