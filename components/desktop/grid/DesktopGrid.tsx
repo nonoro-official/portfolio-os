@@ -63,6 +63,9 @@ const DesktopGrid = () => {
     }
   };
 
+  // Create a Map for O(1) lookups to avoid O(N*M) nested loops
+  const itemsByCell = new Map(items.map((item) => [item.gridCellId, item]));
+
   return (
     <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div
@@ -86,9 +89,8 @@ const DesktopGrid = () => {
           Array.from({ length: gridDimensions.cols }).map((_, colIndex) => {
             const cellId = `${rowIndex}-${colIndex}`;
 
-            const allocatedItem = items.find(
-              (item) => item.gridCellId === cellId,
-            );
+            // Fast O(1) lookup
+            const allocatedItem = itemsByCell.get(cellId);
 
             return (
               <DesktopGridCell

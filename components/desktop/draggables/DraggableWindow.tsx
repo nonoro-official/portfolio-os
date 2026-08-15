@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Minus, Maximize, Square, X } from "lucide-react";
 import type { Window } from "@/types/desktop";
 import { useDesktopContext } from "@/context/DesktopContext";
@@ -25,7 +25,20 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
+  // Local state to drive the UI independently from global context during drag
+  const [localPos, setLocalPos] = useState(windowItem.position);
+  // Ref to hold the latest position so mouseup can read it without re-binding the effect
+  const localPosRef = useRef(windowItem.position);
+
   const isMaximized = windowItem.state === "maximized";
+
+  // Sync local pos with global pos when NOT dragging
+  useEffect(() => {
+    if (!isDragging) {
+      setLocalPos(windowItem.position);
+      localPosRef.current = windowItem.position;
+    }
+  }, [windowItem.position, isDragging]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     // Don't allow dragging if the window is maximized
@@ -33,13 +46,13 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
 
     setIsDragging(true);
     setDragStart({
-      x: e.clientX - windowItem.position.x,
-      y: e.clientY - windowItem.position.y,
+      x: e.clientX - localPos.x,
+      y: e.clientY - localPos.y,
     });
   };
 
   useEffect(() => {
-    // If not dragging, we don't need to attach any listeners
+    // If not dragging, no need to attach listeners
     if (!isDragging) return;
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -60,11 +73,16 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
         Math.min(nextY, desktopHeight - windowItem.size.height - DOCK_HEIGHT),
       );
 
-      moveWindow(windowItem.id, { x: nextX, y: nextY });
+      const newPos = { x: nextX, y: nextY };
+
+      // Update local state ONLY (isolates renders to this component)
+      localPosRef.current = newPos;
+      setLocalPos(newPos);
     };
 
     const handleMouseUp = () => {
       setIsDragging(false);
+      moveWindow(windowItem.id, localPosRef.current);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -90,7 +108,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
 
   return (
     <div
-      onClick={() => focusWindow(windowItem.id, windowItem.title)} // Focus if clicking anywhere on the window body
+      onClick={() => focusWindow(windowItem.id, windowItem.title)} // Focus if clicking anywhere on window body
       className={`absolute backdrop-blur-xl bg-neutral-800/10 shadow-lg overflow-hidden ${
         isDragging ? "" : "transition-all duration-150"
       } ${
@@ -100,8 +118,9 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
         isMaximized
           ? { zIndex: windowItem.zIndex }
           : {
-              left: windowItem.position.x,
-              top: windowItem.position.y,
+              // Read from the local state instead of context
+              left: localPos.x,
+              top: localPos.y,
               width: windowItem.size.width,
               height: windowItem.size.height,
               zIndex: windowItem.zIndex,
@@ -115,7 +134,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
           isMaximized ? "cursor-default" : "cursor-move"
         }`}
         onMouseDown={handleMouseDown}
-        onDoubleClick={() => toggleMaximizeWindow(windowItem.id)} // Double-click to Maximize/Restore
+        onDoubleClick={() => toggleMaximizeWindow(windowItem.id)} // Double-click to maximize/restore
       >
         <h3 className="text-sm select-none">{windowItem.title}</h3>
         <div className="flex space-x-2">
