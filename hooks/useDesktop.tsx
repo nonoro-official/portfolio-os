@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import type { Item, Window } from "@/types/desktop";
 import { initialItems } from "@/config/desktop";
 import { WINDOW_WIDTH, WINDOW_HEIGHT } from "@/types/desktop";
+import { clampWindowPosition } from "@/utils/desktop";
 
 export interface DesktopContextValue {
   items: Item[];
@@ -87,15 +88,17 @@ export const useDesktop = () => {
         ];
       }
 
-      // Calculate initial position (centered, but offset for each new window)
-      const desktopWidth = window.innerWidth;
-      const desktopHeight = window.innerHeight;
-      let initialX = (desktopWidth - WINDOW_WIDTH) / 2 + prev.length * 20;
-      let initialY = (desktopHeight - WINDOW_HEIGHT) / 2 + prev.length * 20;
+      const viewport = { width: window.innerWidth, height: window.innerHeight };
+      const size = { width: WINDOW_WIDTH, height: WINDOW_HEIGHT };
 
-      // Constrain within viewport
-      initialX = Math.max(0, Math.min(initialX, desktopWidth - WINDOW_WIDTH));
-      initialY = Math.max(0, Math.min(initialY, desktopHeight - WINDOW_HEIGHT));
+      // Calculate initial raw position
+      const rawPosition = {
+        x: (viewport.width - size.width) / 2 + prev.length * 20,
+        y: (viewport.height - size.height) / 2 + prev.length * 20,
+      };
+
+      // Apply the unified clamp
+      const clampedPosition = clampWindowPosition(rawPosition, size, viewport);
 
       return [
         ...prev,
@@ -103,8 +106,8 @@ export const useDesktop = () => {
           id: Date.now().toString(),
           itemId: item.id,
           title: item.name,
-          position: { x: initialX, y: initialY },
-          size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
+          position: clampedPosition,
+          size,
           zIndex: nextZIndex,
           state: "normal",
           url: item.link,

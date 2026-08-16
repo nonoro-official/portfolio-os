@@ -3,7 +3,7 @@ import { Minus, Maximize, Square, X } from "lucide-react";
 import type { Window } from "@/types/desktop";
 import { useDesktopContext } from "@/context/DesktopContext";
 import { Button } from "@/components/ui/Button";
-import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/types/desktop";
+import { clampWindowPosition } from "@/utils/desktop";
 
 interface DraggableWindowProps {
   windowItem: Window;
@@ -58,22 +58,18 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
     const handleMouseMove = (e: MouseEvent) => {
       if (isMaximized) return;
 
-      let nextX = e.clientX - dragStart.x;
-      let nextY = e.clientY - dragStart.y;
+      const rawPos = {
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y,
+      };
 
-      const desktopWidth = window.innerWidth;
-      const desktopHeight = window.innerHeight;
+      const viewport = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
 
-      nextX = Math.max(
-        0,
-        Math.min(nextX, desktopWidth - windowItem.size.width),
-      );
-      nextY = Math.max(
-        STATUS_BAR_HEIGHT,
-        Math.min(nextY, desktopHeight - windowItem.size.height - DOCK_HEIGHT),
-      );
-
-      const newPos = { x: nextX, y: nextY };
+      // Apply the unified clamp
+      const newPos = clampWindowPosition(rawPos, windowItem.size, viewport);
 
       // Update local state ONLY (isolates renders to this component)
       localPosRef.current = newPos;
@@ -99,8 +95,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
     dragStart.y,
     moveWindow,
     windowItem.id,
-    windowItem.size.width,
-    windowItem.size.height,
+    windowItem.size,
   ]);
 
   // Completely hide window if minimized
