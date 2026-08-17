@@ -1,5 +1,6 @@
 import React from "react";
 import { useDroppable } from "@dnd-kit/react";
+import { CELL_SIZE } from "@/constants/desktop";
 
 interface DesktopGridCellProps {
   id: string;
@@ -23,7 +24,8 @@ export const DesktopGridCell: React.FC<DesktopGridCellProps> = ({
   return (
     <div
       ref={ref}
-      className={`w-22.5 h-22.5 rounded-lg flex items-center justify-center transition-all duration-150 ${
+      style={{ width: `${CELL_SIZE}px`, height: `${CELL_SIZE}px` }}
+      className={`rounded-lg flex items-center justify-center transition-all duration-150 ${
         !isInteractive
           ? "pointer-events-none bg-transparent"
           : isDropTarget

@@ -7,11 +7,13 @@ import {
 import { useDesktopContext } from "@/context/DesktopContext";
 import { DraggableDesktopItem } from "@/components/desktop/draggables/DraggableDesktopItem";
 import { DesktopGridCell } from "@/components/desktop/grid/DesktopGridCell";
-import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/constants/desktop";
-
-const CELL_SIZE = 90;
-const CELL_GAP = 15;
-const PADDING = 20;
+import {
+  STATUS_BAR_HEIGHT,
+  DOCK_HEIGHT,
+  CELL_SIZE,
+  CELL_GAP,
+  PADDING,
+} from "@/constants/desktop";
 
 const DesktopGrid = () => {
   const { items, moveItem } = useDesktopContext();
