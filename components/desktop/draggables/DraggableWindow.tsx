@@ -98,12 +98,18 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
     windowItem.size,
   ]);
 
+  // Avoid calling context if window is already focused
+  const handleWindowClick = () => {
+    if ("isFocused" in windowItem && windowItem.isFocused) return;
+    focusWindow(windowItem.id, windowItem.title);
+  };
+
   // Completely hide window if minimized
   if (windowItem.state === "minimized") return null;
 
   return (
     <div
-      onClick={() => focusWindow(windowItem.id, windowItem.title)} // Focus if clicking anywhere on window body
+      onClick={handleWindowClick}
       className={`absolute backdrop-blur-xl bg-neutral-800/10 shadow-lg overflow-hidden ${
         isDragging ? "" : "transition-all duration-150"
       } ${

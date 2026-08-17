@@ -161,9 +161,27 @@ export const useDesktop = () => {
 
   const focusWindow = (windowId: string, title: string) => {
     setWindows((prev) => {
-      const nextZIndex = getNextZIndex(prev);
+      const target = prev.find((w) => w.id === windowId);
+      if (!target) return prev;
+
+      // Find the current highest zIndex across all windows
+      const maxZIndex = Math.max(...prev.map((w) => w.zIndex), 0);
+
+      // Do nothing if window is already at top
+      if (target.zIndex === maxZIndex && target.state !== "minimized") {
+        return prev;
+      }
+
+      const nextZIndex = maxZIndex + 1;
       return prev.map((w) =>
-        w.id === windowId ? { ...w, zIndex: nextZIndex, title } : w,
+        w.id === windowId
+          ? {
+              ...w,
+              zIndex: nextZIndex,
+              state: w.state === "minimized" ? "normal" : w.state,
+              title,
+            }
+          : w,
       );
     });
   };
