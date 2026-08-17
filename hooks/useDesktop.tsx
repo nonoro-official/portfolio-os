@@ -153,7 +153,7 @@ export const useDesktop = () => {
         return {
           ...w,
           state: isCurrentlyMaximized ? "normal" : "maximized",
-          zIndex: isCurrentlyMaximized ? 0 : nextZIndex,
+          zIndex: nextZIndex,
         };
       });
     });
