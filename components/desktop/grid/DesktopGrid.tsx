@@ -7,7 +7,7 @@ import {
 import { useDesktopContext } from "@/context/DesktopContext";
 import { DraggableDesktopItem } from "@/components/desktop/draggables/DraggableDesktopItem";
 import { DesktopGridCell } from "@/components/desktop/grid/DesktopGridCell";
-import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/types/desktop";
+import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/constants/desktop";
 
 const CELL_SIZE = 90;
 const CELL_GAP = 15;
