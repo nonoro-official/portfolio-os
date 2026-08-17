@@ -1,8 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { Item, Window } from "@/types/desktop";
 import { initialItems } from "@/config/desktop";
-import { WINDOW_WIDTH, WINDOW_HEIGHT } from "@/types/desktop";
-import { clampWindowPosition } from "@/utils/desktop";
+import { clampWindowPosition, getViewportConfig } from "@/utils/desktop";
+import { WINDOW_WIDTH, WINDOW_HEIGHT } from "@/constants/desktop";
 
 export interface DesktopContextValue {
   items: Item[];
@@ -88,8 +88,12 @@ export const useDesktop = () => {
         ];
       }
 
-      const viewport = { width: window.innerWidth, height: window.innerHeight };
-      const size = { width: WINDOW_WIDTH, height: WINDOW_HEIGHT };
+      const { viewport, maxWidth, maxHeight, isMobile } = getViewportConfig();
+
+      const size = {
+        width: Math.min(WINDOW_WIDTH, maxWidth),
+        height: Math.min(WINDOW_HEIGHT, maxHeight),
+      };
 
       // Calculate initial raw position
       const rawPosition = {
@@ -109,7 +113,7 @@ export const useDesktop = () => {
           position: clampedPosition,
           size,
           zIndex: nextZIndex,
-          state: "normal",
+          state: isMobile ? "maximized" : "normal",
           url: item.link,
         },
       ];
@@ -178,6 +182,74 @@ export const useDesktop = () => {
       ),
     );
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const calculateWindowBounds = () => {
+      setWindows((prev) => {
+        if (prev.length === 0) return prev;
+
+        const { viewport, maxWidth, maxHeight, isMobile } = getViewportConfig();
+        let hasChanges = false;
+
+        const updatedWindows = prev.map((w): Window => {
+          if (w.state === "minimized") return w;
+
+          // Ideal size based on default constants & available screen space
+          const targetSize = {
+            width: Math.min(WINDOW_WIDTH, maxWidth),
+            height: Math.min(WINDOW_HEIGHT, maxHeight),
+          };
+
+          // Mobile auto-maximize
+          if (isMobile) {
+            if (
+              w.state !== "maximized" ||
+              w.size.width !== targetSize.width ||
+              w.size.height !== targetSize.height
+            ) {
+              hasChanges = true;
+              return { ...w, state: "maximized", size: targetSize };
+            }
+            return w;
+          }
+
+          const newPos = clampWindowPosition(w.position, targetSize, viewport);
+
+          // If window is maximized on desktop, update stored restored size in background
+          if (w.state === "maximized") {
+            if (
+              targetSize.width !== w.size.width ||
+              targetSize.height !== w.size.height
+            ) {
+              hasChanges = true;
+              return { ...w, size: targetSize, position: newPos };
+            }
+            return w;
+          }
+
+          // Normal state window size & position update
+          if (
+            targetSize.width !== w.size.width ||
+            targetSize.height !== w.size.height ||
+            newPos.x !== w.position.x ||
+            newPos.y !== w.position.y
+          ) {
+            hasChanges = true;
+            return { ...w, size: targetSize, position: newPos };
+          }
+
+          return w;
+        });
+
+        return hasChanges ? updatedWindows : prev;
+      });
+    };
+
+    window.addEventListener("resize", calculateWindowBounds);
+    return () => window.removeEventListener("resize", calculateWindowBounds);
+  }, []);
 
   // Derive focusedWindow directly from the windows state
   const focusedWindow = windows.reduce<Window | null>((highest, current) => {

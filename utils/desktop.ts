@@ -1,4 +1,8 @@
-import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/types/desktop";
+import {
+  STATUS_BAR_HEIGHT,
+  DOCK_HEIGHT,
+  WINDOW_MARGIN,
+} from "@/constants/desktop";
 
 interface Position {
   x: number;
@@ -29,3 +33,15 @@ export function clampWindowPosition(
     y: Math.min(Math.max(position.y, minY), maxY),
   };
 }
+
+export const getViewportConfig = () => {
+  const viewport = { width: window.innerWidth, height: window.innerHeight };
+  const maxWidth = Math.max(0, viewport.width - WINDOW_MARGIN * 2);
+  const maxHeight = Math.max(
+    0,
+    viewport.height - STATUS_BAR_HEIGHT - DOCK_HEIGHT - WINDOW_MARGIN * 2,
+  );
+  const isMobile = viewport.width < 640;
+
+  return { viewport, maxWidth, maxHeight, isMobile };
+};
