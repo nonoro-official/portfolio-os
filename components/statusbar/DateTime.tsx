@@ -6,11 +6,13 @@ import { Button } from "../ui/Button";
 export function DateTime() {
   const [time, setTime] = useState("");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setDate(new Date());
+
     const updateClock = () => {
       const now = new Date();
       setTime(
