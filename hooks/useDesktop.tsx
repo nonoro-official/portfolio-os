@@ -76,7 +76,7 @@ export const useDesktop = () => {
         return [
           ...prev,
           {
-            id: Date.now().toString(),
+            id: crypto.randomUUID(),
             itemId: item.id,
             title: item.name,
             position: { x: 50 + prev.length * 20, y: 50 + prev.length * 20 },
@@ -107,7 +107,7 @@ export const useDesktop = () => {
       return [
         ...prev,
         {
-          id: Date.now().toString(),
+          id: crypto.randomUUID(),
           itemId: item.id,
           title: item.name,
           position: clampedPosition,
