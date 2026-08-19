@@ -251,12 +251,15 @@ const GameStore = () => {
                 renderPreview={(mediaItem) => {
                   if (mediaItem.type === "video") {
                     return (
-                      <video
-                        src={mediaItem.src}
-                        controls
-                        preload="none"
-                        className="max-h-full max-w-full"
-                      />
+                      <div className="relative flex h-full w-full items-center justify-center overflow-hidden p-4">
+                        <video
+                          src={mediaItem.src}
+                          controls
+                          playsInline
+                          preload="metadata"
+                          className="h-full w-full max-w-full max-h-full object-contain"
+                        />
+                      </div>
                     );
                   }
                   return (
