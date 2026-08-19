@@ -6,7 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/Popover";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 interface NavMenuProps {
   buttonName: string;

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { Calendar } from "../ui/Calendar";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 
 export function DateTime() {
   const [time, setTime] = useState("");

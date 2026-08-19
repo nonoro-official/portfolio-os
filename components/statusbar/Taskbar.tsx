@@ -1,6 +1,6 @@
 import React from "react";
 import { useDesktopContext } from "@/context/DesktopContext";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 const Taskbar = () => {
   // Directly destructure the derived values instead of the getter functions

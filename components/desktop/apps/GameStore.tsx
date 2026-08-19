@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { useWindow } from "@/hooks/useWindow";
 import { useStoreFilters } from "@/hooks/useStoreFilters";
 import { useSearch } from "@/hooks/useSearch";

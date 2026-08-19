@@ -7,7 +7,7 @@ import {
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from "@/components/ui/Carousel";
+} from "@/components/ui/carousel";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 import { usePreviewNav } from "@/hooks/usePreviewNav";
 

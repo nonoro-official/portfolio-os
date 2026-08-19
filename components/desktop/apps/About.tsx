@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import type { Window } from "@/types/desktop";
 import { useDesktopContext } from "@/context/DesktopContext";
 import { about } from "@/config/nonoro";

@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { ArrowLeft, Home, RotateCw } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 
 interface ToolbarProps {
   canGoBack?: boolean;

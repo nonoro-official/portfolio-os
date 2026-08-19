@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Minus, Maximize, Square, X } from "lucide-react";
 import type { Window } from "@/types/desktop";
 import { useDesktopContext } from "@/context/DesktopContext";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { clampWindowPosition } from "@/utils/desktop";
 
 interface DraggableWindowProps {

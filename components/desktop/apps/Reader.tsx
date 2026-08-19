@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { useWindow } from "@/hooks/useWindow";
 import { resume } from "@/config/nonoro";
 

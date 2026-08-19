@@ -2,7 +2,7 @@ import React from "react";
 import { useDesktopContext } from "@/context/DesktopContext";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/button";
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { DOCK_INNER_HEIGHT, DOCK_BOTTOM_OFFSET } from "@/constants/desktop";
 

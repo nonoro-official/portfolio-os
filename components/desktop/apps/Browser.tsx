@@ -1,7 +1,7 @@
 import { useState, Fragment } from "react";
 import { useWindow } from "@/hooks/useWindow";
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { useSearch } from "@/hooks/useSearch";
 import { usePreviewNav } from "@/hooks/usePreviewNav";
 import { SearchBar } from "@/components/ui/custom/SearchBar";

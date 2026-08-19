@@ -7,9 +7,9 @@ import {
   CarouselNext,
   CarouselPrevious,
   type CarouselApi,
-} from "@/components/ui/Carousel";
+} from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 import { usePreviewNav } from "@/hooks/usePreviewNav";
 

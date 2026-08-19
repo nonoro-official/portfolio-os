@@ -1,5 +1,5 @@
 import { Dialog, DialogContent } from "@/components/ui/Dialog";
-import { Button } from "../Button";
+import { Button } from "../button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ImagePreviewProps<T> {
