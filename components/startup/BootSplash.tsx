@@ -11,32 +11,51 @@ const BootSplash = () => {
   // BIOS line interval
   useEffect(() => {
     const timer = setInterval(() => {
-      setVisibleLines((prev) => (prev < 5 ? prev + 1 : prev));
+      setVisibleLines((prev) => {
+        if (prev >= 4) {
+          clearInterval(timer);
+          return 5;
+        }
+        return prev + 1;
+      });
     }, 800);
+
     return () => clearInterval(timer);
   }, []);
 
-  // black screen to route
+  // Black screen to route
   useEffect(() => {
-    if (visibleLines >= 4) {
+    if (visibleLines === 5 && !isBlackedOut) {
       const redirectTimer = setTimeout(() => {
         setIsBlackedOut(true);
 
         setTimeout(() => {
           router.replace("/login");
-        }, 1000);
-      }, 5000);
+        }, 500);
+      }, 3000);
 
       return () => clearTimeout(redirectTimer);
     }
-  }, [visibleLines, router]);
+  }, [visibleLines, router, isBlackedOut]);
+
+  // Skip to login
+  const handleSkip = () => {
+    if (isBlackedOut) return;
+    setIsBlackedOut(true);
+    setTimeout(() => {
+      router.replace("/login");
+    }, 300);
+  };
 
   if (isBlackedOut) {
     return <div className="h-screen w-full bg-black"></div>;
   }
 
   return (
-    <div className="h-screen w-full bg-black text-white p-10 font-mono">
+    <div
+      className="relative h-screen w-full bg-black text-white p-10 font-mono select-none cursor-pointer"
+      onClick={handleSkip}
+    >
       <div className="flex flex-col gap-2">
         {visibleLines >= 1 && <p>nonoro-official</p>}
         {visibleLines >= 1 && <p>Copyright (C) 2026-</p>}
@@ -57,6 +76,10 @@ const BootSplash = () => {
           />
         </div>
       )}
+
+      <div className="absolute bottom-10 right-10 text-sm text-neutral-500 animate-pulse">
+        [Click anywhere to skip]
+      </div>
     </div>
   );
 };
