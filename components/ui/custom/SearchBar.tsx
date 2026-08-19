@@ -9,7 +9,7 @@ import {
   AutocompleteInput,
   AutocompleteItem,
   AutocompleteList,
-} from "@/components/ui/Autocomplete";
+} from "@/components/ui/autocomplete";
 import { cn } from "@/lib/utils";
 
 interface SearchBarProps<T extends { name: string }> {

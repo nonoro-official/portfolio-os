@@ -1,4 +1,4 @@
-import { Dialog, DialogContent } from "@/components/ui/Dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "../button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 

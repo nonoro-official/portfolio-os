@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Calendar } from "../ui/Calendar";
+import { Calendar } from "../ui/calendar";
 import { Button } from "../ui/button";
 
 export function DateTime() {

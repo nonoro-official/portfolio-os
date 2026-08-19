@@ -1,6 +1,6 @@
 import { NavMenu } from "@/components/ui/custom/NavMenu";
-import { Label } from "@/components/ui/Label";
-import { Checkbox } from "@/components/ui/Checkbox";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface FilterMenuProps {
   label: string;
