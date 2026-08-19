@@ -24,7 +24,7 @@ export const DraggableDesktopItem: React.FC<DraggableDesktopItemProps> = ({
       <div className="text-[36px] mb-1 drop-shadow-md">{item.icon}</div>
 
       {/* Label Text */}
-      <span className="text-foreground text-xs text-shadow-sm font-medium break-word line-clamp-2 px-1">
+      <span className="text-foreground text-xs text-shadow-sm font-medium wrap-break-word line-clamp-2 px-1">
         {item.name}
       </span>
     </div>

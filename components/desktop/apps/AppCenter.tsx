@@ -104,7 +104,7 @@ const AppCenter = () => {
         /* ================= HOMEPAGE VIEW ================= */
         <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col gap-8">
           {search.query && search.query.trim().length === 0 && (
-            <p className="text-sm text-zinc-500 image-center justify-center flex">
+            <p className="text-sm text-zinc-500 items-center justify-center flex">
               No results found.
             </p>
           )}
@@ -118,7 +118,7 @@ const AppCenter = () => {
               enableImagePreview={false}
               renderItem={(app) => (
                 <div
-                  className="relative flex h-80 w-full bg-zinc-950 border dark:border-text-foreground rounded-xl overflow-hidden cursor-pointer group"
+                  className="relative flex h-80 w-full bg-zinc-950 border dark:border-foreground rounded-xl overflow-hidden cursor-pointer group"
                   onClick={() => navigateTo(app.url)}
                 >
                   {/* App Details Sidebar (Centered & Color-Matched) */}
@@ -184,7 +184,7 @@ const AppCenter = () => {
                     media={
                       <div className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden">
                         {app.logo.type === "emoji" ? (
-                          <span className="text-6xl line-height-none default-flex-center">
+                          <span className="text-6xl leading-none default-flex-center">
                             {app.logo.value}
                           </span>
                         ) : (
@@ -212,7 +212,7 @@ const AppCenter = () => {
               {/* App Preview Box */}
               <div className="size-24 bg-zinc-100 rounded-xl flex items-center justify-center text-3xl border border-zinc-200/60 hover:shadow-sm transition shrink-0 select-none overflow-hidden">
                 {activeApp.logo.type === "emoji" ? (
-                  <span className="text-6xl line-height-none default-flex-center">
+                  <span className="text-6xl leading-none default-flex-center">
                     {activeApp.logo.value}
                   </span>
                 ) : (

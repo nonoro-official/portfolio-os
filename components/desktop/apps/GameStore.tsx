@@ -120,7 +120,7 @@ const GameStore = () => {
         /* ================= HOMEPAGE VIEW ================= */
         <div className="max-w-2xl mx-auto items-stretch px-6 py-8 flex flex-col">
           {search.query && search.query.trim().length === 0 && (
-            <p className="text-sm text-zinc-500 image-center justify-center flex mb-4">
+            <p className="text-sm text-zinc-500 items-center justify-center flex mb-4">
               No results found.
             </p>
           )}
