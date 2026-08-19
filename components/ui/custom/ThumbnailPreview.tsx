@@ -33,7 +33,9 @@ export const ThumbnailPreview = <T,>({
   const [mainApi, setMainApi] = useState<CarouselApi>();
   const [thumbApi, setThumbApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const preview = usePreviewNav(items.length, (index) =>
+    mainApi?.scrollTo(index),
+  );
 
   const onThumbClick = (index: number) => {
     if (!mainApi || !thumbApi) return;
@@ -59,10 +61,6 @@ export const ThumbnailPreview = <T,>({
     };
   }, [mainApi, thumbApi]);
 
-  const handleNavigate = usePreviewNav(items.length, (i) =>
-    mainApi?.scrollTo(i),
-  );
-
   return (
     <div className={cn("flex w-full flex-col gap-3", className)}>
       {/* Main Feature Display */}
@@ -71,8 +69,7 @@ export const ThumbnailPreview = <T,>({
           {items.map((item, index) => (
             <CarouselItem
               key={index}
-              // Clicking the main item opens the preview modal at its current index
-              onClick={() => enableImagePreview && setPreviewIndex(index)}
+              onClick={() => enableImagePreview && preview.open(index)}
               className={cn(enableImagePreview && "cursor-zoom-in")}
             >
               {renderMainItem(item, index)}
@@ -115,9 +112,9 @@ export const ThumbnailPreview = <T,>({
       {enableImagePreview && (
         <ImagePreview
           items={items}
-          previewIndex={previewIndex}
-          onClose={() => setPreviewIndex(null)}
-          onNavigate={handleNavigate.navigate}
+          previewIndex={preview.previewIndex}
+          onClose={preview.close}
+          onNavigate={preview.navigate}
           renderPreview={renderPreview}
           imageDesc={imageDesc}
           totalCount={items.length}
