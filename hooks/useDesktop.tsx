@@ -8,6 +8,7 @@ export interface DesktopContextValue {
   items: Item[];
   windows: Window[];
   focusedWindow: Window | null;
+  isMobile: boolean;
   openWindow: (item: Item) => void;
   closeWindow: (windowId: string) => void;
   toggleMinimizeWindow: (windowId: string) => void;
@@ -41,6 +42,7 @@ export const useDesktop = () => {
     initializeItems(initialItems),
   );
   const [windows, setWindows] = useState<Window[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
   const desktopRef = useRef<HTMLDivElement>(null);
 
   // Helper to get the next highest zIndex
@@ -204,7 +206,13 @@ export const useDesktop = () => {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    const syncViewportState = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
     const calculateWindowBounds = () => {
+      syncViewportState();
+
       setWindows((prev) => {
         if (prev.length === 0) return prev;
 
@@ -265,8 +273,13 @@ export const useDesktop = () => {
       });
     };
 
+    syncViewportState();
     window.addEventListener("resize", calculateWindowBounds);
-    return () => window.removeEventListener("resize", calculateWindowBounds);
+    window.addEventListener("resize", syncViewportState);
+    return () => {
+      window.removeEventListener("resize", calculateWindowBounds);
+      window.removeEventListener("resize", syncViewportState);
+    };
   }, []);
 
   // Derive focusedWindow directly from the windows state
@@ -280,6 +293,7 @@ export const useDesktop = () => {
     items,
     windows,
     focusedWindow,
+    isMobile,
     openWindow,
     closeWindow,
     toggleMinimizeWindow,

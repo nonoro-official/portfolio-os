@@ -15,7 +15,15 @@ import {
   PADDING,
 } from "@/constants/desktop";
 
-const DesktopGrid = () => {
+interface DesktopGridProps {
+  topOffset?: number;
+  bottomOffset?: number;
+}
+
+const DesktopGrid = ({
+  topOffset = STATUS_BAR_HEIGHT,
+  bottomOffset = DOCK_HEIGHT,
+}: DesktopGridProps) => {
   const { items, moveItem } = useDesktopContext();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [gridDimensions, setGridDimensions] = useState({ rows: 0, cols: 0 });
@@ -24,7 +32,7 @@ const DesktopGrid = () => {
     const calculateGrid = () => {
       const availableWidth = window.innerWidth - PADDING * 2;
       const availableHeight =
-        window.innerHeight - STATUS_BAR_HEIGHT - DOCK_HEIGHT - PADDING;
+        window.innerHeight - topOffset - bottomOffset - PADDING;
 
       const cols = Math.floor(
         (availableWidth + CELL_GAP) / (CELL_SIZE + CELL_GAP),
@@ -39,7 +47,7 @@ const DesktopGrid = () => {
     calculateGrid();
     window.addEventListener("resize", calculateGrid);
     return () => window.removeEventListener("resize", calculateGrid);
-  }, []);
+  }, [topOffset, bottomOffset]);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(String(event.operation.source?.id));
@@ -72,13 +80,13 @@ const DesktopGrid = () => {
     <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div
         style={{
-          marginTop: `${STATUS_BAR_HEIGHT}px`,
+          marginTop: `${topOffset}px`,
           display: "grid",
           gridTemplateRows: `repeat(${gridDimensions.rows}, ${CELL_SIZE}px)`,
           gridTemplateColumns: `repeat(${gridDimensions.cols}, ${CELL_SIZE}px)`,
           gap: `${CELL_GAP}px`,
           padding: `${PADDING}px`,
-          height: `calc(100vh - ${STATUS_BAR_HEIGHT}px - ${DOCK_HEIGHT}px)`,
+          height: `calc(100vh - ${topOffset}px - ${bottomOffset}px)`,
           width: "100vw",
           position: "absolute",
           top: 0,
