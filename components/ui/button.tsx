@@ -23,6 +23,9 @@ const buttonVariants = cva(
         link: "text-left text-primary underline-offset-4 hover:underline",
         window:
           "bg-transparent text-foreground hover:bg-primary/30 hover:text-foreground aria-expanded:bg-primary aria-expanded:text-foreground dark:hover:bg-primary-foreground/50",
+        "title-link":
+          "h-auto p-0 justify-start text-left whitespace-normal text-xl font-medium leading-tight text-foreground hover:text-primary hover:underline",
+        cta: "bg-amber-600 hover:bg-amber-700 text-white shadow-sm flex items-center gap-2 text-sm",
       },
       size: {
         default:
@@ -36,6 +39,7 @@ const buttonVariants = cva(
         "icon-sm":
           "size-8 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md",
         "icon-lg": "size-10",
+        none: "",
       },
     },
     defaultVariants: {

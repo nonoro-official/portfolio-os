@@ -66,7 +66,7 @@ const DesktopWrapper: React.FC = () => {
             delay={50}
             showCursor={false}
             enableLoop={true}
-            className="absolute right-12 top-1/2 -translate-y-1/2 max-w-1xl text-right font-bold font-mono text-7xl text-primary/50 pointer-events-none select-none z-0 tracking-tight whitespace-pre-line"
+            className="absolute right-12 top-1/2 -translate-y-1/2 max-w-xl text-right font-bold font-mono text-7xl text-primary/50 pointer-events-none select-none z-0 tracking-tight whitespace-pre-line"
           />
 
           <Dock />

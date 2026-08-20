@@ -1,14 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   type CarouselApi,
-} from "@/components/ui/Carousel";
+} from "@/components/ui/carousel";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
+import { usePreviewNav } from "@/hooks/usePreviewNav";
 
 interface ThumbnailPreviewProps<T> {
   items: T[];
@@ -32,49 +33,33 @@ export const ThumbnailPreview = <T,>({
   const [mainApi, setMainApi] = useState<CarouselApi>();
   const [thumbApi, setThumbApi] = useState<CarouselApi>();
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [previewIndex, setPreviewIndex] = useState<number | null>(null);
-
-  const onThumbClick = useCallback(
-    (index: number) => {
-      if (!mainApi || !thumbApi) return;
-      mainApi.scrollTo(index);
-    },
-    [mainApi, thumbApi],
+  const preview = usePreviewNav(items.length, (index) =>
+    mainApi?.scrollTo(index),
   );
 
-  const onSelect = useCallback(() => {
+  const onThumbClick = (index: number) => {
     if (!mainApi || !thumbApi) return;
-    const index = mainApi.selectedScrollSnap();
-    setSelectedIndex(index);
-    thumbApi.scrollTo(index);
-  }, [mainApi, thumbApi]);
+    mainApi.scrollTo(index);
+  };
 
   useEffect(() => {
-    if (!mainApi) return;
+    if (!mainApi || !thumbApi) return;
+
+    const onSelect = () => {
+      const index = mainApi.selectedScrollSnap();
+      setSelectedIndex(index);
+      thumbApi.scrollTo(index);
+    };
+
     onSelect();
     mainApi.on("select", onSelect);
     mainApi.on("reInit", onSelect);
+
     return () => {
       mainApi.off("select", onSelect);
       mainApi.off("reInit", onSelect);
     };
-  }, [mainApi, onSelect]);
-
-  const handleNavigate = (direction: "prev" | "next") => {
-    if (previewIndex === null) return;
-
-    let nextIndex = previewIndex;
-    if (direction === "prev" && previewIndex > 0) {
-      nextIndex = previewIndex - 1;
-    }
-    if (direction === "next" && previewIndex < items.length - 1) {
-      nextIndex = previewIndex + 1;
-    }
-
-    setPreviewIndex(nextIndex);
-    // Sync the background slider with our modal navigation!
-    mainApi?.scrollTo(nextIndex);
-  };
+  }, [mainApi, thumbApi]);
 
   return (
     <div className={cn("flex w-full flex-col gap-3", className)}>
@@ -84,8 +69,7 @@ export const ThumbnailPreview = <T,>({
           {items.map((item, index) => (
             <CarouselItem
               key={index}
-              // Clicking the main item opens the preview modal at its current index
-              onClick={() => enableImagePreview && setPreviewIndex(index)}
+              onClick={() => enableImagePreview && preview.open(index)}
               className={cn(enableImagePreview && "cursor-zoom-in")}
             >
               {renderMainItem(item, index)}
@@ -128,9 +112,9 @@ export const ThumbnailPreview = <T,>({
       {enableImagePreview && (
         <ImagePreview
           items={items}
-          previewIndex={previewIndex}
-          onClose={() => setPreviewIndex(null)}
-          onNavigate={handleNavigate}
+          previewIndex={preview.previewIndex}
+          onClose={preview.close}
+          onNavigate={preview.navigate}
           renderPreview={renderPreview}
           imageDesc={imageDesc}
           totalCount={items.length}

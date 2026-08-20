@@ -9,7 +9,7 @@ import {
   AutocompleteInput,
   AutocompleteItem,
   AutocompleteList,
-} from "@/components/ui/Autocomplete";
+} from "@/components/ui/autocomplete";
 import { cn } from "@/lib/utils";
 
 interface SearchBarProps<T extends { name: string }> {
@@ -36,7 +36,12 @@ export function SearchBar<T extends { name: string }>({
   itemToStringValue,
 }: SearchBarProps<T>) {
   return (
-    <div className={cn("relative w-full", className)}>
+    <div
+      className={cn(
+        "relative w-full bg-zinc-50 dark:bg-background border border-zinc-200 dark:border-border rounded-lg flex items-center shadow-sm text-zinc-400 select-none transition-all focus-within:border-zinc-400 dark:focus-within:border-zinc-500",
+        className,
+      )}
+    >
       <Autocomplete
         value={value}
         onValueChange={onChange}
@@ -49,7 +54,7 @@ export function SearchBar<T extends { name: string }>({
             placeholder={placeholder}
             showClear
             className={cn(
-              "w-full bg-transparent border-none pl-9 pr-4 py-2 text-sm outline-none transition focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
+              "w-full bg-transparent border-none pl-9 pr-4 py-2 text-sm outline-none transition focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50 text-zinc-800 dark:text-zinc-100 placeholder-zinc-400",
               inputClassName,
             )}
           />

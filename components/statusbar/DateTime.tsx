@@ -1,16 +1,18 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Calendar } from "../ui/Calendar";
-import { Button } from "../ui/Button";
+import { Calendar } from "../ui/calendar";
+import { Button } from "../ui/button";
 
 export function DateTime() {
   const [time, setTime] = useState("");
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>();
 
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setDate(new Date());
+
     const updateClock = () => {
       const now = new Date();
       setTime(

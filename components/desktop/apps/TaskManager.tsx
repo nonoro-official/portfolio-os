@@ -3,27 +3,20 @@ import { Menu, Wrench, History, ContactRound } from "lucide-react";
 import { useWindow } from "@/hooks/useWindow";
 import { skills, history, contacts } from "@/config/nonoro";
 import { WindowSidebar } from "@/components/ui/custom/WindowSidebar";
+import { InfoGrid, InfoCard } from "@/components/ui/custom/InfoCard";
 
 function SkillsView() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <InfoGrid>
       {skills.map((skill) => (
-        <div
+        <InfoCard
           key={skill.name}
-          className="flex gap-3 p-4 bg-card rounded-md border border-border"
-        >
-          <div className="p-2 bg-accent text-accent-foreground rounded-sm h-fit shrink-0 [&>svg]:size-4">
-            {skill.icon}
-          </div>
-          <div>
-            <h3 className="text-sm font-semibold">{skill.name}</h3>
-            <p className="text-xs text-muted-foreground mt-1 font-mono">
-              {skill.stack}
-            </p>
-          </div>
-        </div>
+          title={skill.name}
+          icon={skill.icon}
+          description={skill.stack}
+        />
       ))}
-    </div>
+    </InfoGrid>
   );
 }
 
@@ -77,30 +70,16 @@ function HistoryView() {
 
 function ContactsView() {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <InfoGrid>
       {contacts.map((contact) => (
-        <div
+        <InfoCard
           key={contact.name}
-          className="flex gap-3 p-4 bg-card rounded-md border border-border"
-        >
-          <div className="flex items-center justify-center size-7 shrink-0 bg-accent text-accent-foreground rounded-sm [&>svg]:size-5">
-            {contact.icon}
-          </div>
-          <div>
-            <h3 className="justify-center text-md font-semibold">
-              <a
-                href={contact.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={contact.name}
-              >
-                {contact.name}
-              </a>
-            </h3>
-          </div>
-        </div>
+          title={contact.name}
+          icon={contact.icon}
+          link={contact.link}
+        />
       ))}
-    </div>
+    </InfoGrid>
   );
 }
 

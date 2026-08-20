@@ -7,11 +7,13 @@ import {
 import { useDesktopContext } from "@/context/DesktopContext";
 import { DraggableDesktopItem } from "@/components/desktop/draggables/DraggableDesktopItem";
 import { DesktopGridCell } from "@/components/desktop/grid/DesktopGridCell";
-import { STATUS_BAR_HEIGHT, DOCK_HEIGHT } from "@/types/desktop";
-
-const CELL_SIZE = 90;
-const CELL_GAP = 15;
-const PADDING = 20;
+import {
+  STATUS_BAR_HEIGHT,
+  DOCK_HEIGHT,
+  CELL_SIZE,
+  CELL_GAP,
+  PADDING,
+} from "@/constants/desktop";
 
 const DesktopGrid = () => {
   const { items, moveItem } = useDesktopContext();
@@ -63,6 +65,9 @@ const DesktopGrid = () => {
     }
   };
 
+  // Create a Map for O(1) lookups to avoid O(N*M) nested loops
+  const itemsByCell = new Map(items.map((item) => [item.gridCellId, item]));
+
   return (
     <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div
@@ -86,9 +91,8 @@ const DesktopGrid = () => {
           Array.from({ length: gridDimensions.cols }).map((_, colIndex) => {
             const cellId = `${rowIndex}-${colIndex}`;
 
-            const allocatedItem = items.find(
-              (item) => item.gridCellId === cellId,
-            );
+            // Fast O(1) lookup
+            const allocatedItem = itemsByCell.get(cellId);
 
             return (
               <DesktopGridCell
