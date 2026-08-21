@@ -14,14 +14,14 @@ const MobileNav = ({
   onHome: () => void;
 }) => {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-center gap-4 px-4 pb-4 pt-3 pointer-events-none">
-      <div className="pointer-events-auto flex items-center gap-3 rounded-full border border-white/10 bg-black/35 px-4 py-3 backdrop-blur-xl shadow-lg">
+    <div className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-center pt-3 w-full max-w-full pointer-events-none">
+      <div className="pointer-events-auto flex items-center justify-center gap-20 w-full bg-sidebar text-sidebar-foreground border border-sidebar-border px-4">
         <Button
           type="button"
           variant="ghost"
           size="icon"
           onClick={onBack}
-          className="rounded-full text-white hover:bg-white/10"
+          className="rounded-full text-foreground"
           aria-label="Back"
         >
           <ArrowLeft className="size-5" />
@@ -30,9 +30,9 @@ const MobileNav = ({
           type="button"
           variant="ghost"
           size="icon"
-          onClick={onWindow}
-          className="rounded-full text-white hover:bg-white/10"
-          aria-label="Window"
+          onClick={onHome}
+          className="rounded-full text-foreground"
+          aria-label="Home"
         >
           <Square className="size-5" />
         </Button>
@@ -40,9 +40,9 @@ const MobileNav = ({
           type="button"
           variant="ghost"
           size="icon"
-          onClick={onHome}
-          className="rounded-full text-white hover:bg-white/10"
-          aria-label="Home"
+          onClick={onWindow}
+          className="rounded-full text-foreground"
+          aria-label="Window"
         >
           <Menu className="size-5" />
         </Button>
