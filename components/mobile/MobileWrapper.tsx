@@ -6,6 +6,7 @@ import DesktopGrid from "@/components/desktop/grid/DesktopGrid";
 import { DraggableWindow } from "@/components/desktop/draggables/DraggableWindow";
 import type { Window } from "@/types/desktop";
 import MobileNav from "@/components/mobile/MobileNav";
+import StatusBar from "@/components/statusbar/StatusBar";
 
 interface MobileWrapperProps {
   renderWindowContent: (windowItem: Window) => React.ReactNode;
@@ -56,6 +57,7 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-background">
+      <StatusBar />
       <DesktopGrid topOffset={0} bottomOffset={0} />
 
       {windows.map((windowItem) => (

@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Calendar } from "../ui/calendar";
-import { Button } from "../ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Button } from "@/components/ui/button";
+import { useDesktopContext } from "@/context/DesktopContext";
 
 export function DateTime() {
   const [time, setTime] = useState("");
@@ -9,6 +10,8 @@ export function DateTime() {
   const [date, setDate] = useState<Date | undefined>();
 
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const { isMobile } = useDesktopContext();
 
   useEffect(() => {
     setDate(new Date());
@@ -56,11 +59,14 @@ export function DateTime() {
         onClick={() => setIsCalendarOpen((prev) => !prev)}
         className="cursor-pointer"
       >
-        <span>
-          {date
-            ? `${date.toLocaleDateString("en-US", { month: "short" })} ${date.getDate()} ${date.toLocaleDateString("en-US", { weekday: "short" })}`
-            : "--- -- ---"}
-        </span>
+        {!isMobile && (
+          <span>
+            {date
+              ? `${date.toLocaleDateString("en-US", { month: "short" })} ${date.getDate()} ${date.toLocaleDateString("en-US", { weekday: "short" })}`
+              : "--- -- ---"}
+          </span>
+        )}
+
         <span>{time || "--:--"}</span>
       </Button>
       {isCalendarOpen && (
