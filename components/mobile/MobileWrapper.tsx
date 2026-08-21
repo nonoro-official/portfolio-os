@@ -56,22 +56,34 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
   };
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-background">
-      <StatusBar />
-      <DesktopGrid topOffset={0} bottomOffset={0} />
-
-      {windows.map((windowItem) => (
-        <DraggableWindow key={windowItem.id} windowItem={windowItem}>
-          {renderWindowContent(windowItem)}
-        </DraggableWindow>
-      ))}
-
+    <div className="flex flex-col h-full w-full overflow-hidden bg-background">
+      {/* Status Bar */}
       {activeWindow && activeWindow.state !== "minimized" && (
-        <MobileNav
-          onBack={handleBack}
-          onWindow={handleWindow}
-          onHome={handleHome}
-        />
+        <div className="relative z-10 shrink-0">
+          <StatusBar />
+        </div>
+      )}
+
+      {/* Desktop & Windows Container */}
+      <div className="relative z-0 flex-1 w-full overflow-hidden">
+        <DesktopGrid topOffset={0} bottomOffset={0} />
+
+        {windows.map((windowItem) => (
+          <DraggableWindow key={windowItem.id} windowItem={windowItem}>
+            {renderWindowContent(windowItem)}
+          </DraggableWindow>
+        ))}
+      </div>
+
+      {/* Mobile Nav */}
+      {activeWindow && activeWindow.state !== "minimized" && (
+        <div className="relative z-10 shrink-0">
+          <MobileNav
+            onBack={handleBack}
+            onWindow={handleWindow}
+            onHome={handleHome}
+          />
+        </div>
       )}
     </div>
   );
