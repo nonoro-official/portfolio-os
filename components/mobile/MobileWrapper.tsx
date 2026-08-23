@@ -7,6 +7,8 @@ import { DraggableWindow } from "@/components/desktop/draggables/DraggableWindow
 import type { Window } from "@/types/desktop";
 import MobileNav from "@/components/mobile/MobileNav";
 import StatusBar from "@/components/statusbar/StatusBar";
+import { DateTime } from "../statusbar/DateTime";
+import { ModeToggle } from "../statusbar/ModeToggle";
 
 interface MobileWrapperProps {
   renderWindowContent: (windowItem: Window) => React.ReactNode;
@@ -68,6 +70,12 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
       <div className="relative z-0 flex-1 w-full overflow-hidden">
         <DesktopGrid topOffset={0} bottomOffset={0} />
 
+        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+          <div className="grid grid-cols-2 gap-4 items-center justify-items-center pointer-events-auto">
+            <DateTime />
+            <ModeToggle />
+          </div>
+        </div>
         {windows.map((windowItem) => (
           <DraggableWindow key={windowItem.id} windowItem={windowItem}>
             {renderWindowContent(windowItem)}
