@@ -96,7 +96,7 @@ export const useDesktop = () => {
         ];
       }
 
-      const { viewport, maxWidth, maxHeight, isMobile } = getViewportConfig();
+      const { viewport, maxWidth, maxHeight } = getViewportConfig();
 
       const size = {
         width: Math.min(WINDOW_WIDTH, maxWidth),
@@ -121,7 +121,7 @@ export const useDesktop = () => {
           position: clampedPosition,
           size,
           zIndex: nextZIndex,
-          state: isMobile ? "maximized" : "normal",
+          state: "normal",
           url: item.link,
         },
       ];
@@ -237,7 +237,7 @@ export const useDesktop = () => {
       setWindows((prev) => {
         if (prev.length === 0) return prev;
 
-        const { viewport, maxWidth, maxHeight, isMobile } = getViewportConfig();
+        const { viewport, maxWidth, maxHeight } = getViewportConfig();
         let hasChanges = false;
 
         const updatedWindows = prev.map((w): Window => {
@@ -248,19 +248,6 @@ export const useDesktop = () => {
             width: Math.min(WINDOW_WIDTH, maxWidth),
             height: Math.min(WINDOW_HEIGHT, maxHeight),
           };
-
-          // Mobile auto-maximize
-          if (isMobile) {
-            if (
-              w.state !== "maximized" ||
-              w.size.width !== targetSize.width ||
-              w.size.height !== targetSize.height
-            ) {
-              hasChanges = true;
-              return { ...w, state: "maximized", size: targetSize };
-            }
-            return w;
-          }
 
           const newPos = clampWindowPosition(w.position, targetSize, viewport);
 
