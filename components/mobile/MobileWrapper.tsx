@@ -67,15 +67,18 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
       )}
 
       {/* Desktop & Windows Container */}
-      <div className="relative z-0 flex-1 w-full overflow-hidden">
+      <div className="relative z-0 flex flex-col flex-1 w-full overflow-hidden">
         <DesktopGrid topOffset={0} bottomOffset={0} />
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-          <div className="grid grid-cols-2 gap-4 items-center justify-items-center pointer-events-auto">
-            <DateTime />
-            <ModeToggle />
+        {(!activeWindow || activeWindow.state === "minimized") && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+            <div className="grid grid-cols-2 gap-4 items-center justify-items-center pointer-events-auto">
+              <DateTime />
+              <ModeToggle />
+            </div>
           </div>
-        </div>
+        )}
+
         {windows.map((windowItem) => (
           <DraggableWindow key={windowItem.id} windowItem={windowItem}>
             {renderWindowContent(windowItem)}
