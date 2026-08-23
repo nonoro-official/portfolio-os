@@ -15,7 +15,10 @@ export interface DesktopContextValue {
   toggleMaximizeWindow: (windowId: string) => void;
   focusWindow: (windowId: string, title: string) => void;
   moveWindow: (windowId: string, position: { x: number; y: number }) => void;
-  moveItem: (itemId: string, gridCell: { id: string }) => void;
+  moveItem: (
+    itemId: string,
+    gridCell: { id: string; mobileId: string },
+  ) => void;
 }
 
 const MAX_ROWS_PER_COLUMN = 8;
@@ -33,7 +36,10 @@ export const useDesktop = () => {
 
       return {
         ...item,
-        gridCellId: `${rowIndex}-${colIndex}`,
+        gridCellId: {
+          id: `${rowIndex}-${colIndex}`,
+          mobileId: `${rowIndex}-${colIndex}`,
+        },
       };
     });
   };
@@ -194,11 +200,26 @@ export const useDesktop = () => {
     );
   };
 
-  const moveItem = (itemId: string, gridCell: { id: string }) => {
-    // This function would update the position of the desktop item in the grid
+  // Update position of item in the grid when dragged to a new cell
+  const moveItem = (
+    itemId: string,
+    gridCell: { id: string; mobileId: string },
+  ) => {
+    const activeCellKey = isMobile ? "mobileId" : "id";
+
     setItems((prev) =>
       prev.map((item) =>
-        item.id === itemId ? { ...item, gridCellId: gridCell.id } : item,
+        item.id === itemId
+          ? {
+              ...item,
+              gridCellId: item.gridCellId
+                ? {
+                    ...item.gridCellId,
+                    [activeCellKey]: gridCell[activeCellKey],
+                  }
+                : gridCell,
+            }
+          : item,
       ),
     );
   };

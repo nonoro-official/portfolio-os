@@ -24,7 +24,7 @@ const DesktopGrid = ({
   topOffset = STATUS_BAR_HEIGHT,
   bottomOffset = DOCK_HEIGHT,
 }: DesktopGridProps) => {
-  const { items, moveItem } = useDesktopContext();
+  const { items, moveItem, isMobile } = useDesktopContext();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [gridDimensions, setGridDimensions] = useState({ rows: 0, cols: 0 });
 
@@ -69,12 +69,20 @@ const DesktopGrid = ({
       typeof targetCellId === "string" &&
       targetCellId.includes("-")
     ) {
-      moveItem(String(draggedItemId), { id: targetCellId });
+      moveItem(String(draggedItemId), {
+        id: targetCellId,
+        mobileId: targetCellId,
+      });
     }
   };
 
   // Create a Map for O(1) lookups to avoid O(N*M) nested loops
-  const itemsByCell = new Map(items.map((item) => [item.gridCellId, item]));
+  const itemsByCell = new Map(
+    items.map((item) => [
+      isMobile ? item.gridCellId?.mobileId : item.gridCellId?.id,
+      item,
+    ]),
+  );
 
   return (
     <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>

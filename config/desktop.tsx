@@ -8,7 +8,7 @@ export const initialItems: Item[] = [
     type: "app",
     parentId: null,
     path: "/desktop/Apps",
-    gridCellId: "0-0",
+    gridCellId: { id: "0-0", mobileId: "5-0" },
   },
   {
     icon: "🌐",
@@ -18,7 +18,7 @@ export const initialItems: Item[] = [
     parentId: null,
     path: "/desktop/Web",
     link: "",
-    gridCellId: "1-0",
+    gridCellId: { id: "1-0", mobileId: "5-1" },
   },
   {
     icon: "🎮",
@@ -28,7 +28,7 @@ export const initialItems: Item[] = [
     parentId: null,
     path: "/desktop/Games",
     link: "",
-    gridCellId: "2-0",
+    gridCellId: { id: "2-0", mobileId: "5-2" },
   },
   // {
   //   icon: "🖥️",
@@ -38,7 +38,7 @@ export const initialItems: Item[] = [
   //   parentId: null,
   //   path: "/desktop/CLI_Tools.sh",
   //   link: "",
-  //   gridCellId: "3-0",
+  //   gridCellId: { id: "3-0", mobileId: "5-3" },
   // },
   {
     icon: "ℹ️",
@@ -47,7 +47,7 @@ export const initialItems: Item[] = [
     type: "app",
     parentId: null,
     path: "/desktop/About",
-    gridCellId: "0-1",
+    gridCellId: { id: "0-1", mobileId: "6-0" },
   },
   {
     icon: "💻",
@@ -56,7 +56,7 @@ export const initialItems: Item[] = [
     type: "app",
     parentId: null,
     path: "/desktop/Profile",
-    gridCellId: "1-1",
+    gridCellId: { id: "1-1", mobileId: "6-1" },
   },
   // {
   //   icon: "🖼️",
@@ -75,6 +75,6 @@ export const initialItems: Item[] = [
     parentId: null,
     path: "/desktop/Resume.pdf",
     link: "/resume.pdf",
-    gridCellId: "0-2",
+    gridCellId: { id: "0-2", mobileId: "5-3" },
   },
 ];
