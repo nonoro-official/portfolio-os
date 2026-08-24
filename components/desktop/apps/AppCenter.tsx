@@ -134,7 +134,7 @@ const AppCenter = () => {
                           alt={`${app.name} icon`}
                           width={80}
                           height={80}
-                          className="object-contain"
+                          className="object-contain w-auto h-auto"
                         />
                       </div>
                     )}
