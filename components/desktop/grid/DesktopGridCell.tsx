@@ -6,12 +6,14 @@ interface DesktopGridCellProps {
   id: string;
   children?: React.ReactNode;
   isDraggingItem?: boolean;
+  size?: number;
 }
 
 export const DesktopGridCell: React.FC<DesktopGridCellProps> = ({
   id,
   children,
   isDraggingItem,
+  size = CELL_SIZE,
 }) => {
   const { ref, isDropTarget } = useDroppable({ id });
 
@@ -24,7 +26,7 @@ export const DesktopGridCell: React.FC<DesktopGridCellProps> = ({
   return (
     <div
       ref={ref}
-      style={{ width: `${CELL_SIZE}px`, height: `${CELL_SIZE}px` }}
+      style={{ width: `${size}px`, height: `${size}px` }}
       className={`rounded-lg flex items-center justify-center transition-all duration-150 ${
         !isInteractive
           ? "pointer-events-none bg-transparent"

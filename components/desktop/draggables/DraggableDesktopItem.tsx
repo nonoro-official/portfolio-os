@@ -18,7 +18,7 @@ export const DraggableDesktopItem: React.FC<DraggableDesktopItemProps> = ({
     <div
       ref={ref}
       onDoubleClick={handleOpenItem}
-      className="flex flex-col items-center justify-center w-20 text-center cursor-grab select-none active:cursor-grabbing"
+      className="flex flex-col items-center justify-center w-full max-w-full text-center cursor-grab select-none active:cursor-grabbing p-1"
     >
       {/* Icon Display */}
       <div className="text-[36px] mb-1 drop-shadow-md">{item.icon}</div>

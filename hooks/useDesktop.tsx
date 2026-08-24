@@ -22,23 +22,27 @@ export interface DesktopContextValue {
 }
 
 const MAX_ROWS_PER_COLUMN = 8;
+const MOBILE_COLS_PER_ROW = 4;
 
 export const useDesktop = () => {
   // Assign grid cells to items that don't have one
   const initializeItems = (items: Item[]) => {
     return items.map((item, index) => {
-      // Keep row-col assignment if gridCellId already exists
       if (item.gridCellId) return item;
 
-      // Standard column-major fallback layout calculation:
-      const rowIndex = index % MAX_ROWS_PER_COLUMN;
-      const colIndex = Math.floor(index / MAX_ROWS_PER_COLUMN);
+      // DESKTOP: Column-major (fills vertical column, then starts next column)
+      const desktopRowIndex = index % MAX_ROWS_PER_COLUMN;
+      const desktopColIndex = Math.floor(index / MAX_ROWS_PER_COLUMN);
+
+      // MOBILE: Row-major (fills 4 per row, left to right, then goes down a row)
+      const mobileRowIndex = Math.floor(index / MOBILE_COLS_PER_ROW);
+      const mobileColIndex = index % MOBILE_COLS_PER_ROW;
 
       return {
         ...item,
         gridCellId: {
-          id: `${rowIndex}-${colIndex}`,
-          mobileId: `${rowIndex}-${colIndex}`,
+          id: `${desktopRowIndex}-${desktopColIndex}`,
+          mobileId: `${mobileRowIndex}-${mobileColIndex}`,
         },
       };
     });

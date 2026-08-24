@@ -19,12 +19,6 @@ export const initialItems: Item[] = [
     name: "Games",
     gridCellId: { id: "2-0", mobileId: "5-2" },
   },
-  // {
-  //   icon: "🖥️",
-  //   id: "tools",
-  //   name: "CLI_Tools",
-  //   gridCellId: { id: "3-0", mobileId: "5-3" },
-  // },
   {
     icon: "ℹ️",
     id: "about",
@@ -55,16 +49,10 @@ export const initialItems: Item[] = [
     name: "Contacts",
     gridCellId: { mobileId: "6-3" },
   },
-  // {
-  //   icon: "🖼️",
-  //   id: "gallery",
-  //   name: "Gallery",
-  //   gridCellId: "2-1",
-  // },
   {
     icon: "📄",
     id: "resume",
-    name: "Resume.pdf",
+    name: "Resume",
     link: "/resume.pdf",
     gridCellId: { id: "0-2", mobileId: "5-3" },
   },
