@@ -9,6 +9,7 @@ import MobileNav from "@/components/mobile/MobileNav";
 import StatusBar from "@/components/statusbar/StatusBar";
 import { DateTime } from "../statusbar/DateTime";
 import { ModeToggle } from "../statusbar/ModeToggle";
+import TypewriterEffect from "../effects/TypewriterEffect";
 
 interface MobileWrapperProps {
   renderWindowContent: (windowItem: Window) => React.ReactNode;
@@ -24,6 +25,9 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
     toggleMinimizeWindow,
     focusWindow,
   } = useDesktopContext();
+
+  const bgText =
+    "Hello! I'm Noah. Always learning and creating. I hope you enjoy your stay!";
 
   const activeWindow = focusedWindow;
 
@@ -71,11 +75,19 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
         <DesktopGrid topOffset={0} bottomOffset={0} />
 
         {(!activeWindow || activeWindow.state === "minimized") && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+          <div className="absolute inset-0 z-10 items-center justify-center mt-5 pointer-events-none">
             <div className="grid grid-cols-2 gap-4 items-center justify-items-center pointer-events-auto">
               <DateTime />
               <ModeToggle />
             </div>
+
+            <TypewriterEffect
+              text={bgText}
+              delay={50}
+              showCursor={false}
+              enableLoop={true}
+              className="top-1/2 max-w-xl text-left p-5 font-bold font-mono text-4xl text-primary/50 pointer-events-none select-none z-0 tracking-tight whitespace-pre-line"
+            />
           </div>
         )}
 
