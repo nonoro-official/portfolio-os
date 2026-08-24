@@ -13,6 +13,7 @@ import AppCenter from "@/components/desktop/apps/AppCenter";
 import About from "@/components/desktop/apps/About";
 import TaskManager from "@/components/desktop/apps/TaskManager";
 import Reader from "@/components/desktop/apps/Reader";
+import Settings from "@/components/mobile/apps/Settings";
 import TypewriterEffect from "@/components/effects/TypewriterEffect";
 import MobileWrapper from "@/components/mobile/MobileWrapper";
 
@@ -35,6 +36,12 @@ const DesktopWrapper: React.FC = () => {
         return <TaskManager />;
       case "resume":
         return <Reader />;
+      case "skills":
+        return <Settings />;
+      case "history":
+        return <Settings />;
+      case "contacts":
+        return <Settings />;
       default:
         return (
           <div className="p-4 font-mono text-xs text-zinc-500">
