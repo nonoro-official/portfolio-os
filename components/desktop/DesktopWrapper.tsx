@@ -14,6 +14,8 @@ import About from "@/components/desktop/apps/About";
 import TaskManager from "@/components/desktop/apps/TaskManager";
 import Reader from "@/components/desktop/apps/Reader";
 import Settings from "@/components/mobile/apps/Settings";
+import Clock from "@/components/mobile/apps/Clock";
+import Contacts from "@/components/mobile/apps/Contacts";
 import TypewriterEffect from "@/components/effects/TypewriterEffect";
 import MobileWrapper from "@/components/mobile/MobileWrapper";
 
@@ -39,9 +41,9 @@ const DesktopWrapper: React.FC = () => {
       case "skills":
         return <Settings />;
       case "history":
-        return <Settings />;
+        return <Clock />;
       case "contacts":
-        return <Settings />;
+        return <Contacts />;
       default:
         return (
           <div className="p-4 font-mono text-xs text-zinc-500">
