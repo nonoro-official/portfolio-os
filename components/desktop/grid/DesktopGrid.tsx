@@ -116,7 +116,7 @@ const DesktopGrid = ({
             : `repeat(${gridDimensions.cols}, ${dynamicSizes.size}px)`,
           gap: `${dynamicSizes.gap}px`,
           padding: `${PADDING}px`,
-          justifyContent: "center",
+          justifyContent: isMobile ? "space-between" : "start",
           justifyItems: "center",
           alignItems: "center",
           boxSizing: "border-box",
