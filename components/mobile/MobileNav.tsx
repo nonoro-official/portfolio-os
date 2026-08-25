@@ -14,7 +14,7 @@ const MobileNav = ({
   onHome: () => void;
 }) => {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 flex items-center justify-center pt-3 w-full max-w-full pointer-events-none">
+    <div className="relative inset-x-0 bottom-0 z-50 flex items-center justify-center w-full max-w-full pointer-events-none">
       <div className="pointer-events-auto flex items-center justify-center gap-20 w-full bg-sidebar text-sidebar-foreground border border-sidebar-border px-4">
         <Button
           type="button"
