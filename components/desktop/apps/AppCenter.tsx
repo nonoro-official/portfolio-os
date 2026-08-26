@@ -122,13 +122,13 @@ const AppCenter = () => {
                   onClick={() => navigateTo(app.url)}
                 >
                   {/* App Details Sidebar (Centered & Color-Matched) */}
-                  <div className="flex flex-col justify-center items-center text-center w-full md:w-52 h-auto md:h-full bg-sidebar border-t md:border-t-0 md:border-r border-zinc-800/50 text-sm text-foreground p-4 md:p-5 shrink-0 z-10">
+                  <div className="flex flex-row md:flex-col items-center md:items-start text-left md:text-center w-full md:w-52 h-auto md:h-full bg-sidebar border-t md:border-t-0 md:border-r border-zinc-800/50 text-sm text-foreground p-4 md:p-5 shrink-0 z-10 gap-3 md:gap-0">
                     {app.logo.type === "emoji" ? (
-                      <span className="text-4xl md:text-6xl leading-none mb-2 md:mb-3 selection:bg-transparent">
+                      <span className="text-4xl md:text-6xl leading-none md:mb-3 selection:bg-transparent shrink-0">
                         {app.logo.value}
                       </span>
                     ) : (
-                      <div className="mb-2 md:mb-3">
+                      <div className="shrink-0 md:mb-3">
                         <Image
                           src={app.logo.value}
                           alt={`${app.name} icon`}
@@ -138,12 +138,14 @@ const AppCenter = () => {
                         />
                       </div>
                     )}
-                    <h3 className="font-bold text-base text-foreground group-hover:text-amber-500 transition-colors">
-                      {app.name}
-                    </h3>
-                    <p className="mt-1 md:mt-2 text-xs text-zinc-500 line-clamp-2 md:line-clamp-4 leading-relaxed">
-                      {app.desc}
-                    </p>
+                    <div className="flex flex-col flex-1 md:flex-none">
+                      <h3 className="font-bold text-base text-foreground group-hover:text-amber-500 transition-colors">
+                        {app.name}
+                      </h3>
+                      <p className="mt-1 md:mt-2 text-xs text-zinc-500 line-clamp-2 md:line-clamp-4 leading-relaxed">
+                        {app.desc}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Image Container */}
