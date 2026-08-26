@@ -132,11 +132,11 @@ const GameStore = () => {
                 hasCounter
                 renderItem={(game, index) => (
                   <div
-                    className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
+                    className="relative flex flex-col md:flex-row h-auto md:h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
                     onClick={() => navigateTo(game.url)}
                   >
                     {/* Image Container */}
-                    <div className="relative flex-1 h-full bg-zinc-950">
+                    <div className="relative w-full h-48 md:h-full md:flex-1 bg-zinc-950">
                       <Image
                         src={game.featuredImage || "/images/default.png"}
                         alt={game.name}
@@ -147,12 +147,12 @@ const GameStore = () => {
                       />
                     </div>
 
-                    {/* Game Details Sidebar */}
-                    <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 dark:bg-zinc-50 dark:border-zinc-400 text-sm text-zinc-200 dark:text-zinc-800 p-4 shrink-0">
+                    {/* Details Bar */}
+                    <div className="flex flex-col justify-center w-full md:w-50 h-auto md:h-full bg-zinc-900 border-t md:border-t-0 md:border-l border-zinc-800 dark:bg-zinc-50 dark:border-zinc-400 text-sm text-zinc-200 dark:text-zinc-800 p-4 shrink-0">
                       <h3 className="font-bold text-base text-zinc-50 dark:text-zinc-800 group-hover:text-amber-500 transition-colors">
                         {game.name}
                       </h3>
-                      <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-600 dark:line-clamp-4 leading-relaxed">
+                      <p className="mt-2 md:mt-3 text-xs text-zinc-400 dark:text-zinc-600 line-clamp-2 md:line-clamp-4 leading-relaxed">
                         {game.desc}
                       </p>
                     </div>

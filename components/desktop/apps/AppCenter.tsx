@@ -118,36 +118,36 @@ const AppCenter = () => {
               enableImagePreview={false}
               renderItem={(app) => (
                 <div
-                  className="relative flex h-80 w-full bg-zinc-950 border dark:border-foreground rounded-xl overflow-hidden cursor-pointer group"
+                  className="relative flex flex-col-reverse md:flex-row h-auto md:h-80 w-full bg-zinc-950 border dark:border-foreground rounded-xl overflow-hidden cursor-pointer group"
                   onClick={() => navigateTo(app.url)}
                 >
                   {/* App Details Sidebar (Centered & Color-Matched) */}
-                  <div className="flex flex-col justify-center items-center text-center h-full w-52 bg-sidebar border-r border-zinc-800/50 text-sm text-foreground p-5 shrink-0 z-10">
+                  <div className="flex flex-col justify-center items-center text-center w-full md:w-52 h-auto md:h-full bg-sidebar border-t md:border-t-0 md:border-r border-zinc-800/50 text-sm text-foreground p-4 md:p-5 shrink-0 z-10">
                     {app.logo.type === "emoji" ? (
-                      <span className="text-6xl leading-none mb-3 selection:bg-transparent">
+                      <span className="text-4xl md:text-6xl leading-none mb-2 md:mb-3 selection:bg-transparent">
                         {app.logo.value}
                       </span>
                     ) : (
-                      <div className="mb-3">
+                      <div className="mb-2 md:mb-3">
                         <Image
                           src={app.logo.value}
                           alt={`${app.name} icon`}
                           width={80}
                           height={80}
-                          className="object-contain w-auto h-auto"
+                          className="object-contain w-12 h-12 md:w-auto md:h-auto"
                         />
                       </div>
                     )}
                     <h3 className="font-bold text-base text-foreground group-hover:text-amber-500 transition-colors">
                       {app.name}
                     </h3>
-                    <p className="mt-2 text-xs text-zinc-500 line-clamp-4 leading-relaxed">
+                    <p className="mt-1 md:mt-2 text-xs text-zinc-500 line-clamp-2 md:line-clamp-4 leading-relaxed">
                       {app.desc}
                     </p>
                   </div>
 
                   {/* Image Container */}
-                  <div className="relative flex-1 h-full bg-zinc-950">
+                  <div className="relative w-full h-48 md:h-full md:flex-1 bg-zinc-950">
                     <Image
                       src={app.featuredImage || "/images/default.png"}
                       alt={app.name}
@@ -388,7 +388,6 @@ const AppCenter = () => {
                           muted
                           playsInline
                           loop
-                          preload="none"
                           autoPlay
                           onClick={(e) => {
                             e.stopPropagation();
@@ -412,7 +411,6 @@ const AppCenter = () => {
                       src={media.src}
                       controls
                       autoPlay
-                      preload="none"
                       className="h-full w-full object-contain"
                     />
                   )
