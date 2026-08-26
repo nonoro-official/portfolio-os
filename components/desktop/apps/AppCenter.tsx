@@ -16,6 +16,7 @@ import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
 import { FilterMenu } from "@/components/ui/custom/FilterMenu";
 import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 import { AppShell } from "@/components/ui/custom/AppShell";
+import { useDesktopContext } from "@/context/DesktopContext";
 
 const AppCenter = () => {
   const { currentUrl, viewMode, navigateTo, goHome } = useWindow();
@@ -40,28 +41,13 @@ const AppCenter = () => {
   const featuredApp = app.filter((app) => app.isFeatured === true);
   const activeApp = app.find((app) => app.url === currentUrl);
 
+  const { isMobile } = useDesktopContext();
+
   return (
     <AppShell
-      subBar={
-        <div className="flex items-center justify-between w-full gap-2">
-          {/* Title */}
-          <div className="flex-1 flex justify-start">
-            <Button
-              variant="link"
-              onClick={() => {
-                goHome();
-                resetFilters();
-              }}
-              className="p-1 hover:bg-zinc-200/50 rounded transition"
-            >
-              <p className="text-2xl font-bold bg-clip-text text-amber-600 select-none shrink-0 py-1 cursor-pointer">
-                AppHub
-              </p>
-            </Button>
-          </div>
-
-          {/* Search Bar */}
-          <div className="flex-2 flex justify-center max-w-xl w-full mx-4">
+      toolbar={
+        isMobile && (
+          <div className="flex-2 flex justify-center max-w-xl w-full">
             <SearchBar
               value={search.query}
               onChange={search.setQuery}
@@ -71,9 +57,50 @@ const AppCenter = () => {
               itemToStringValue={(item) => item.name}
             />
           </div>
+        )
+      }
+      subBar={
+        <div className="flex items-center justify-between w-full gap-2">
+          {/* Title */}
+          {!isMobile && (
+            <div className="flex-1 flex justify-start">
+              <Button
+                variant="link"
+                onClick={() => {
+                  goHome();
+                  resetFilters();
+                }}
+                className="p-1 hover:bg-zinc-200/50 rounded transition"
+              >
+                <p className="text-2xl font-bold bg-clip-text text-amber-600 select-none shrink-0 py-1 cursor-pointer">
+                  AppHub
+                </p>
+              </Button>
+            </div>
+          )}
+
+          {/* Search Bar */}
+          {!isMobile && (
+            <div className="flex-2 flex justify-center max-w-xl w-full mx-4">
+              <SearchBar
+                value={search.query}
+                onChange={search.setQuery}
+                items={app}
+                placeholder="Search the store..."
+                onSelect={(app) => navigateTo(app.url)}
+                itemToStringValue={(item) => item.name}
+              />
+            </div>
+          )}
 
           {/* Nav Menu */}
-          <div className="flex-1 flex justify-end items-center gap-3">
+          <div
+            className={
+              isMobile
+                ? "w-full flex justify-center items-center gap-3 overflow-x-auto no-scrollbar"
+                : "flex-1 flex justify-end items-center gap-3"
+            }
+          >
             <FilterMenu
               label="OS"
               options={os}

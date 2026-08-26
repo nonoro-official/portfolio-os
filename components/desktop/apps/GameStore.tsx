@@ -14,6 +14,7 @@ import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 import { AppShell } from "@/components/ui/custom/AppShell";
 import { Toolbar } from "@/components/ui/custom/Toolbar";
+import { useDesktopContext } from "@/context/DesktopContext";
 
 const GameStore = () => {
   const { currentUrl, viewMode, navigateTo, goHome, refreshPage } = useWindow();
@@ -44,10 +45,12 @@ const GameStore = () => {
 
   const preview = usePreviewNav(store.filtered.length);
 
+  const { isMobile } = useDesktopContext();
+
   return (
     <AppShell
       toolbar={
-        <>
+        !isMobile ? (
           <Toolbar
             canGoBack={viewMode !== "homepage"}
             showHome={false}
@@ -62,18 +65,28 @@ const GameStore = () => {
               Vapor
             </p>
           </Toolbar>
-        </>
+        ) : (
+          <SearchBar
+            value={search.query}
+            onChange={search.setQuery}
+            items={games}
+            placeholder="Search the store..."
+            onSelect={(game) => navigateTo(game.url)}
+            className="w-full"
+            itemToStringValue={(item) => item.name}
+          />
+        )
       }
       subBar={
-        <>
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center justify-between gap-3 w-full">
+          <div className="flex items-center justify-center md:justify-start gap-1.5 w-full md:w-auto shrink-0 overflow-x-auto no-scrollbar">
             <Button
               variant="link"
               onClick={() => {
                 goHome();
                 resetFilters();
               }}
-              className="p-1 hover:bg-zinc-200/50 rounded transition"
+              className="p-1 hover:bg-zinc-200/50 rounded transition text-sm shrink-0"
             >
               Browse
             </Button>
@@ -102,18 +115,18 @@ const GameStore = () => {
               }
             />
           </div>
-
-          {/* Search Bar */}
-          <SearchBar
-            value={search.query}
-            onChange={search.setQuery}
-            items={games}
-            placeholder="Search the store..."
-            onSelect={(game) => navigateTo(game.url)}
-            className="flex-1 mr-4"
-            itemToStringValue={(item) => item.name}
-          />
-        </>
+          {!isMobile && (
+            <SearchBar
+              value={search.query}
+              onChange={search.setQuery}
+              items={games}
+              placeholder="Search the store..."
+              onSelect={(game) => navigateTo(game.url)}
+              className="flex-1 w-full"
+              itemToStringValue={(item) => item.name}
+            />
+          )}
+        </div>
       }
     >
       {viewMode === "homepage" || !activeGame ? (

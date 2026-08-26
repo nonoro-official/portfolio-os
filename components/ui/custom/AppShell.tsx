@@ -10,7 +10,7 @@ export function AppShell({ toolbar, subBar, children }: AppShellProps) {
   return (
     <div className="w-full h-full flex flex-col bg-[#FDFBF7] text-zinc-800 font-sans select-text">
       {toolbar && (
-        <div className="flex items-center gap-3 px-4 py-1 bg-[#FDFBF7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
+        <div className="flex items-center gap-3 px-4 py-1.5 bg-[#ecebe7] md:bg-[#FDFBF7] dark:bg-popover border-b border-zinc-200/50 dark:border-border shrink-0">
           {toolbar}
         </div>
       )}
