@@ -18,8 +18,12 @@ import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 import { AppShell } from "@/components/ui/custom/AppShell";
 import { useDesktopContext } from "@/context/DesktopContext";
 
-const AppCenter = () => {
-  const { currentUrl, viewMode, navigateTo, goHome } = useWindow();
+interface AppCenterProps {
+  windowId?: string;
+}
+
+const AppCenter: React.FC<AppCenterProps> = ({ windowId }) => {
+  const { currentUrl, viewMode, navigateTo, goHome } = useWindow(windowId);
 
   const search = useSearch();
 

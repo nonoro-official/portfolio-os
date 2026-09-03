@@ -27,11 +27,11 @@ const DesktopWrapper: React.FC = () => {
   const renderItemContent = (windowItem: Window) => {
     switch (windowItem.itemId) {
       case "websites":
-        return <Browser />;
+        return <Browser windowId={windowItem.id} />;
       case "games":
-        return <GameStore />;
+        return <GameStore windowId={windowItem.id} />;
       case "apps":
-        return <AppCenter />;
+        return <AppCenter windowId={windowItem.id} />;
       case "about":
         return <About windowItem={windowItem} />;
       case "profile":

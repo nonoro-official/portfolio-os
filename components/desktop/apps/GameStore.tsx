@@ -16,8 +16,13 @@ import { AppShell } from "@/components/ui/custom/AppShell";
 import { Toolbar } from "@/components/ui/custom/Toolbar";
 import { useDesktopContext } from "@/context/DesktopContext";
 
-const GameStore = () => {
-  const { currentUrl, viewMode, navigateTo, goHome, refreshPage } = useWindow();
+interface GameStoreProps {
+  windowId?: string;
+}
+
+const GameStore: React.FC<GameStoreProps> = ({ windowId }) => {
+  const { currentUrl, viewMode, navigateTo, goHome, refreshPage } =
+    useWindow(windowId);
 
   const search = useSearch();
   const store = useStoreFilters({

@@ -23,7 +23,7 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
     focusedWindow,
     closeWindow,
     toggleMinimizeWindow,
-    focusWindow,
+    popWindowHistory,
   } = useDesktopContext();
 
   const bgText =
@@ -34,17 +34,11 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
   const handleBack = () => {
     if (!activeWindow) return;
 
-    const visibleWindows = windows
-      .filter((window) => window.state !== "minimized")
-      .sort((left, right) => (left.zIndex ?? 0) - (right.zIndex ?? 0));
-    const currentIndex = visibleWindows.findIndex(
-      (window) => window.id === activeWindow.id,
-    );
-    const previousWindow =
-      currentIndex > 0 ? visibleWindows[currentIndex - 1] : null;
+    console.log("Current history stack:", activeWindow.history);
 
-    if (previousWindow) {
-      focusWindow(previousWindow.id, previousWindow.title);
+    if (activeWindow.history && activeWindow.history.length > 1) {
+      // Go back one page inside the window
+      popWindowHistory(activeWindow.id);
       return;
     }
 

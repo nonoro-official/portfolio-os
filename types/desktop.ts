@@ -18,6 +18,7 @@ export interface Window {
   state: "normal" | "minimized" | "maximized";
   url?: string;
   content?: string;
+  history?: string[];
 }
 
 export interface Position {

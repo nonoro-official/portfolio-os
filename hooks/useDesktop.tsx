@@ -19,6 +19,8 @@ export interface DesktopContextValue {
     itemId: string,
     gridCell: { id: string; mobileId: string },
   ) => void;
+  popWindowHistory: (windowId: string) => void;
+  pushWindowHistory: (windowId: string, newUrl: string) => void;
 }
 
 const MAX_ROWS_PER_COLUMN = 8;
@@ -82,6 +84,8 @@ export const useDesktop = () => {
 
       // Otherwise, create a new window
       const nextZIndex = getNextZIndex(prev);
+      const initialUrl = item.link ?? "";
+      const initialHistory = [initialUrl];
 
       if (typeof window === "undefined") {
         // If window is not defined (e.g., during SSR), return a default position
@@ -95,7 +99,8 @@ export const useDesktop = () => {
             size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
             zIndex: nextZIndex,
             state: "normal",
-            url: item.link,
+            url: initialUrl,
+            history: initialHistory,
           },
         ];
       }
@@ -126,7 +131,8 @@ export const useDesktop = () => {
           size,
           zIndex: nextZIndex,
           state: "normal",
-          url: item.link,
+          url: initialUrl,
+          history: initialHistory,
         },
       ];
     });
@@ -301,6 +307,43 @@ export const useDesktop = () => {
     return (current.zIndex ?? 0) > (highest.zIndex ?? 0) ? current : highest;
   }, null);
 
+  const popWindowHistory = (id: string) => {
+    setWindows((prevWindows) =>
+      prevWindows.map((win) => {
+        if (win.id === id && win.history && win.history.length > 1) {
+          // Remove the last page from the history array
+          const newHistory = [...win.history];
+          newHistory.pop();
+
+          // Update the current URL/content to the new last item
+          const previousPage = newHistory[newHistory.length - 1];
+
+          return {
+            ...win,
+            history: newHistory,
+            url: previousPage,
+          };
+        }
+        return win;
+      }),
+    );
+  };
+
+  const pushWindowHistory = (id: string, newUrl: string) => {
+    setWindows((prevWindows) =>
+      prevWindows.map((win) => {
+        if (win.id === id) {
+          return {
+            ...win,
+            url: newUrl,
+            history: [...(win.history || []), newUrl],
+          };
+        }
+        return win;
+      }),
+    );
+  };
+
   const contextValue: DesktopContextValue = {
     items,
     windows,
@@ -313,6 +356,8 @@ export const useDesktop = () => {
     focusWindow,
     moveWindow,
     moveItem,
+    popWindowHistory,
+    pushWindowHistory,
   };
 
   return {
