@@ -48,7 +48,7 @@ const Dock = () => {
         }`}
     >
       {isMobile && (
-        <span className="absolute -top-0.75 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-sidebar-border border border-background shadow-sm" />
+        <span className="absolute -top-2 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-sidebar-border border border-background shadow-sm" />
       )}
 
       {/* github, linkedin, email links */}
