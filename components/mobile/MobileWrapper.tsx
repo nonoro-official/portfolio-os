@@ -10,6 +10,7 @@ import StatusBar from "@/components/statusbar/StatusBar";
 import { DateTime } from "../statusbar/DateTime";
 import { ModeToggle } from "../statusbar/ModeToggle";
 import TypewriterEffect from "../effects/TypewriterEffect";
+import Dock from "@/components/dock/Dock";
 
 interface MobileWrapperProps {
   renderWindowContent: (windowItem: Window) => React.ReactNode;
@@ -91,6 +92,12 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
           </DraggableWindow>
         ))}
       </div>
+
+      {/* Dock */}
+      <Dock />
+      <p className="absolute bottom-3 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground text-center">
+        © 2026 Noah Peñaranda
+      </p>
 
       {/* Mobile Nav */}
       {activeWindow && activeWindow.state !== "minimized" && (
