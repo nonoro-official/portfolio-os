@@ -52,8 +52,25 @@ const DesktopGrid = ({
         // Calculate maximum cell size that allows 4 columns to fit
         size = Math.floor((availableWidth - gap * (cols - 1)) / cols);
 
-        // Calculate rows based on the dynamic size
-        rows = Math.floor((availableHeight + gap) / (size + gap));
+        // Keep mobile rows tight to occupied app rows so icons can sit above the dock.
+        const mobileRowIndices = items
+          .map((item) => {
+            const mobileId = item.gridCellId?.mobileId;
+            if (!mobileId) return null;
+
+            const [rowPart] = mobileId.split("-");
+            const parsedRow = Number.parseInt(rowPart, 10);
+            return Number.isNaN(parsedRow) ? null : parsedRow;
+          })
+          .filter((row): row is number => row !== null);
+
+        if (mobileRowIndices.length > 0) {
+          const minRow = Math.min(...mobileRowIndices);
+          const maxRow = Math.max(...mobileRowIndices);
+          rows = maxRow - minRow + 1;
+        } else {
+          rows = 1;
+        }
       } else {
         // Desktop Logic
         cols = Math.floor((availableWidth + gap) / (size + gap));
@@ -67,7 +84,7 @@ const DesktopGrid = ({
     calculateGrid();
     window.addEventListener("resize", calculateGrid);
     return () => window.removeEventListener("resize", calculateGrid);
-  }, [topOffset, bottomOffset, isMobile]);
+  }, [topOffset, bottomOffset, isMobile, items]);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(String(event.operation.source?.id));
@@ -117,10 +134,11 @@ const DesktopGrid = ({
           gap: `${dynamicSizes.gap}px`,
           padding: `${PADDING}px`,
           justifyContent: isMobile ? "space-between" : "start",
+          alignContent: isMobile ? "end" : "start",
           justifyItems: "center",
           alignItems: "center",
           boxSizing: "border-box",
-          height: `calc(100vh - ${topOffset}px - ${bottomOffset}px)`,
+          height: `calc(100dvh - ${topOffset}px - ${bottomOffset}px)`,
           width: "100%",
           position: "absolute",
           top: 0,

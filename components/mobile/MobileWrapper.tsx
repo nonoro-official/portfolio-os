@@ -11,6 +11,7 @@ import { DateTime } from "../statusbar/DateTime";
 import { ModeToggle } from "../statusbar/ModeToggle";
 import TypewriterEffect from "../effects/TypewriterEffect";
 import Dock from "@/components/dock/Dock";
+import { DOCK_HEIGHT } from "@/constants/desktop";
 
 interface MobileWrapperProps {
   renderWindowContent: (windowItem: Window) => React.ReactNode;
@@ -31,6 +32,7 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
     "Hello! I'm Noah. Always learning and creating. I hope you enjoy your stay!";
 
   const activeWindow = focusedWindow;
+  const showHome = !activeWindow || activeWindow.state === "minimized";
 
   const handleBack = () => {
     if (!activeWindow) return;
@@ -67,9 +69,9 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
 
       {/* Desktop & Windows Container */}
       <div className="relative z-0 flex flex-col flex-1 w-full overflow-hidden">
-        <DesktopGrid topOffset={0} bottomOffset={0} />
+        <DesktopGrid topOffset={0} bottomOffset={showHome ? DOCK_HEIGHT : 0} />
 
-        {(!activeWindow || activeWindow.state === "minimized") && (
+        {showHome && (
           <div className="absolute inset-0 z-10 items-center justify-center mt-5 pointer-events-none">
             <div className="grid grid-cols-2 gap-4 items-center justify-items-center pointer-events-auto">
               <DateTime />
@@ -94,10 +96,14 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
       </div>
 
       {/* Dock */}
-      <Dock />
-      <p className="absolute bottom-3 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground text-center">
-        © 2026 Noah Peñaranda
-      </p>
+      {showHome && (
+        <>
+          <Dock />
+          <p className="absolute bottom-3 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground text-center">
+            © 2026 Noah Peñaranda
+          </p>
+        </>
+      )}
 
       {/* Mobile Nav */}
       {activeWindow && activeWindow.state !== "minimized" && (
