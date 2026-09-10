@@ -12,6 +12,7 @@ const Login = () => {
           fill
           className="object-cover"
           sizes="128px"
+          loading="eager"
         />
       </div>
       <div className="w-full max-w-xs mt-4">
