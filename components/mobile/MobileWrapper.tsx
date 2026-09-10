@@ -96,14 +96,7 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
       </div>
 
       {/* Dock */}
-      {showHome && (
-        <>
-          <Dock />
-          <p className="absolute bottom-3 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground text-center">
-            © 2026 Noah Peñaranda
-          </p>
-        </>
-      )}
+      {showHome && <Dock />}
 
       {/* Mobile Nav */}
       {activeWindow && activeWindow.state !== "minimized" && (

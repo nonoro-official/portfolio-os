@@ -83,9 +83,6 @@ const DesktopWrapper: React.FC = () => {
             />
 
             <Dock />
-            <p className="absolute bottom-1.5 left-1/2 transform -translate-x-1/2 text-xs text-muted-foreground text-center">
-              © 2026 Noah Peñaranda
-            </p>
           </div>
         )}
       </div>
