@@ -274,7 +274,7 @@ const GameStore: React.FC<GameStoreProps> = ({ windowId }) => {
                           src={mediaItem.src}
                           controls
                           playsInline
-                          preload="metadata"
+                          // preload="metadata"
                           className="h-full w-full max-w-full max-h-full object-contain"
                         />
                       </div>
@@ -300,7 +300,7 @@ const GameStore: React.FC<GameStoreProps> = ({ windowId }) => {
                         autoPlay
                         loop
                         playsInline
-                        preload="none"
+                        // preload="none"
                         className="w-full h-full object-cover"
                       />
                     ) : (

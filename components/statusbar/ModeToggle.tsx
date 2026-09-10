@@ -29,7 +29,7 @@ export function ModeToggle() {
       size={isUnfocusedMobile ? "default" : "icon"}
       onClick={toggleTheme}
       aria-label="Toggle theme"
-      className={`relative flex items-center justify-center cursor-pointer ${
+      className={`relative flex items-center justify-end cursor-pointer ${
         isUnfocusedMobile ? "h-auto p-3" : ""
       }`}
     >
