@@ -1,14 +1,11 @@
 export interface Item {
   id: string;
   name: string;
-  type: "file" | "folder" | "app";
-  parentId: string | null;
   content?: Item[];
   icon?: string;
   link?: string;
-  path: string;
   position?: Position;
-  gridCellId?: string;
+  gridCellId: { id?: string; mobileId?: string };
 }
 
 export interface Window {
@@ -21,6 +18,7 @@ export interface Window {
   state: "normal" | "minimized" | "maximized";
   url?: string;
   content?: string;
+  history?: string[];
 }
 
 export interface Position {

@@ -8,31 +8,44 @@ export interface DesktopContextValue {
   items: Item[];
   windows: Window[];
   focusedWindow: Window | null;
+  isMobile: boolean;
   openWindow: (item: Item) => void;
   closeWindow: (windowId: string) => void;
   toggleMinimizeWindow: (windowId: string) => void;
   toggleMaximizeWindow: (windowId: string) => void;
   focusWindow: (windowId: string, title: string) => void;
   moveWindow: (windowId: string, position: { x: number; y: number }) => void;
-  moveItem: (itemId: string, gridCell: { id: string }) => void;
+  moveItem: (
+    itemId: string,
+    gridCell: { id: string; mobileId: string },
+  ) => void;
+  popWindowHistory: (windowId: string) => void;
+  pushWindowHistory: (windowId: string, newUrl: string) => void;
 }
 
 const MAX_ROWS_PER_COLUMN = 8;
+const MOBILE_COLS_PER_ROW = 4;
 
 export const useDesktop = () => {
   // Assign grid cells to items that don't have one
   const initializeItems = (items: Item[]) => {
     return items.map((item, index) => {
-      // Keep row-col assignment if gridCellId already exists
       if (item.gridCellId) return item;
 
-      // Standard column-major fallback layout calculation:
-      const rowIndex = index % MAX_ROWS_PER_COLUMN;
-      const colIndex = Math.floor(index / MAX_ROWS_PER_COLUMN);
+      // DESKTOP: Column-major (fills vertical column, then starts next column)
+      const desktopRowIndex = index % MAX_ROWS_PER_COLUMN;
+      const desktopColIndex = Math.floor(index / MAX_ROWS_PER_COLUMN);
+
+      // MOBILE: Row-major (fills 4 per row, left to right, then goes down a row)
+      const mobileRowIndex = Math.floor(index / MOBILE_COLS_PER_ROW);
+      const mobileColIndex = index % MOBILE_COLS_PER_ROW;
 
       return {
         ...item,
-        gridCellId: `${rowIndex}-${colIndex}`,
+        gridCellId: {
+          id: `${desktopRowIndex}-${desktopColIndex}`,
+          mobileId: `${mobileRowIndex}-${mobileColIndex}`,
+        },
       };
     });
   };
@@ -41,6 +54,7 @@ export const useDesktop = () => {
     initializeItems(initialItems),
   );
   const [windows, setWindows] = useState<Window[]>([]);
+  const [isMobile, setIsMobile] = useState(false);
   const desktopRef = useRef<HTMLDivElement>(null);
 
   // Helper to get the next highest zIndex
@@ -70,6 +84,8 @@ export const useDesktop = () => {
 
       // Otherwise, create a new window
       const nextZIndex = getNextZIndex(prev);
+      const initialUrl = item.link ?? "";
+      const initialHistory = [initialUrl];
 
       if (typeof window === "undefined") {
         // If window is not defined (e.g., during SSR), return a default position
@@ -83,12 +99,13 @@ export const useDesktop = () => {
             size: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT },
             zIndex: nextZIndex,
             state: "normal",
-            url: item.link,
+            url: initialUrl,
+            history: initialHistory,
           },
         ];
       }
 
-      const { viewport, maxWidth, maxHeight, isMobile } = getViewportConfig();
+      const { viewport, maxWidth, maxHeight } = getViewportConfig();
 
       const size = {
         width: Math.min(WINDOW_WIDTH, maxWidth),
@@ -113,8 +130,9 @@ export const useDesktop = () => {
           position: clampedPosition,
           size,
           zIndex: nextZIndex,
-          state: isMobile ? "maximized" : "normal",
-          url: item.link,
+          state: "normal",
+          url: initialUrl,
+          history: initialHistory,
         },
       ];
     });
@@ -192,11 +210,26 @@ export const useDesktop = () => {
     );
   };
 
-  const moveItem = (itemId: string, gridCell: { id: string }) => {
-    // This function would update the position of the desktop item in the grid
+  // Update position of item in the grid when dragged to a new cell
+  const moveItem = (
+    itemId: string,
+    gridCell: { id: string; mobileId: string },
+  ) => {
+    const activeCellKey = isMobile ? "mobileId" : "id";
+
     setItems((prev) =>
       prev.map((item) =>
-        item.id === itemId ? { ...item, gridCellId: gridCell.id } : item,
+        item.id === itemId
+          ? {
+              ...item,
+              gridCellId: item.gridCellId
+                ? {
+                    ...item.gridCellId,
+                    [activeCellKey]: gridCell[activeCellKey],
+                  }
+                : gridCell,
+            }
+          : item,
       ),
     );
   };
@@ -204,11 +237,17 @@ export const useDesktop = () => {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
+    const syncViewportState = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+
     const calculateWindowBounds = () => {
+      syncViewportState();
+
       setWindows((prev) => {
         if (prev.length === 0) return prev;
 
-        const { viewport, maxWidth, maxHeight, isMobile } = getViewportConfig();
+        const { viewport, maxWidth, maxHeight } = getViewportConfig();
         let hasChanges = false;
 
         const updatedWindows = prev.map((w): Window => {
@@ -219,19 +258,6 @@ export const useDesktop = () => {
             width: Math.min(WINDOW_WIDTH, maxWidth),
             height: Math.min(WINDOW_HEIGHT, maxHeight),
           };
-
-          // Mobile auto-maximize
-          if (isMobile) {
-            if (
-              w.state !== "maximized" ||
-              w.size.width !== targetSize.width ||
-              w.size.height !== targetSize.height
-            ) {
-              hasChanges = true;
-              return { ...w, state: "maximized", size: targetSize };
-            }
-            return w;
-          }
 
           const newPos = clampWindowPosition(w.position, targetSize, viewport);
 
@@ -265,8 +291,13 @@ export const useDesktop = () => {
       });
     };
 
+    syncViewportState();
     window.addEventListener("resize", calculateWindowBounds);
-    return () => window.removeEventListener("resize", calculateWindowBounds);
+    window.addEventListener("resize", syncViewportState);
+    return () => {
+      window.removeEventListener("resize", calculateWindowBounds);
+      window.removeEventListener("resize", syncViewportState);
+    };
   }, []);
 
   // Derive focusedWindow directly from the windows state
@@ -276,10 +307,48 @@ export const useDesktop = () => {
     return (current.zIndex ?? 0) > (highest.zIndex ?? 0) ? current : highest;
   }, null);
 
+  const popWindowHistory = (id: string) => {
+    setWindows((prevWindows) =>
+      prevWindows.map((win) => {
+        if (win.id === id && win.history && win.history.length > 1) {
+          // Remove the last page from the history array
+          const newHistory = [...win.history];
+          newHistory.pop();
+
+          // Update the current URL/content to the new last item
+          const previousPage = newHistory[newHistory.length - 1];
+
+          return {
+            ...win,
+            history: newHistory,
+            url: previousPage,
+          };
+        }
+        return win;
+      }),
+    );
+  };
+
+  const pushWindowHistory = (id: string, newUrl: string) => {
+    setWindows((prevWindows) =>
+      prevWindows.map((win) => {
+        if (win.id === id) {
+          return {
+            ...win,
+            url: newUrl,
+            history: [...(win.history || []), newUrl],
+          };
+        }
+        return win;
+      }),
+    );
+  };
+
   const contextValue: DesktopContextValue = {
     items,
     windows,
     focusedWindow,
+    isMobile,
     openWindow,
     closeWindow,
     toggleMinimizeWindow,
@@ -287,6 +356,8 @@ export const useDesktop = () => {
     focusWindow,
     moveWindow,
     moveItem,
+    popWindowHistory,
+    pushWindowHistory,
   };
 
   return {

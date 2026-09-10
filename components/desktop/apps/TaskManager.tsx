@@ -5,7 +5,7 @@ import { skills, history, contacts } from "@/config/nonoro";
 import { WindowSidebar } from "@/components/ui/custom/WindowSidebar";
 import { InfoGrid, InfoCard } from "@/components/ui/custom/InfoCard";
 
-function SkillsView() {
+export function SkillsView() {
   return (
     <InfoGrid>
       {skills.map((skill) => (
@@ -20,7 +20,7 @@ function SkillsView() {
   );
 }
 
-function HistoryView() {
+export function HistoryView() {
   return (
     <div className="space-y-4 max-w-2xl font-sans">
       {history.map((job, idx) => {
@@ -68,7 +68,7 @@ function HistoryView() {
   );
 }
 
-function ContactsView() {
+export function ContactsView() {
   return (
     <InfoGrid>
       {contacts.map((contact) => (

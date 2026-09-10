@@ -15,31 +15,76 @@ import {
   PADDING,
 } from "@/constants/desktop";
 
-const DesktopGrid = () => {
-  const { items, moveItem } = useDesktopContext();
+interface DesktopGridProps {
+  topOffset?: number;
+  bottomOffset?: number;
+}
+
+const DesktopGrid = ({
+  topOffset = STATUS_BAR_HEIGHT,
+  bottomOffset = DOCK_HEIGHT,
+}: DesktopGridProps) => {
+  const { items, moveItem, isMobile } = useDesktopContext();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [gridDimensions, setGridDimensions] = useState({ rows: 0, cols: 0 });
+
+  // Track dynamic sizing so it can shrink on mobile
+  const [dynamicSizes, setDynamicSizes] = useState({
+    size: CELL_SIZE,
+    gap: CELL_GAP,
+  });
 
   useEffect(() => {
     const calculateGrid = () => {
       const availableWidth = window.innerWidth - PADDING * 2;
       const availableHeight =
-        window.innerHeight - STATUS_BAR_HEIGHT - DOCK_HEIGHT - PADDING;
+        window.innerHeight - topOffset - bottomOffset - PADDING;
 
-      const cols = Math.floor(
-        (availableWidth + CELL_GAP) / (CELL_SIZE + CELL_GAP),
-      );
-      const rows = Math.floor(
-        (availableHeight + CELL_GAP) / (CELL_SIZE + CELL_GAP),
-      );
+      let size = CELL_SIZE;
+      let gap = CELL_GAP;
+      let cols = 0;
+      let rows = 0;
 
+      if (isMobile) {
+        cols = 4;
+        gap = 12;
+
+        // Calculate maximum cell size that allows 4 columns to fit
+        size = Math.floor((availableWidth - gap * (cols - 1)) / cols);
+
+        // Keep mobile rows tight to occupied app rows so icons can sit above the dock.
+        const mobileRowIndices = items
+          .map((item) => {
+            const mobileId = item.gridCellId?.mobileId;
+            if (!mobileId) return null;
+
+            const [rowPart] = mobileId.split("-");
+            const parsedRow = Number.parseInt(rowPart, 10);
+            return Number.isNaN(parsedRow) ? null : parsedRow;
+          })
+          .filter((row): row is number => row !== null);
+
+        if (mobileRowIndices.length > 0) {
+          const minRow = Math.min(...mobileRowIndices);
+          const maxRow = Math.max(...mobileRowIndices);
+          rows = maxRow - minRow + 1;
+        } else {
+          rows = 1;
+        }
+      } else {
+        // Desktop Logic
+        cols = Math.floor((availableWidth + gap) / (size + gap));
+        rows = Math.floor((availableHeight + gap) / (size + gap));
+      }
+
+      setDynamicSizes({ size, gap });
       setGridDimensions({ rows: Math.max(1, rows), cols: Math.max(1, cols) });
     };
 
     calculateGrid();
     window.addEventListener("resize", calculateGrid);
     return () => window.removeEventListener("resize", calculateGrid);
-  }, []);
+  }, [topOffset, bottomOffset, isMobile, items]);
 
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(String(event.operation.source?.id));
@@ -61,28 +106,44 @@ const DesktopGrid = () => {
       typeof targetCellId === "string" &&
       targetCellId.includes("-")
     ) {
-      moveItem(String(draggedItemId), { id: targetCellId });
+      moveItem(String(draggedItemId), {
+        id: targetCellId,
+        mobileId: targetCellId,
+      });
     }
   };
 
   // Create a Map for O(1) lookups to avoid O(N*M) nested loops
-  const itemsByCell = new Map(items.map((item) => [item.gridCellId, item]));
+  const itemsByCell = new Map(
+    items.map((item) => [
+      isMobile ? item.gridCellId?.mobileId : item.gridCellId?.id,
+      item,
+    ]),
+  );
 
   return (
     <DragDropProvider onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div
         style={{
-          marginTop: `${STATUS_BAR_HEIGHT}px`,
+          marginTop: `${topOffset}px`,
           display: "grid",
-          gridTemplateRows: `repeat(${gridDimensions.rows}, ${CELL_SIZE}px)`,
-          gridTemplateColumns: `repeat(${gridDimensions.cols}, ${CELL_SIZE}px)`,
-          gap: `${CELL_GAP}px`,
+          gridTemplateRows: `repeat(${gridDimensions.rows}, ${dynamicSizes.size}px)`,
+          gridTemplateColumns: isMobile
+            ? "repeat(4, 1fr)"
+            : `repeat(${gridDimensions.cols}, ${dynamicSizes.size}px)`,
+          gap: `${dynamicSizes.gap}px`,
           padding: `${PADDING}px`,
-          height: `calc(100vh - ${STATUS_BAR_HEIGHT}px - ${DOCK_HEIGHT}px)`,
-          width: "100vw",
+          justifyContent: isMobile ? "space-between" : "start",
+          alignContent: isMobile ? "end" : "start",
+          justifyItems: "center",
+          alignItems: "center",
+          boxSizing: "border-box",
+          height: `calc(100dvh - ${topOffset}px - ${bottomOffset}px)`,
+          width: "100%",
           position: "absolute",
           top: 0,
           left: 0,
+          right: 0,
           zIndex: 1,
           overflow: "hidden",
         }}
@@ -99,6 +160,7 @@ const DesktopGrid = () => {
                 key={cellId}
                 id={cellId}
                 isDraggingItem={!!activeId}
+                size={dynamicSizes.size}
               >
                 {allocatedItem && <DraggableDesktopItem item={allocatedItem} />}
               </DesktopGridCell>

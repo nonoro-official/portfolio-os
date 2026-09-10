@@ -25,7 +25,7 @@ const MAIN_SOCIALS = [
 ];
 
 const Dock = () => {
-  const { windows } = useDesktopContext();
+  const { windows, isMobile } = useDesktopContext();
   const isAnyWindowMaximized = windows.some((w) => w.state === "maximized");
 
   return (
@@ -34,27 +34,46 @@ const Dock = () => {
         height: `${DOCK_INNER_HEIGHT}px`,
         bottom: isAnyWindowMaximized ? 0 : `${DOCK_BOTTOM_OFFSET}px`,
       }}
-      className={`fixed left-1/2 -translate-x-1/2 w-max max-w-[90vw] bg-sidebar text-sidebar-foreground flex 
-        items-center gap-2 px-4 border border-sidebar-border rounded-xl shadow-lg backdrop-blur-md z-50 
+      className={`fixed left-1/2 -translate-x-1/2 w-max max-w-[90vw] flex items-center gap-3 px-4 z-50 
         transition-all duration-300 ease-in-out
+        ${
+          !isMobile
+            ? "bg-sidebar text-sidebar-foreground border border-sidebar-border rounded-xl shadow-lg backdrop-blur-md"
+            : ""
+        }
         ${
           isAnyWindowMaximized
             ? "translate-y-full opacity-0 pointer-events-none"
             : "translate-y-0 opacity-100"
         }`}
     >
+      {isMobile && (
+        <span className="absolute -top-2 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-sidebar-border border border-background shadow-sm" />
+      )}
+
       {/* github, linkedin, email links */}
       {MAIN_SOCIALS.map((social) => (
-        <Button key={social.name} variant="ghost-bar" size="icon-lg" asChild>
-          <a
-            href={social.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={social.name}
+        <div
+          key={social.name}
+          className="relative flex flex-col items-center group"
+        >
+          <Button
+            variant="ghost-bar"
+            size="icon-lg"
+            className="h-12 w-12"
+            asChild
           >
-            <Icon icon={social.icon} size="xl" />
-          </a>
-        </Button>
+            <a
+              href={social.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={social.name}
+              className="flex items-center justify-center"
+            >
+              <Icon icon={social.icon} size="2xl" className="text-2xl" />
+            </a>
+          </Button>
+        </div>
       ))}
     </div>
   );

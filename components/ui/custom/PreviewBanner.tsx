@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 import { usePreviewNav } from "@/hooks/usePreviewNav";
+import { useDesktopContext } from "@/context/DesktopContext";
 
 interface PreviewBannerProps<T> {
   items: T[];
@@ -42,6 +43,8 @@ export const PreviewBanner = <T,>({
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const preview = usePreviewNav(items.length);
+
+  const { isMobile } = useDesktopContext();
 
   useEffect(() => {
     if (!api) return;
@@ -113,7 +116,7 @@ export const PreviewBanner = <T,>({
             </div>
           </div>
         )}
-        {items.length > 1 && (
+        {items.length > 1 && !isMobile && (
           <>
             <CarouselPrevious />
             <CarouselNext />

@@ -16,9 +16,14 @@ import { PreviewBanner } from "@/components/ui/custom/PreviewBanner";
 import { FilterMenu } from "@/components/ui/custom/FilterMenu";
 import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 import { AppShell } from "@/components/ui/custom/AppShell";
+import { useDesktopContext } from "@/context/DesktopContext";
 
-const AppCenter = () => {
-  const { currentUrl, viewMode, navigateTo, goHome } = useWindow();
+interface AppCenterProps {
+  windowId?: string;
+}
+
+const AppCenter: React.FC<AppCenterProps> = ({ windowId }) => {
+  const { currentUrl, viewMode, navigateTo, goHome } = useWindow(windowId);
 
   const search = useSearch();
 
@@ -40,28 +45,13 @@ const AppCenter = () => {
   const featuredApp = app.filter((app) => app.isFeatured === true);
   const activeApp = app.find((app) => app.url === currentUrl);
 
+  const { isMobile } = useDesktopContext();
+
   return (
     <AppShell
-      subBar={
-        <div className="flex items-center justify-between w-full gap-2">
-          {/* Title */}
-          <div className="flex-1 flex justify-start">
-            <Button
-              variant="link"
-              onClick={() => {
-                goHome();
-                resetFilters();
-              }}
-              className="p-1 hover:bg-zinc-200/50 rounded transition"
-            >
-              <p className="text-2xl font-bold bg-clip-text text-amber-600 select-none shrink-0 py-1 cursor-pointer">
-                AppHub
-              </p>
-            </Button>
-          </div>
-
-          {/* Search Bar */}
-          <div className="flex-2 flex justify-center max-w-xl w-full mx-4">
+      toolbar={
+        isMobile && (
+          <div className="flex-2 flex justify-center max-w-xl w-full">
             <SearchBar
               value={search.query}
               onChange={search.setQuery}
@@ -71,9 +61,50 @@ const AppCenter = () => {
               itemToStringValue={(item) => item.name}
             />
           </div>
+        )
+      }
+      subBar={
+        <div className="flex items-center justify-between w-full gap-2">
+          {/* Title */}
+          {!isMobile && (
+            <div className="flex-1 flex justify-start">
+              <Button
+                variant="link"
+                onClick={() => {
+                  goHome();
+                  resetFilters();
+                }}
+                className="p-1 hover:bg-zinc-200/50 rounded transition"
+              >
+                <p className="text-2xl font-bold bg-clip-text text-amber-600 select-none shrink-0 py-1 cursor-pointer">
+                  AppHub
+                </p>
+              </Button>
+            </div>
+          )}
+
+          {/* Search Bar */}
+          {!isMobile && (
+            <div className="flex-2 flex justify-center max-w-xl w-full mx-4">
+              <SearchBar
+                value={search.query}
+                onChange={search.setQuery}
+                items={app}
+                placeholder="Search the store..."
+                onSelect={(app) => navigateTo(app.url)}
+                itemToStringValue={(item) => item.name}
+              />
+            </div>
+          )}
 
           {/* Nav Menu */}
-          <div className="flex-1 flex justify-end items-center gap-3">
+          <div
+            className={
+              isMobile
+                ? "w-full flex justify-center items-center gap-3 overflow-x-auto no-scrollbar"
+                : "flex-1 flex justify-end items-center gap-3"
+            }
+          >
             <FilterMenu
               label="OS"
               options={os}
@@ -118,36 +149,38 @@ const AppCenter = () => {
               enableImagePreview={false}
               renderItem={(app) => (
                 <div
-                  className="relative flex h-80 w-full bg-zinc-950 border dark:border-foreground rounded-xl overflow-hidden cursor-pointer group"
+                  className="relative flex flex-col-reverse md:flex-row h-auto md:h-80 w-full bg-zinc-950 border dark:border-foreground rounded-xl overflow-hidden cursor-pointer group"
                   onClick={() => navigateTo(app.url)}
                 >
                   {/* App Details Sidebar (Centered & Color-Matched) */}
-                  <div className="flex flex-col justify-center items-center text-center h-full w-52 bg-sidebar border-r border-zinc-800/50 text-sm text-foreground p-5 shrink-0 z-10">
+                  <div className="flex flex-row md:flex-col items-center md:items-start text-left md:text-center w-full md:w-52 h-auto md:h-full bg-sidebar border-t md:border-t-0 md:border-r border-zinc-800/50 text-sm text-foreground p-4 md:p-5 shrink-0 z-10 gap-3 md:gap-0">
                     {app.logo.type === "emoji" ? (
-                      <span className="text-6xl leading-none mb-3 selection:bg-transparent">
+                      <span className="text-4xl md:text-6xl leading-none md:mb-3 selection:bg-transparent shrink-0">
                         {app.logo.value}
                       </span>
                     ) : (
-                      <div className="mb-3">
+                      <div className="shrink-0 md:mb-3">
                         <Image
                           src={app.logo.value}
                           alt={`${app.name} icon`}
                           width={80}
                           height={80}
-                          className="object-contain"
+                          className="object-contain w-12 h-12 md:w-auto md:h-auto"
                         />
                       </div>
                     )}
-                    <h3 className="font-bold text-base text-foreground group-hover:text-amber-500 transition-colors">
-                      {app.name}
-                    </h3>
-                    <p className="mt-2 text-xs text-zinc-500 line-clamp-4 leading-relaxed">
-                      {app.desc}
-                    </p>
+                    <div className="flex flex-col flex-1 md:flex-none">
+                      <h3 className="font-bold text-base text-foreground group-hover:text-amber-500 transition-colors">
+                        {app.name}
+                      </h3>
+                      <p className="mt-1 md:mt-2 text-xs text-zinc-500 line-clamp-2 md:line-clamp-4 leading-relaxed">
+                        {app.desc}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Image Container */}
-                  <div className="relative flex-1 h-full bg-zinc-950">
+                  <div className="relative w-full h-48 md:h-full md:flex-1 bg-zinc-950">
                     <Image
                       src={app.featuredImage || "/images/default.png"}
                       alt={app.name}
@@ -388,7 +421,6 @@ const AppCenter = () => {
                           muted
                           playsInline
                           loop
-                          preload="none"
                           autoPlay
                           onClick={(e) => {
                             e.stopPropagation();
@@ -412,7 +444,6 @@ const AppCenter = () => {
                       src={media.src}
                       controls
                       autoPlay
-                      preload="none"
                       className="h-full w-full object-contain"
                     />
                   )

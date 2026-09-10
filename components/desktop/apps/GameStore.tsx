@@ -14,9 +14,15 @@ import { ImagePreview } from "@/components/ui/custom/ImagePreview";
 import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 import { AppShell } from "@/components/ui/custom/AppShell";
 import { Toolbar } from "@/components/ui/custom/Toolbar";
+import { useDesktopContext } from "@/context/DesktopContext";
 
-const GameStore = () => {
-  const { currentUrl, viewMode, navigateTo, goHome, refreshPage } = useWindow();
+interface GameStoreProps {
+  windowId?: string;
+}
+
+const GameStore: React.FC<GameStoreProps> = ({ windowId }) => {
+  const { currentUrl, viewMode, navigateTo, goHome, refreshPage } =
+    useWindow(windowId);
 
   const search = useSearch();
   const store = useStoreFilters({
@@ -44,10 +50,12 @@ const GameStore = () => {
 
   const preview = usePreviewNav(store.filtered.length);
 
+  const { isMobile } = useDesktopContext();
+
   return (
     <AppShell
       toolbar={
-        <>
+        !isMobile ? (
           <Toolbar
             canGoBack={viewMode !== "homepage"}
             showHome={false}
@@ -62,18 +70,28 @@ const GameStore = () => {
               Vapor
             </p>
           </Toolbar>
-        </>
+        ) : (
+          <SearchBar
+            value={search.query}
+            onChange={search.setQuery}
+            items={games}
+            placeholder="Search the store..."
+            onSelect={(game) => navigateTo(game.url)}
+            className="w-full"
+            itemToStringValue={(item) => item.name}
+          />
+        )
       }
       subBar={
-        <>
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center justify-between gap-3 w-full">
+          <div className="flex items-center justify-center md:justify-start gap-1.5 w-full md:w-auto shrink-0 overflow-x-auto no-scrollbar">
             <Button
               variant="link"
               onClick={() => {
                 goHome();
                 resetFilters();
               }}
-              className="p-1 hover:bg-zinc-200/50 rounded transition"
+              className="p-1 hover:bg-zinc-200/50 rounded transition text-sm shrink-0"
             >
               Browse
             </Button>
@@ -102,18 +120,18 @@ const GameStore = () => {
               }
             />
           </div>
-
-          {/* Search Bar */}
-          <SearchBar
-            value={search.query}
-            onChange={search.setQuery}
-            items={games}
-            placeholder="Search the store..."
-            onSelect={(game) => navigateTo(game.url)}
-            className="flex-1 mr-4"
-            itemToStringValue={(item) => item.name}
-          />
-        </>
+          {!isMobile && (
+            <SearchBar
+              value={search.query}
+              onChange={search.setQuery}
+              items={games}
+              placeholder="Search the store..."
+              onSelect={(game) => navigateTo(game.url)}
+              className="flex-1 w-full"
+              itemToStringValue={(item) => item.name}
+            />
+          )}
+        </div>
       }
     >
       {viewMode === "homepage" || !activeGame ? (
@@ -132,11 +150,11 @@ const GameStore = () => {
                 hasCounter
                 renderItem={(game, index) => (
                   <div
-                    className="relative flex h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
+                    className="relative flex flex-col md:flex-row h-auto md:h-80 w-full bg-zinc-800 rounded-xl overflow-hidden cursor-pointer group"
                     onClick={() => navigateTo(game.url)}
                   >
                     {/* Image Container */}
-                    <div className="relative flex-1 h-full bg-zinc-950">
+                    <div className="relative w-full h-48 md:h-full md:flex-1 bg-zinc-950">
                       <Image
                         src={game.featuredImage || "/images/default.png"}
                         alt={game.name}
@@ -147,12 +165,12 @@ const GameStore = () => {
                       />
                     </div>
 
-                    {/* Game Details Sidebar */}
-                    <div className="flex flex-col justify-center h-full w-50 bg-zinc-900 border-l border-zinc-800 dark:bg-zinc-50 dark:border-zinc-400 text-sm text-zinc-200 dark:text-zinc-800 p-4 shrink-0">
+                    {/* Details Bar */}
+                    <div className="flex flex-col justify-center w-full md:w-50 h-auto md:h-full bg-zinc-900 border-t md:border-t-0 md:border-l border-zinc-800 dark:bg-zinc-50 dark:border-zinc-400 text-sm text-zinc-200 dark:text-zinc-800 p-4 shrink-0">
                       <h3 className="font-bold text-base text-zinc-50 dark:text-zinc-800 group-hover:text-amber-500 transition-colors">
                         {game.name}
                       </h3>
-                      <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-600 dark:line-clamp-4 leading-relaxed">
+                      <p className="mt-2 md:mt-3 text-xs text-zinc-400 dark:text-zinc-600 line-clamp-2 md:line-clamp-4 leading-relaxed">
                         {game.desc}
                       </p>
                     </div>
@@ -256,7 +274,7 @@ const GameStore = () => {
                           src={mediaItem.src}
                           controls
                           playsInline
-                          preload="metadata"
+                          // preload="metadata"
                           className="h-full w-full max-w-full max-h-full object-contain"
                         />
                       </div>
@@ -282,7 +300,7 @@ const GameStore = () => {
                         autoPlay
                         loop
                         playsInline
-                        preload="none"
+                        // preload="none"
                         className="w-full h-full object-cover"
                       />
                     ) : (

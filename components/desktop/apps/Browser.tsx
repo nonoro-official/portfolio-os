@@ -11,7 +11,11 @@ import { StoreListItem } from "@/components/ui/custom/StoreListItem";
 import { AppShell } from "@/components/ui/custom/AppShell";
 import { Toolbar } from "@/components/ui/custom/Toolbar";
 
-const Browser = () => {
+interface BrowserProps {
+  windowId?: string;
+}
+
+const Browser: React.FC<BrowserProps> = ({ windowId }) => {
   const {
     currentUrl,
     inputUrl,
@@ -21,7 +25,7 @@ const Browser = () => {
     navigateTo,
     goHome,
     refreshPage,
-  } = useWindow();
+  } = useWindow(windowId);
 
   const [filteredSite, setFilteredSite] = useState<(typeof websites)[0] | null>(
     null,

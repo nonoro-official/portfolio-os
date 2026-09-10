@@ -20,6 +20,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
     toggleMaximizeWindow,
     focusWindow,
     moveWindow,
+    isMobile,
   } = useDesktopContext();
 
   const [isDragging, setIsDragging] = useState(false);
@@ -30,7 +31,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
   // Ref to hold the latest position so mouseup can read it without re-binding the effect
   const localPosRef = useRef(windowItem.position);
 
-  const isMaximized = windowItem.state === "maximized";
+  const isMaximized = windowItem.state === "maximized" || isMobile;
 
   // Sync local pos with global pos when NOT dragging
   useEffect(() => {
@@ -41,7 +42,7 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
   }, [windowItem.position, isDragging]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    // Don't allow dragging if the window is maximized
+    // Don't allow dragging if the window is maximized or on mobile
     if (isMaximized) return;
 
     setIsDragging(true);
@@ -129,56 +130,60 @@ export const DraggableWindow: React.FC<DraggableWindowProps> = ({
             }
       }
     >
-      {/* Header Bar */}
-      <div
-        className={`p-2 px-4 flex bg-secondary border-b border-sidebar-border justify-between items-center ${
-          isMaximized ? "cursor-default" : "cursor-move"
-        }`}
-        onMouseDown={handleMouseDown}
-        onDoubleClick={() => toggleMaximizeWindow(windowItem.id)} // Double-click to maximize/restore
-      >
-        <h3 className="text-sm select-none">{windowItem.title}</h3>
-        <div className="flex space-x-2">
-          {/* Minimize Button */}
-          <Button
-            onClick={() => toggleMinimizeWindow(windowItem.id)}
-            variant="ghost"
-            size="sm"
-            className="p-2"
+      {!isMobile && (
+        <>
+          {/* Header Bar */}
+          <div
+            className={`p-2 px-4 flex bg-secondary border-b border-sidebar-border justify-between items-center ${
+              isMaximized ? "cursor-default" : "cursor-move"
+            }`}
+            onMouseDown={handleMouseDown}
+            onDoubleClick={() => toggleMaximizeWindow(windowItem.id)} // Double-click to maximize/restore
           >
-            <Minus className="size-4" />
-          </Button>
+            <h3 className="text-sm select-none">{windowItem.title}</h3>
+            <div className="flex space-x-2">
+              {/* Minimize Button */}
+              <Button
+                onClick={() => toggleMinimizeWindow(windowItem.id)}
+                variant="ghost"
+                size="sm"
+                className="p-2"
+              >
+                <Minus className="size-4" />
+              </Button>
 
-          {/* Maximize / Restore Button */}
-          <Button
-            onClick={() => toggleMaximizeWindow(windowItem.id)}
-            variant="ghost"
-            size="sm"
-            className="p-2"
-          >
-            {isMaximized ? (
-              <Square className="size-4" />
-            ) : (
-              <Maximize className="size-4" />
-            )}
-          </Button>
+              {/* Maximize / Restore Button */}
+              <Button
+                onClick={() => toggleMaximizeWindow(windowItem.id)}
+                variant="ghost"
+                size="sm"
+                className="p-2"
+              >
+                {isMaximized ? (
+                  <Square className="size-4" />
+                ) : (
+                  <Maximize className="size-4" />
+                )}
+              </Button>
 
-          {/* Close Button */}
-          <Button
-            onClick={() => closeWindow(windowItem.id)}
-            variant="destructive"
-            size="sm"
-            className="p-2"
-          >
-            <X className="size-4" />
-          </Button>
-        </div>
-      </div>
+              {/* Close Button */}
+              <Button
+                onClick={() => closeWindow(windowItem.id)}
+                variant="destructive"
+                size="sm"
+                className="p-2"
+              >
+                <X className="size-4" />
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Window Body */}
       <div
         className="w-full bg-sidebar-primary-foreground dark:bg-card overflow-hidden"
-        style={{ height: "calc(100% - 40px)" }}
+        style={{ height: isMobile ? "100%" : "calc(100% - 40px)" }}
       >
         {children}
       </div>
