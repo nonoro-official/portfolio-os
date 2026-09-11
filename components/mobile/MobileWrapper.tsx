@@ -12,6 +12,7 @@ import { ModeToggle } from "../statusbar/ModeToggle";
 import TypewriterEffect from "../effects/TypewriterEffect";
 import Dock from "@/components/dock/Dock";
 import { DOCK_HEIGHT } from "@/constants/desktop";
+import { GRID_BOTTOM_MARGIN } from "@/constants/desktop";
 
 interface MobileWrapperProps {
   renderWindowContent: (windowItem: Window) => React.ReactNode;
@@ -69,11 +70,14 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
 
       {/* Desktop & Windows Container */}
       <div className="relative z-0 flex flex-col flex-1 w-full overflow-hidden">
-        <DesktopGrid topOffset={0} bottomOffset={showHome ? DOCK_HEIGHT : 0} />
+        <DesktopGrid
+          topOffset={0}
+          bottomOffset={showHome ? DOCK_HEIGHT + GRID_BOTTOM_MARGIN : 0}
+        />
 
         {showHome && (
           <div className="absolute inset-0 z-10 items-center justify-center mt-5 pointer-events-none">
-            <div className="grid grid-cols-2 gap-4 items-center justify-items-center pointer-events-auto">
+            <div className="flex justify-between items-center px-6 w-full pointer-events-auto">
               <DateTime />
               <ModeToggle />
             </div>

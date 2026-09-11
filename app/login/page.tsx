@@ -4,7 +4,7 @@ import EnterPassword from "@/components/startup/EnterPassword";
 
 const Login = () => {
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center">
+    <div className="h-dvh w-full flex flex-col items-center justify-center overflow-hidden">
       <div className="relative w-32 h-32 overflow-hidden rounded-full">
         <Image
           src="/nonoro.svg"
