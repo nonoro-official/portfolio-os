@@ -46,21 +46,21 @@ const BootSplash = () => {
     setIsBlackedOut(true);
     setTimeout(() => {
       router.replace("/login");
-    }, 300);
+    }, 240);
   };
 
   if (isBlackedOut) {
-    return <div className="h-screen w-full bg-black"></div>;
+    return <div className="h-dvh w-full bg-black"></div>;
   }
 
   return (
     <div
-      className="relative h-screen w-full bg-black text-white p-10 font-mono select-none cursor-pointer"
+      className="relative h-dvh w-full bg-black text-white p-6 md:p-10 font-mono select-none cursor-pointer overflow-hidden"
       onClick={handleSkip}
     >
       {isMobile ? (
-        <div className="min-h-screen flex items-center justify-center text-2xl font-bold">
-          <TypewriterEffect text={"nonorOS"} delay={150} showCursor={false} />
+        <div className="h-full flex items-center justify-center text-2xl font-bold">
+          <TypewriterEffect text={"nonorOS"} delay={120} showCursor={false} />
         </div>
       ) : (
         <>
@@ -75,7 +75,7 @@ const BootSplash = () => {
           </div>
 
           {visibleLines >= 5 && (
-            <div className="absolute bottom-10 left-10 flex items-center text-2xl font-bold">
+            <div className="absolute bottom-2 right-2 md:bottom-10 md:right-10 text-sm text-neutral-500 animate-pulse">
               <span>Booting NonorOS</span>
               <TypewriterEffect
                 text={"...................."}

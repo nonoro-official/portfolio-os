@@ -52,6 +52,11 @@ const DesktopGrid = ({
         // Calculate maximum cell size that allows 4 columns to fit
         size = Math.floor((availableWidth - gap * (cols - 1)) / cols);
 
+        // Max rows that can fit on screen
+        const maxPhysicalRows = Math.floor(
+          (availableHeight + gap) / (size + gap),
+        );
+
         // Keep mobile rows tight to occupied app rows so icons can sit above the dock.
         const mobileRowIndices = items
           .map((item) => {
@@ -67,7 +72,8 @@ const DesktopGrid = ({
         if (mobileRowIndices.length > 0) {
           const minRow = Math.min(...mobileRowIndices);
           const maxRow = Math.max(...mobileRowIndices);
-          rows = maxRow - minRow + 1;
+          const calculatedRows = maxRow - minRow + 1;
+          rows = Math.min(calculatedRows, Math.max(1, maxPhysicalRows));
         } else {
           rows = 1;
         }
@@ -146,6 +152,8 @@ const DesktopGrid = ({
           right: 0,
           zIndex: 1,
           overflow: "hidden",
+          overscrollBehavior: "none",
+          touchAction: "none",
         }}
       >
         {Array.from({ length: gridDimensions.rows }).map((_, rowIndex) =>
