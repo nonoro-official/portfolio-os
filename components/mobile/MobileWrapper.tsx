@@ -29,8 +29,7 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
     popWindowHistory,
   } = useDesktopContext();
 
-  const bgText =
-    "Hello! I'm Noah. Always learning and creating. I hope you enjoy your stay!";
+  const bgText = "Always learning and creating.";
 
   const activeWindow = focusedWindow;
   const showHome = !activeWindow || activeWindow.state === "minimized";
