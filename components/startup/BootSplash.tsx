@@ -75,7 +75,7 @@ const BootSplash = () => {
           </div>
 
           {visibleLines >= 5 && (
-            <div className="absolute bottom-2 right-2 md:bottom-10 md:right-10 text-sm text-neutral-500 animate-pulse">
+            <div className="absolute bottom-10 left-10 flex items-center gap-2 text-xl text-white font-bold">
               <span>Booting NonorOS</span>
               <TypewriterEffect
                 text={"...................."}
