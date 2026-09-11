@@ -13,3 +13,5 @@ export const DOCK_HEIGHT = DOCK_INNER_HEIGHT + DOCK_BOTTOM_OFFSET;
 export const CELL_SIZE = 90;
 export const CELL_GAP = 15;
 export const PADDING = 20;
+
+export const GRID_BOTTOM_MARGIN = 24;
