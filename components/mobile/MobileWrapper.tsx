@@ -60,7 +60,7 @@ const MobileWrapper: React.FC<MobileWrapperProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full w-full overflow-hidden bg-background">
+    <div className="flex flex-col h-dvh w-full overflow-hidden bg-background overscroll-none">
       {/* Status Bar */}
       {activeWindow && activeWindow.state !== "minimized" && (
         <div className="relative z-10 shrink-0">
