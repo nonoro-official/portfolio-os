@@ -38,7 +38,7 @@ export const contacts = [
   {
     icon: <FontAwesomeIcon icon={faLinkedin} />,
     name: "LinkedIn",
-    link: "https://www.linkedin.com/in/noah-peñaranda-7b63ba356",
+    link: "https://www.linkedin.com/in/noah-penaranda-7b63ba356",
   },
   {
     icon: <FontAwesomeIcon icon={faItchIo} />,
